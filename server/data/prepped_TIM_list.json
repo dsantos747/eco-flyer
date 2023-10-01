@@ -1,0 +1,407 @@
+{
+  "flights": [
+    [
+      {
+        "origin": "HHN",
+        "destination": "STN",
+        "operatingCarrierCode": "FR",
+        "flightNumber": 6198,
+        "departureDate": {
+          "year": "2024",
+          "month": "04",
+          "day": "01"
+        }
+      }
+    ],
+    [
+      {
+        "origin": "STN",
+        "destination": "HHN",
+        "operatingCarrierCode": "FR",
+        "flightNumber": 6199,
+        "departureDate": {
+          "year": "2024",
+          "month": "04",
+          "day": "04"
+        }
+      }
+    ],
+    [
+      {
+        "origin": "FRA",
+        "destination": "MAD",
+        "operatingCarrierCode": "IB",
+        "flightNumber": 3131,
+        "departureDate": {
+          "year": "2024",
+          "month": "04",
+          "day": "02"
+        }
+      }
+    ],
+    [
+      {
+        "origin": "MAD",
+        "destination": "FRA",
+        "operatingCarrierCode": "IB",
+        "flightNumber": 8712,
+        "departureDate": {
+          "year": "2024",
+          "month": "04",
+          "day": "04"
+        }
+      }
+    ],
+    [
+      {
+        "origin": "HHN",
+        "destination": "PMI",
+        "operatingCarrierCode": "AL",
+        "flightNumber": 4212,
+        "departureDate": {
+          "year": "2024",
+          "month": "04",
+          "day": "02"
+        }
+      }
+    ],
+    [
+      {
+        "origin": "PMI",
+        "destination": "MAD",
+        "operatingCarrierCode": "FR",
+        "flightNumber": 2064,
+        "departureDate": {
+          "year": "2024",
+          "month": "04",
+          "day": "04"
+        }
+      },
+      {
+        "origin": "MAD",
+        "destination": "FRA",
+        "operatingCarrierCode": "IB",
+        "flightNumber": 8712,
+        "departureDate": {
+          "year": "2024",
+          "month": "04",
+          "day": "04"
+        }
+      }
+    ],
+    [
+      {
+        "origin": "HHN",
+        "destination": "PMI",
+        "operatingCarrierCode": "FR",
+        "flightNumber": 9832,
+        "departureDate": {
+          "year": "2024",
+          "month": "04",
+          "day": "03"
+        }
+      },
+      {
+        "origin": "PMI",
+        "destination": "BCN",
+        "operatingCarrierCode": "FR",
+        "flightNumber": 3071,
+        "departureDate": {
+          "year": "2024",
+          "month": "04",
+          "day": "03"
+        }
+      }
+    ],
+    [
+      {
+        "origin": "BCN",
+        "destination": "MXP",
+        "operatingCarrierCode": "VY",
+        "flightNumber": 6332,
+        "departureDate": {
+          "year": "2024",
+          "month": "04",
+          "day": "06"
+        }
+      },
+      {
+        "origin": "MXP",
+        "destination": "FRA",
+        "operatingCarrierCode": "LH",
+        "flightNumber": 253,
+        "departureDate": {
+          "year": "2024",
+          "month": "04",
+          "day": "06"
+        }
+      }
+    ],
+    [
+      {
+        "origin": "FRA",
+        "destination": "IST",
+        "operatingCarrierCode": "TK",
+        "flightNumber": 1588,
+        "departureDate": {
+          "year": "2024",
+          "month": "04",
+          "day": "03"
+        }
+      }
+    ],
+    [
+      {
+        "origin": "IST",
+        "destination": "FRA",
+        "operatingCarrierCode": "LH",
+        "flightNumber": 1299,
+        "departureDate": {
+          "year": "2024",
+          "month": "04",
+          "day": "06"
+        }
+      }
+    ],
+    [
+      {
+        "origin": "FRA",
+        "destination": "JED",
+        "operatingCarrierCode": "SV",
+        "flightNumber": 168,
+        "departureDate": {
+          "year": "2024",
+          "month": "04",
+          "day": "02"
+        }
+      },
+      {
+        "origin": "JED",
+        "destination": "DXB",
+        "operatingCarrierCode": "SV",
+        "flightNumber": 566,
+        "departureDate": {
+          "year": "2024",
+          "month": "04",
+          "day": "03"
+        }
+      }
+    ],
+    [
+      {
+        "origin": "DXB",
+        "destination": "RUH",
+        "operatingCarrierCode": "SV",
+        "flightNumber": 593,
+        "departureDate": {
+          "year": "2024",
+          "month": "04",
+          "day": "05"
+        }
+      },
+      {
+        "origin": "RUH",
+        "destination": "FRA",
+        "operatingCarrierCode": "SV",
+        "flightNumber": 179,
+        "departureDate": {
+          "year": "2024",
+          "month": "04",
+          "day": "05"
+        }
+      }
+    ],
+    [
+      {
+        "origin": "FRA",
+        "destination": "KEF",
+        "operatingCarrierCode": "FI",
+        "flightNumber": 521,
+        "departureDate": {
+          "year": "2024",
+          "month": "04",
+          "day": "03"
+        }
+      },
+      {
+        "origin": "KEF",
+        "destination": "EWR",
+        "operatingCarrierCode": "FI",
+        "flightNumber": 623,
+        "departureDate": {
+          "year": "2024",
+          "month": "04",
+          "day": "03"
+        }
+      }
+    ],
+    [
+      {
+        "origin": "EWR",
+        "destination": "KEF",
+        "operatingCarrierCode": "FI",
+        "flightNumber": 622,
+        "departureDate": {
+          "year": "2024",
+          "month": "04",
+          "day": "06"
+        }
+      },
+      {
+        "origin": "KEF",
+        "destination": "FRA",
+        "operatingCarrierCode": "FI",
+        "flightNumber": 520,
+        "departureDate": {
+          "year": "2024",
+          "month": "04",
+          "day": "07"
+        }
+      }
+    ],
+    [
+      {
+        "origin": "FRA",
+        "destination": "RUH",
+        "operatingCarrierCode": "SV",
+        "flightNumber": 180,
+        "departureDate": {
+          "year": "2024",
+          "month": "04",
+          "day": "01"
+        }
+      },
+      {
+        "origin": "RUH",
+        "destination": "BKK",
+        "operatingCarrierCode": "SV",
+        "flightNumber": 846,
+        "departureDate": {
+          "year": "2024",
+          "month": "04",
+          "day": "02"
+        }
+      }
+    ],
+    [
+      {
+        "origin": "BKK",
+        "destination": "JED",
+        "operatingCarrierCode": "SV",
+        "flightNumber": 849,
+        "departureDate": {
+          "year": "2024",
+          "month": "04",
+          "day": "04"
+        }
+      },
+      {
+        "origin": "JED",
+        "destination": "FRA",
+        "operatingCarrierCode": "SV",
+        "flightNumber": 167,
+        "departureDate": {
+          "year": "2024",
+          "month": "04",
+          "day": "04"
+        }
+      }
+    ],
+    [
+      {
+        "origin": "FRA",
+        "destination": "DEL",
+        "operatingCarrierCode": "UK",
+        "flightNumber": 26,
+        "departureDate": {
+          "year": "2024",
+          "month": "04",
+          "day": "01"
+        }
+      }
+    ],
+    [
+      {
+        "origin": "DEL",
+        "destination": "ALA",
+        "operatingCarrierCode": "KC",
+        "flightNumber": 964,
+        "departureDate": {
+          "year": "2024",
+          "month": "04",
+          "day": "04"
+        }
+      },
+      {
+        "origin": "ALA",
+        "destination": "NQZ",
+        "operatingCarrierCode": "KC",
+        "flightNumber": 621,
+        "departureDate": {
+          "year": "2024",
+          "month": "04",
+          "day": "04"
+        }
+      },
+      {
+        "origin": "NQZ",
+        "destination": "FRA",
+        "operatingCarrierCode": "KC",
+        "flightNumber": 921,
+        "departureDate": {
+          "year": "2024",
+          "month": "04",
+          "day": "04"
+        }
+      }
+    ],
+    [
+      {
+        "origin": "FRA",
+        "destination": "MAD",
+        "operatingCarrierCode": "UX",
+        "flightNumber": 1502,
+        "departureDate": {
+          "year": "2024",
+          "month": "04",
+          "day": "02"
+        }
+      },
+      {
+        "origin": "MAD",
+        "destination": "CUN",
+        "operatingCarrierCode": "UX",
+        "flightNumber": 63,
+        "departureDate": {
+          "year": "2024",
+          "month": "04",
+          "day": "02"
+        }
+      }
+    ],
+    [
+      {
+        "origin": "CUN",
+        "destination": "MAD",
+        "operatingCarrierCode": "2W",
+        "flightNumber": 2502,
+        "departureDate": {
+          "year": "2024",
+          "month": "04",
+          "day": "05"
+        }
+      },
+      {
+        "origin": "MAD",
+        "destination": "FRA",
+        "operatingCarrierCode": "LH",
+        "flightNumber": 1115,
+        "departureDate": {
+          "year": "2024",
+          "month": "04",
+          "day": "06"
+        }
+      }
+    ]
+  ]
+}

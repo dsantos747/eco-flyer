@@ -1,0 +1,951 @@
+{
+  "London": [
+    {
+      "id": "241a032d4d660000fdeb4d76_0|032d241a4d690000cc154221_0",
+      "flyFrom": "HHN",
+      "cityFrom": "Frankfurt",
+      "flyTo": "STN",
+      "cityTo": "London",
+      "countryFrom": "Germany",
+      "countryTo": "United Kingdom",
+      "local_departure": "2024-04-01T00:50:00.000Z",
+      "utc_departure": "2024-03-31T22:50:00.000Z",
+      "local_arrival": "2024-04-01T01:10:00.000Z",
+      "utc_arrival": "2024-04-01T00:10:00.000Z",
+      "nightsInDest": 3,
+      "quality": 112.33322,
+      "distance": 538.03,
+      "duration": {
+        "departure": 4800,
+        "return": 4800,
+        "total": 9600
+      },
+      "price": 67,
+      "airlines": [
+        "FR"
+      ],
+      "flights": [
+        [
+          {
+            "id": "241a032d4d660000fdeb4d76_0",
+            "combination_id": "241a032d4d660000fdeb4d76",
+            "flyFrom": "HHN",
+            "cityFrom": "Frankfurt",
+            "flyTo": "STN",
+            "cityTo": "London",
+            "local_departure": "2024-04-01T00:50:00.000Z",
+            "utc_departure": "2024-03-31T22:50:00.000Z",
+            "local_arrival": "2024-04-01T01:10:00.000Z",
+            "utc_arrival": "2024-04-01T00:10:00.000Z",
+            "airline": "FR",
+            "flight_no": 6198,
+            "operating_carrier": "",
+            "operating_flight_no": "",
+            "return": 0
+          }
+        ],
+        [
+          {
+            "id": "032d241a4d690000cc154221_0",
+            "combination_id": "032d241a4d690000cc154221",
+            "flyFrom": "STN",
+            "cityFrom": "London",
+            "flyTo": "HHN",
+            "cityTo": "Frankfurt",
+            "local_departure": "2024-04-04T07:35:00.000Z",
+            "utc_departure": "2024-04-04T06:35:00.000Z",
+            "local_arrival": "2024-04-04T09:55:00.000Z",
+            "utc_arrival": "2024-04-04T07:55:00.000Z",
+            "airline": "FR",
+            "flight_no": 6199,
+            "operating_carrier": "",
+            "operating_flight_no": "",
+            "return": 1
+          }
+        ]
+      ],
+      "total_legs": 2,
+      "out_legs": 1,
+      "return_legs": 1,
+      "booking_token": "GSL4bsAPSw4OxFJmreRL1JewwPNusMKXhOd4fvdO4u4VTktGETnXxWucJz2pVlKLgRvXrKIudhW2JyfRL_627KVTa26picf_grIYbVMpNgtR5TfSDN-WA-BBrDRHAohW2jguYBQecKkyqfcQRqEwMSLYiDvzHJz47elRZKiZ08JwKTqzd0MzmrlV_NZ3eu9gkXy4e_I327dlIOlOeT0cb6jolrWd9pX-yHo0Aiv3J9w_OP3ZziRjakcHahPUnK5-tMwyNGe3Yi5V4Qj2OAkL4luIEAR5pihKJjiqlgScknHd9y-Md7rzBVYGqvG6miB9DbUnGgQ1cqOdMX83q9V4h5hdSB7sye7p8UH-3vTMxWqqnle-Bs784m-UyX2dzhYbVopqE2-EbeaXGHgYkDek1TuowZUDgsc_liZSUAOskpDNXwBTBlsRZkdxZuqZCS-m_ERXm8Nw-8yI3ojx261mA92I-vsdhV4mWOqTmxs5zmnKYXfAqm1ru3OVt7ctC3Zw5",
+      "deep_link": "https://www.kiwi.com/deep?affilid=flightemissionsdwsflightemissionsmetasearch&currency=EUR&flightsId=241a032d4d660000fdeb4d76_0%7C032d241a4d690000cc154221_0&from=HHN&lang=en&passengers=1&searchBags=0.0&to=STN&booking_token=GSL4bsAPSw4OxFJmreRL1JewwPNusMKXhOd4fvdO4u4VTktGETnXxWucJz2pVlKLgRvXrKIudhW2JyfRL_627KVTa26picf_grIYbVMpNgtR5TfSDN-WA-BBrDRHAohW2jguYBQecKkyqfcQRqEwMSLYiDvzHJz47elRZKiZ08JwKTqzd0MzmrlV_NZ3eu9gkXy4e_I327dlIOlOeT0cb6jolrWd9pX-yHo0Aiv3J9w_OP3ZziRjakcHahPUnK5-tMwyNGe3Yi5V4Qj2OAkL4luIEAR5pihKJjiqlgScknHd9y-Md7rzBVYGqvG6miB9DbUnGgQ1cqOdMX83q9V4h5hdSB7sye7p8UH-3vTMxWqqnle-Bs784m-UyX2dzhYbVopqE2-EbeaXGHgYkDek1TuowZUDgsc_liZSUAOskpDNXwBTBlsRZkdxZuqZCS-m_ERXm8Nw-8yI3ojx261mA92I-vsdhV4mWOqTmxs5zmnKYXfAqm1ru3OVt7ctC3Zw5"
+    }
+  ],
+  "Madrid": [
+    {
+      "id": "17290a224d670000c823a7a9_0|0a2217294d69000041ea450f_0",
+      "flyFrom": "FRA",
+      "cityFrom": "Frankfurt",
+      "flyTo": "MAD",
+      "cityTo": "Madrid",
+      "countryFrom": "Germany",
+      "countryTo": "Spain",
+      "local_departure": "2024-04-02T19:35:00.000Z",
+      "utc_departure": "2024-04-02T17:35:00.000Z",
+      "local_arrival": "2024-04-02T22:25:00.000Z",
+      "utc_arrival": "2024-04-02T20:25:00.000Z",
+      "nightsInDest": 2,
+      "quality": 225.33316,
+      "distance": 1421.89,
+      "duration": {
+        "departure": 10200,
+        "return": 10200,
+        "total": 20400
+      },
+      "price": 156,
+      "airlines": [
+        "IB",
+        "VY"
+      ],
+      "flights": [
+        [
+          {
+            "id": "17290a224d670000c823a7a9_0",
+            "combination_id": "17290a224d670000c823a7a9",
+            "flyFrom": "FRA",
+            "cityFrom": "Frankfurt",
+            "flyTo": "MAD",
+            "cityTo": "Madrid",
+            "local_departure": "2024-04-02T19:35:00.000Z",
+            "utc_departure": "2024-04-02T17:35:00.000Z",
+            "local_arrival": "2024-04-02T22:25:00.000Z",
+            "utc_arrival": "2024-04-02T20:25:00.000Z",
+            "airline": "VY",
+            "flight_no": 5244,
+            "operating_carrier": "IB",
+            "operating_flight_no": "3131",
+            "return": 0
+          }
+        ],
+        [
+          {
+            "id": "0a2217294d69000041ea450f_0",
+            "combination_id": "0a2217294d69000041ea450f",
+            "flyFrom": "MAD",
+            "cityFrom": "Madrid",
+            "flyTo": "FRA",
+            "cityTo": "Frankfurt",
+            "local_departure": "2024-04-04T19:55:00.000Z",
+            "utc_departure": "2024-04-04T17:55:00.000Z",
+            "local_arrival": "2024-04-04T22:45:00.000Z",
+            "utc_arrival": "2024-04-04T20:45:00.000Z",
+            "airline": "IB",
+            "flight_no": 8712,
+            "operating_carrier": "IB",
+            "operating_flight_no": "8712",
+            "return": 1
+          }
+        ]
+      ],
+      "total_legs": 2,
+      "out_legs": 1,
+      "return_legs": 1,
+      "booking_token": "G2cBDs3CVrDrDfpQqk5G_bzCY4YUtWH-xW19O0liI5D6TuDyuzhOnP5EZ0TIqiYFY4KJnSz1KeZGtawqzq4Ugi6rCm5lAK1P0PZnZtK0T3g9V_D_NTsqjf2lUk3lAQjhQKFILKG-4DQgyg8WqrEXS3CuhxJHdIDEcmXl3aLn9-87PjUY6l8h2Q28LO1JO7ZLidbyFZ31PnNzEKVNt3VosOt3yB7BKPrcZQmHpGxss6bxMmJs_oVfznD7hJadmP27FAG9KA3XKpndHAQ5kDuGvbV_-2gG72_pfAC-Y1ZrDz2XkzWYYUiTm5BWYplB3EqlrTR5Hyyly5O7S4zaVivPiW1Dz4A3MJqXC760XUn41EGCXBlLjJHKNziAGpOHDmUlt6Xy1ucz1MlwqRskGfQFhh8gyU_K4LqlnS5eU7c-fIDLmqNbADeY4XFuzEErs2lYuqeqr0vCHUzyyzmI8-GEm1HoQrOyhIX4VO2f5MhAQU0SzgTdzR0ETdfjty4celQbXZcbaC6ksX7diiorKbNrC2D59_bJZKfsVeewYP6ttmRGROoHBEUgKtLwsHVnJy1mk",
+      "deep_link": "https://www.kiwi.com/deep?affilid=flightemissionsdwsflightemissionsmetasearch&currency=EUR&flightsId=17290a224d670000c823a7a9_0%7C0a2217294d69000041ea450f_0&from=FRA&lang=en&passengers=1&searchBags=0.0&to=MAD&booking_token=G2cBDs3CVrDrDfpQqk5G_bzCY4YUtWH-xW19O0liI5D6TuDyuzhOnP5EZ0TIqiYFY4KJnSz1KeZGtawqzq4Ugi6rCm5lAK1P0PZnZtK0T3g9V_D_NTsqjf2lUk3lAQjhQKFILKG-4DQgyg8WqrEXS3CuhxJHdIDEcmXl3aLn9-87PjUY6l8h2Q28LO1JO7ZLidbyFZ31PnNzEKVNt3VosOt3yB7BKPrcZQmHpGxss6bxMmJs_oVfznD7hJadmP27FAG9KA3XKpndHAQ5kDuGvbV_-2gG72_pfAC-Y1ZrDz2XkzWYYUiTm5BWYplB3EqlrTR5Hyyly5O7S4zaVivPiW1Dz4A3MJqXC760XUn41EGCXBlLjJHKNziAGpOHDmUlt6Xy1ucz1MlwqRskGfQFhh8gyU_K4LqlnS5eU7c-fIDLmqNbADeY4XFuzEErs2lYuqeqr0vCHUzyyzmI8-GEm1HoQrOyhIX4VO2f5MhAQU0SzgTdzR0ETdfjty4celQbXZcbaC6ksX7diiorKbNrC2D59_bJZKfsVeewYP6ttmRGROoHBEUgKtLwsHVnJy1mk"
+    }
+  ],
+  "Palma, Majorca": [
+    {
+      "id": "241a13a24d67000047e09464_0|13a20a224d6900005a80372a_0|0a2217294d69000041ea450f_0",
+      "flyFrom": "HHN",
+      "cityFrom": "Frankfurt",
+      "flyTo": "PMI",
+      "cityTo": "Palma, Majorca",
+      "countryFrom": "Germany",
+      "countryTo": "Spain",
+      "local_departure": "2024-04-02T18:25:00.000Z",
+      "utc_departure": "2024-04-02T16:25:00.000Z",
+      "local_arrival": "2024-04-02T20:30:00.000Z",
+      "utc_arrival": "2024-04-02T18:30:00.000Z",
+      "nightsInDest": 2,
+      "quality": 274.333075,
+      "distance": 1210.79,
+      "duration": {
+        "departure": 7500,
+        "return": 28200,
+        "total": 35700
+      },
+      "price": 171,
+      "airlines": [
+        "FR",
+        "IB"
+      ],
+      "flights": [
+        [
+          {
+            "id": "241a13a24d67000047e09464_0",
+            "combination_id": "241a13a24d67000047e09464",
+            "flyFrom": "HHN",
+            "cityFrom": "Frankfurt",
+            "flyTo": "PMI",
+            "cityTo": "Palma, Majorca",
+            "local_departure": "2024-04-02T18:25:00.000Z",
+            "utc_departure": "2024-04-02T16:25:00.000Z",
+            "local_arrival": "2024-04-02T20:30:00.000Z",
+            "utc_arrival": "2024-04-02T18:30:00.000Z",
+            "airline": "FR",
+            "flight_no": 4212,
+            "operating_carrier": "AL",
+            "operating_flight_no": "",
+            "return": 0
+          }
+        ],
+        [
+          {
+            "id": "13a20a224d6900005a80372a_0",
+            "combination_id": "13a20a224d6900005a80372a",
+            "flyFrom": "PMI",
+            "cityFrom": "Palma, Majorca",
+            "flyTo": "MAD",
+            "cityTo": "Madrid",
+            "local_departure": "2024-04-04T14:55:00.000Z",
+            "utc_departure": "2024-04-04T12:55:00.000Z",
+            "local_arrival": "2024-04-04T16:25:00.000Z",
+            "utc_arrival": "2024-04-04T14:25:00.000Z",
+            "airline": "FR",
+            "flight_no": 2064,
+            "operating_carrier": "",
+            "operating_flight_no": "",
+            "return": 1
+          },
+          {
+            "id": "0a2217294d69000041ea450f_0",
+            "combination_id": "0a2217294d69000041ea450f",
+            "flyFrom": "MAD",
+            "cityFrom": "Madrid",
+            "flyTo": "FRA",
+            "cityTo": "Frankfurt",
+            "local_departure": "2024-04-04T19:55:00.000Z",
+            "utc_departure": "2024-04-04T17:55:00.000Z",
+            "local_arrival": "2024-04-04T22:45:00.000Z",
+            "utc_arrival": "2024-04-04T20:45:00.000Z",
+            "airline": "IB",
+            "flight_no": 8712,
+            "operating_carrier": "IB",
+            "operating_flight_no": "8712",
+            "return": 1
+          }
+        ]
+      ],
+      "total_legs": 3,
+      "out_legs": 1,
+      "return_legs": 2,
+      "booking_token": "GN7X3RGRnBd96vO-PhW6AM_TtYl5whFgtNZl7tL74lhUJYzBrAOy0NqZsx7IJE6lsIoKrwYBrscnTSQMvB5kGHRFz9zuZ6bVGZxGUw_XaLkm2zQZdEUtvk-1-865ahN2RYQ8kxWBwl8v06WVv2kWh_gzgVQG4J1wGD-zrfsBlr_o_l0NA0pTYEAqAIBqOOJ7AWT3JCgQAvxMjv39i0vOMwT4xbDFdQikGB5C04BV7mkDkudjiNNmPmMpPUe9_3xcPf9LuBYzxGfPs0byzD9TRD65iQ4wU86OuMvmJs29JJlHnpEEi0LU42uThwQqP_Vygx2F5RegnQyv--o-6cbwTc4EmgR0J9RdjuER1vCLsLlp8Dh4WMoLl9oYLgd8O3f5cguWNrW3wnVnqsHEikvuVsQrnYFsPU6DUNZDF_A4tJO8Ss9l8Aq_RpLSF360Q1-9Sq5_Les_SkERIkDzqOn6EETf9QlZSCSyUxKD6n9hc4C4GXhElLvXTnM2iWrhtHMFCDFxN1t5hu2UYunQQ-WaSLv6BiK7NX5lfq3aiZRL3U4J8pToD_lsLAW2BcQWUofQcx5GB6qrkD4wZ9YUY0LcBdNKfyr3XV181rutQgzV6eZvcVjyPMw56QSvb8bK9xpSQAHSny1c84toBqLSS50DdcQ==",
+      "deep_link": "https://www.kiwi.com/deep?affilid=flightemissionsdwsflightemissionsmetasearch&currency=EUR&flightsId=241a13a24d67000047e09464_0%7C13a20a224d6900005a80372a_0%7C0a2217294d69000041ea450f_0&from=HHN&lang=en&passengers=1&searchBags=0.0&to=PMI&booking_token=GN7X3RGRnBd96vO-PhW6AM_TtYl5whFgtNZl7tL74lhUJYzBrAOy0NqZsx7IJE6lsIoKrwYBrscnTSQMvB5kGHRFz9zuZ6bVGZxGUw_XaLkm2zQZdEUtvk-1-865ahN2RYQ8kxWBwl8v06WVv2kWh_gzgVQG4J1wGD-zrfsBlr_o_l0NA0pTYEAqAIBqOOJ7AWT3JCgQAvxMjv39i0vOMwT4xbDFdQikGB5C04BV7mkDkudjiNNmPmMpPUe9_3xcPf9LuBYzxGfPs0byzD9TRD65iQ4wU86OuMvmJs29JJlHnpEEi0LU42uThwQqP_Vygx2F5RegnQyv--o-6cbwTc4EmgR0J9RdjuER1vCLsLlp8Dh4WMoLl9oYLgd8O3f5cguWNrW3wnVnqsHEikvuVsQrnYFsPU6DUNZDF_A4tJO8Ss9l8Aq_RpLSF360Q1-9Sq5_Les_SkERIkDzqOn6EETf9QlZSCSyUxKD6n9hc4C4GXhElLvXTnM2iWrhtHMFCDFxN1t5hu2UYunQQ-WaSLv6BiK7NX5lfq3aiZRL3U4J8pToD_lsLAW2BcQWUofQcx5GB6qrkD4wZ9YUY0LcBdNKfyr3XV181rutQgzV6eZvcVjyPMw56QSvb8bK9xpSQAHSny1c84toBqLSS50DdcQ=="
+    }
+  ],
+  "Barcelona": [
+    {
+      "id": "241a13a24d6800007dc140e5_0|13a201af4d6800005accfed9_0|01af07f04d6b0000544cb483_0|07f017294d6b00005f358e79_0",
+      "flyFrom": "HHN",
+      "cityFrom": "Frankfurt",
+      "flyTo": "BCN",
+      "cityTo": "Barcelona",
+      "countryFrom": "Germany",
+      "countryTo": "Spain",
+      "local_departure": "2024-04-03T13:20:00.000Z",
+      "utc_departure": "2024-04-03T11:20:00.000Z",
+      "local_arrival": "2024-04-03T18:10:00.000Z",
+      "utc_arrival": "2024-04-03T16:10:00.000Z",
+      "nightsInDest": 3,
+      "quality": 330.333065,
+      "distance": 1043.63,
+      "duration": {
+        "departure": 17400,
+        "return": 20100,
+        "total": 37500
+      },
+      "price": 223,
+      "airlines": [
+        "FR",
+        "LH",
+        "VY"
+      ],
+      "flights": [
+        [
+          {
+            "id": "241a13a24d6800007dc140e5_0",
+            "combination_id": "241a13a24d6800007dc140e5",
+            "flyFrom": "HHN",
+            "cityFrom": "Frankfurt",
+            "flyTo": "PMI",
+            "cityTo": "Palma, Majorca",
+            "local_departure": "2024-04-03T13:20:00.000Z",
+            "utc_departure": "2024-04-03T11:20:00.000Z",
+            "local_arrival": "2024-04-03T15:25:00.000Z",
+            "utc_arrival": "2024-04-03T13:25:00.000Z",
+            "airline": "FR",
+            "flight_no": 9832,
+            "operating_carrier": "",
+            "operating_flight_no": "",
+            "return": 0
+          },
+          {
+            "id": "13a201af4d6800005accfed9_0",
+            "combination_id": "13a201af4d6800005accfed9",
+            "flyFrom": "PMI",
+            "cityFrom": "Palma, Majorca",
+            "flyTo": "BCN",
+            "cityTo": "Barcelona",
+            "local_departure": "2024-04-03T17:15:00.000Z",
+            "utc_departure": "2024-04-03T15:15:00.000Z",
+            "local_arrival": "2024-04-03T18:10:00.000Z",
+            "utc_arrival": "2024-04-03T16:10:00.000Z",
+            "airline": "FR",
+            "flight_no": 3071,
+            "operating_carrier": "",
+            "operating_flight_no": "",
+            "return": 0
+          }
+        ],
+        [
+          {
+            "id": "01af07f04d6b0000544cb483_0",
+            "combination_id": "01af07f04d6b0000544cb483",
+            "flyFrom": "BCN",
+            "cityFrom": "Barcelona",
+            "flyTo": "MXP",
+            "cityTo": "Milan",
+            "local_departure": "2024-04-06T10:25:00.000Z",
+            "utc_departure": "2024-04-06T08:25:00.000Z",
+            "local_arrival": "2024-04-06T12:10:00.000Z",
+            "utc_arrival": "2024-04-06T10:10:00.000Z",
+            "airline": "VY",
+            "flight_no": 6332,
+            "operating_carrier": "VY",
+            "operating_flight_no": "6332",
+            "return": 1
+          },
+          {
+            "id": "07f017294d6b00005f358e79_0",
+            "combination_id": "07f017294d6b00005f358e79",
+            "flyFrom": "MXP",
+            "cityFrom": "Milan",
+            "flyTo": "FRA",
+            "cityTo": "Frankfurt",
+            "local_departure": "2024-04-06T14:40:00.000Z",
+            "utc_departure": "2024-04-06T12:40:00.000Z",
+            "local_arrival": "2024-04-06T16:00:00.000Z",
+            "utc_arrival": "2024-04-06T14:00:00.000Z",
+            "airline": "LH",
+            "flight_no": 253,
+            "operating_carrier": "LH",
+            "operating_flight_no": "253",
+            "return": 1
+          }
+        ]
+      ],
+      "total_legs": 4,
+      "out_legs": 2,
+      "return_legs": 2,
+      "booking_token": "GX-awTeiC4hleb4IQJF-lRRqChN-XLJSvE2U5En5AMjUTD9KT5NW0XRhczYgKV371X5hwUGaxHnI35F61c01miZIEiIWA-n4XK2BvOQD7rPI9hqCIFyP_YtMj_7LZtMhGZGcinrn3ppVRlHpYiOAwNEh8MxnJCpN5Gdp63rdJyRVb_Xln_mF-1GBLv4RBdNlx9egxFo3tMkGBRvZmhEr4zPczyoNDBM_57c2cTZGg70nJIp3im62SKViNI9FP1ibQVnBXUSVKOTi0St0Dy399sQ3ILR-HcrWoysXtQOqGYU2PEYbg_lCQo8XwspcG5FMJeqj0VcW__klWLyfHJ9NgWeq6FbMBFGgT39C4l5MzyqijP3XjjUzR61-78u_4Yw6k7k1dFXLzp5BtiJKU12BOgAUBC2Gq0e6wnBc4jyiSOHV8lCU8ydZj7yc2qmqT5Qey7yxwcoq9zhNM6EI4-X8GdvAMxNHJgvTu_XvsdL1gh3cPghBuJmkfXVm6NZB3z7g58-XS4oT1Yv5-Y7WEyB57GmVLsqzbfxFK6aBYgpClrz675dlWnknq0Jr3JbTHA1Xq7xZazRusokp9bB_aGfnE0feNL8dXYDVnA3asuXogso6gOmKcRpEKLB2KABlqVD6ff79L3KjKMonwAOfDHS-UUhrcNxK9hcZ4CubItkywyJ5p5L-3W-SZ13o86e29l6YY18mEFPLKRtg251nx0IsZSly6Zel6sihtk-ZdACzk-Ck=",
+      "deep_link": "https://www.kiwi.com/deep?affilid=flightemissionsdwsflightemissionsmetasearch&currency=EUR&flightsId=241a13a24d6800007dc140e5_0%7C13a201af4d6800005accfed9_0%7C01af07f04d6b0000544cb483_0%7C07f017294d6b00005f358e79_0&from=HHN&lang=en&passengers=1&searchBags=0.0&to=BCN&booking_token=GX-awTeiC4hleb4IQJF-lRRqChN-XLJSvE2U5En5AMjUTD9KT5NW0XRhczYgKV371X5hwUGaxHnI35F61c01miZIEiIWA-n4XK2BvOQD7rPI9hqCIFyP_YtMj_7LZtMhGZGcinrn3ppVRlHpYiOAwNEh8MxnJCpN5Gdp63rdJyRVb_Xln_mF-1GBLv4RBdNlx9egxFo3tMkGBRvZmhEr4zPczyoNDBM_57c2cTZGg70nJIp3im62SKViNI9FP1ibQVnBXUSVKOTi0St0Dy399sQ3ILR-HcrWoysXtQOqGYU2PEYbg_lCQo8XwspcG5FMJeqj0VcW__klWLyfHJ9NgWeq6FbMBFGgT39C4l5MzyqijP3XjjUzR61-78u_4Yw6k7k1dFXLzp5BtiJKU12BOgAUBC2Gq0e6wnBc4jyiSOHV8lCU8ydZj7yc2qmqT5Qey7yxwcoq9zhNM6EI4-X8GdvAMxNHJgvTu_XvsdL1gh3cPghBuJmkfXVm6NZB3z7g58-XS4oT1Yv5-Y7WEyB57GmVLsqzbfxFK6aBYgpClrz675dlWnknq0Jr3JbTHA1Xq7xZazRusokp9bB_aGfnE0feNL8dXYDVnA3asuXogso6gOmKcRpEKLB2KABlqVD6ff79L3KjKMonwAOfDHS-UUhrcNxK9hcZ4CubItkywyJ5p5L-3W-SZ13o86e29l6YY18mEFPLKRtg251nx0IsZSly6Zel6sihtk-ZdACzk-Ck="
+    }
+  ],
+  "Istanbul": [
+    {
+      "id": "1729170f4d6800001d04fef3_0|170f17294d6b0000e3615d6e_0",
+      "flyFrom": "FRA",
+      "cityFrom": "Frankfurt",
+      "flyTo": "IST",
+      "cityTo": "Istanbul",
+      "countryFrom": "Germany",
+      "countryTo": "Turkey",
+      "local_departure": "2024-04-03T11:40:00.000Z",
+      "utc_departure": "2024-04-03T09:40:00.000Z",
+      "local_arrival": "2024-04-03T15:40:00.000Z",
+      "utc_arrival": "2024-04-03T12:40:00.000Z",
+      "nightsInDest": 3,
+      "quality": 359.33315,
+      "distance": 1839.37,
+      "duration": {
+        "departure": 10800,
+        "return": 11400,
+        "total": 22200
+      },
+      "price": 286,
+      "airlines": [
+        "TK",
+        "LH"
+      ],
+      "flights": [
+        [
+          {
+            "id": "1729170f4d6800001d04fef3_0",
+            "combination_id": "1729170f4d6800001d04fef3",
+            "flyFrom": "FRA",
+            "cityFrom": "Frankfurt",
+            "flyTo": "IST",
+            "cityTo": "Istanbul",
+            "local_departure": "2024-04-03T11:40:00.000Z",
+            "utc_departure": "2024-04-03T09:40:00.000Z",
+            "local_arrival": "2024-04-03T15:40:00.000Z",
+            "utc_arrival": "2024-04-03T12:40:00.000Z",
+            "airline": "TK",
+            "flight_no": 1588,
+            "operating_carrier": "TK",
+            "operating_flight_no": "1588",
+            "return": 0
+          }
+        ],
+        [
+          {
+            "id": "170f17294d6b0000e3615d6e_0",
+            "combination_id": "170f17294d6b0000e3615d6e",
+            "flyFrom": "IST",
+            "cityFrom": "Istanbul",
+            "flyTo": "FRA",
+            "cityTo": "Frankfurt",
+            "local_departure": "2024-04-06T14:00:00.000Z",
+            "utc_departure": "2024-04-06T11:00:00.000Z",
+            "local_arrival": "2024-04-06T16:10:00.000Z",
+            "utc_arrival": "2024-04-06T14:10:00.000Z",
+            "airline": "LH",
+            "flight_no": 1299,
+            "operating_carrier": "LH",
+            "operating_flight_no": "1299",
+            "return": 1
+          }
+        ]
+      ],
+      "total_legs": 2,
+      "out_legs": 1,
+      "return_legs": 1,
+      "booking_token": "GraHQu-IjuWlm4qsraHhsMn1qr7TEG8Hwm2E9f_yhCFhtg1jSXVHbhjanajHOhzfYvGXX0YGmQIW8WOMq1FLjFQe6hUtrzkLlhfseBwANgtsQRLcK2glMD6kF1fcG_eAQ2MByYwB9-hF5TzOryqXQMuLqGMJQVq5UBKRT37FaZO5DyWgccxz-FaASBYVDk1je1nmZR91bDkeGQYlHvgBRGrZE7nZVBQw6XZSAp9W5u-A-xP7rMJgn5Rbpj6yllkVwz6rdBextcLnDVd2xi0oU-QBk8H4ozZOkwpHEv1AsgKxUT6KHvkiItbk9kfVbNTBH9t-ZXkAldTZdn5Bknp62SN9gATfByNK02XuqlWI-4P8ZA-qtF56sgOb38MsZ71H-yBXwcAqB4SOmV80_57InAob6pWPrlAusz3QzDmkPLMyeUVKoFeRbbnbYWST9w320mDX-RZBLZWyjnShcGItoxLXla6eEw3OQQHIZhjGWXrkwTi_f63gBZ1Rd4E214rbwYXMRXeykdd5lmUalau7ACGePXDYmuvAQzCLugUw2zsE=",
+      "deep_link": "https://www.kiwi.com/deep?affilid=flightemissionsdwsflightemissionsmetasearch&currency=EUR&flightsId=1729170f4d6800001d04fef3_0%7C170f17294d6b0000e3615d6e_0&from=FRA&lang=en&passengers=1&searchBags=0.0&to=IST&booking_token=GraHQu-IjuWlm4qsraHhsMn1qr7TEG8Hwm2E9f_yhCFhtg1jSXVHbhjanajHOhzfYvGXX0YGmQIW8WOMq1FLjFQe6hUtrzkLlhfseBwANgtsQRLcK2glMD6kF1fcG_eAQ2MByYwB9-hF5TzOryqXQMuLqGMJQVq5UBKRT37FaZO5DyWgccxz-FaASBYVDk1je1nmZR91bDkeGQYlHvgBRGrZE7nZVBQw6XZSAp9W5u-A-xP7rMJgn5Rbpj6yllkVwz6rdBextcLnDVd2xi0oU-QBk8H4ozZOkwpHEv1AsgKxUT6KHvkiItbk9kfVbNTBH9t-ZXkAldTZdn5Bknp62SN9gATfByNK02XuqlWI-4P8ZA-qtF56sgOb38MsZ71H-yBXwcAqB4SOmV80_57InAob6pWPrlAusz3QzDmkPLMyeUVKoFeRbbnbYWST9w320mDX-RZBLZWyjnShcGItoxLXla6eEw3OQQHIZhjGWXrkwTi_f63gBZ1Rd4E214rbwYXMRXeykdd5lmUalau7ACGePXDYmuvAQzCLugUw2zsE="
+    }
+  ],
+  "Dubai": [
+    {
+      "id": "172921dd4d674d6a552c8944_0|172921dd4d674d6a552c8944_1|172921dd4d674d6a552c8944_2|172921dd4d674d6a552c8944_3",
+      "flyFrom": "FRA",
+      "cityFrom": "Frankfurt",
+      "flyTo": "DXB",
+      "cityTo": "Dubai",
+      "countryFrom": "Germany",
+      "countryTo": "United Arab Emirates",
+      "local_departure": "2024-04-02T16:15:00.000Z",
+      "utc_departure": "2024-04-02T14:15:00.000Z",
+      "local_arrival": "2024-04-03T10:50:00.000Z",
+      "utc_arrival": "2024-04-03T06:50:00.000Z",
+      "nightsInDest": 2,
+      "quality": 772.66604,
+      "distance": 4848.52,
+      "duration": {
+        "departure": 59700,
+        "return": 42300,
+        "total": 102000
+      },
+      "price": 522,
+      "airlines": [
+        "SV"
+      ],
+      "flights": [
+        [
+          {
+            "id": "172921dd4d674d6a552c8944_0",
+            "combination_id": "172921dd4d674d6a552c8944",
+            "flyFrom": "FRA",
+            "cityFrom": "Frankfurt",
+            "flyTo": "JED",
+            "cityTo": "Jeddah",
+            "local_departure": "2024-04-02T16:15:00.000Z",
+            "utc_departure": "2024-04-02T14:15:00.000Z",
+            "local_arrival": "2024-04-02T23:15:00.000Z",
+            "utc_arrival": "2024-04-02T20:15:00.000Z",
+            "airline": "SV",
+            "flight_no": 168,
+            "operating_carrier": "SV",
+            "operating_flight_no": "168",
+            "return": 0
+          },
+          {
+            "id": "172921dd4d674d6a552c8944_1",
+            "combination_id": "172921dd4d674d6a552c8944",
+            "flyFrom": "JED",
+            "cityFrom": "Jeddah",
+            "flyTo": "DXB",
+            "cityTo": "Dubai",
+            "local_departure": "2024-04-03T06:40:00.000Z",
+            "utc_departure": "2024-04-03T03:40:00.000Z",
+            "local_arrival": "2024-04-03T10:50:00.000Z",
+            "utc_arrival": "2024-04-03T06:50:00.000Z",
+            "airline": "SV",
+            "flight_no": 566,
+            "operating_carrier": "SV",
+            "operating_flight_no": "566",
+            "return": 0
+          }
+        ],
+        [
+          {
+            "id": "172921dd4d674d6a552c8944_2",
+            "combination_id": "172921dd4d674d6a552c8944",
+            "flyFrom": "DXB",
+            "cityFrom": "Dubai",
+            "flyTo": "RUH",
+            "cityTo": "Riyadh",
+            "local_departure": "2024-04-05T05:00:00.000Z",
+            "utc_departure": "2024-04-05T01:00:00.000Z",
+            "local_arrival": "2024-04-05T06:00:00.000Z",
+            "utc_arrival": "2024-04-05T03:00:00.000Z",
+            "airline": "SV",
+            "flight_no": 593,
+            "operating_carrier": "SV",
+            "operating_flight_no": "593",
+            "return": 1
+          },
+          {
+            "id": "172921dd4d674d6a552c8944_3",
+            "combination_id": "172921dd4d674d6a552c8944",
+            "flyFrom": "RUH",
+            "cityFrom": "Riyadh",
+            "flyTo": "FRA",
+            "cityTo": "Frankfurt",
+            "local_departure": "2024-04-05T09:05:00.000Z",
+            "utc_departure": "2024-04-05T06:05:00.000Z",
+            "local_arrival": "2024-04-05T14:45:00.000Z",
+            "utc_arrival": "2024-04-05T12:45:00.000Z",
+            "airline": "SV",
+            "flight_no": 179,
+            "operating_carrier": "SV",
+            "operating_flight_no": "179",
+            "return": 1
+          }
+        ]
+      ],
+      "total_legs": 4,
+      "out_legs": 2,
+      "return_legs": 2,
+      "booking_token": "GPtfoI7BVi-a4XLmj49cIpqloNx5MroiAZzIwOsjDpnZasrbJPRXS7CE7ST3bSbnotSsA_s3jFkhkKmUDTOyL24zGzZlZRFMCd9tcgdRKD2wCx78CxPTFaSgphyT5ljDG8VbitFgafY70V2Fka-AJYYSPEpAJ8t8YTom4payOzG5HPgGbtFYmOfofv7Z1EpMzY7uEsYnQjFj-TGu8bji2u-i2CdNkg36zF8s74FRKWZbp38vy4oNw95tT6eO6MbrAYi_jkVg0L8d6NvsVTUm0dOhnR_LjVn74A1EknnCTi9FqCKp3eqM6aqcd72RFkXpC4PhLbxNrseEZpkfjwWDmTLtefZRIwbP6JXlXFEVj4YvttUMu6__9NkOfe3-Y0NhiAaJ8hHWWke1xJiDVX6Fs6Gk5cLBXnWLW1pZveIN3DKcjtC9lQd-yFw3mAgm04TA5AhqiawQUhbo1bb5IqhFad9P_iAKU6XqgEuwP-786xbo=",
+      "deep_link": "https://www.kiwi.com/deep?affilid=flightemissionsdwsflightemissionsmetasearch&currency=EUR&flightsId=172921dd4d674d6a552c8944_0%7C172921dd4d674d6a552c8944_1%7C172921dd4d674d6a552c8944_2%7C172921dd4d674d6a552c8944_3&from=FRA&lang=en&passengers=1&searchBags=0.0&to=DXB&booking_token=GPtfoI7BVi-a4XLmj49cIpqloNx5MroiAZzIwOsjDpnZasrbJPRXS7CE7ST3bSbnotSsA_s3jFkhkKmUDTOyL24zGzZlZRFMCd9tcgdRKD2wCx78CxPTFaSgphyT5ljDG8VbitFgafY70V2Fka-AJYYSPEpAJ8t8YTom4payOzG5HPgGbtFYmOfofv7Z1EpMzY7uEsYnQjFj-TGu8bji2u-i2CdNkg36zF8s74FRKWZbp38vy4oNw95tT6eO6MbrAYi_jkVg0L8d6NvsVTUm0dOhnR_LjVn74A1EknnCTi9FqCKp3eqM6aqcd72RFkXpC4PhLbxNrseEZpkfjwWDmTLtefZRIwbP6JXlXFEVj4YvttUMu6__9NkOfe3-Y0NhiAaJ8hHWWke1xJiDVX6Fs6Gk5cLBXnWLW1pZveIN3DKcjtC9lQd-yFw3mAgm04TA5AhqiawQUhbo1bb5IqhFad9P_iAKU6XqgEuwP-786xbo="
+    }
+  ],
+  "New York": [
+    {
+      "id": "17291cdb4d684d6bfc16c35e_0|17291cdb4d684d6bfc16c35e_1|17291cdb4d684d6bfc16c35e_2|17291cdb4d684d6bfc16c35e_3",
+      "flyFrom": "FRA",
+      "cityFrom": "Frankfurt",
+      "flyTo": "EWR",
+      "cityTo": "New York",
+      "countryFrom": "Germany",
+      "countryTo": "United States",
+      "local_departure": "2024-04-03T14:00:00.000Z",
+      "utc_departure": "2024-04-03T12:00:00.000Z",
+      "local_arrival": "2024-04-03T19:15:00.000Z",
+      "utc_arrival": "2024-04-03T23:15:00.000Z",
+      "nightsInDest": 3,
+      "quality": 784.999505,
+      "distance": 6217.86,
+      "duration": {
+        "departure": 40500,
+        "return": 37800,
+        "total": 78300
+      },
+      "price": 587,
+      "airlines": [
+        "FI"
+      ],
+      "flights": [
+        [
+          {
+            "id": "17291cdb4d684d6bfc16c35e_0",
+            "combination_id": "17291cdb4d684d6bfc16c35e",
+            "flyFrom": "FRA",
+            "cityFrom": "Frankfurt",
+            "flyTo": "KEF",
+            "cityTo": "Reykjavik",
+            "local_departure": "2024-04-03T14:00:00.000Z",
+            "utc_departure": "2024-04-03T12:00:00.000Z",
+            "local_arrival": "2024-04-03T15:40:00.000Z",
+            "utc_arrival": "2024-04-03T15:40:00.000Z",
+            "airline": "FI",
+            "flight_no": 521,
+            "operating_carrier": "FI",
+            "operating_flight_no": "521",
+            "return": 0
+          },
+          {
+            "id": "17291cdb4d684d6bfc16c35e_1",
+            "combination_id": "17291cdb4d684d6bfc16c35e",
+            "flyFrom": "KEF",
+            "cityFrom": "Reykjavik",
+            "flyTo": "EWR",
+            "cityTo": "New York",
+            "local_departure": "2024-04-03T17:00:00.000Z",
+            "utc_departure": "2024-04-03T17:00:00.000Z",
+            "local_arrival": "2024-04-03T19:15:00.000Z",
+            "utc_arrival": "2024-04-03T23:15:00.000Z",
+            "airline": "FI",
+            "flight_no": 623,
+            "operating_carrier": "FI",
+            "operating_flight_no": "623",
+            "return": 0
+          }
+        ],
+        [
+          {
+            "id": "17291cdb4d684d6bfc16c35e_2",
+            "combination_id": "17291cdb4d684d6bfc16c35e",
+            "flyFrom": "EWR",
+            "cityFrom": "New York",
+            "flyTo": "KEF",
+            "cityTo": "Reykjavik",
+            "local_departure": "2024-04-06T20:30:00.000Z",
+            "utc_departure": "2024-04-07T00:30:00.000Z",
+            "local_arrival": "2024-04-07T06:15:00.000Z",
+            "utc_arrival": "2024-04-07T06:15:00.000Z",
+            "airline": "FI",
+            "flight_no": 622,
+            "operating_carrier": "FI",
+            "operating_flight_no": "622",
+            "return": 1
+          },
+          {
+            "id": "17291cdb4d684d6bfc16c35e_3",
+            "combination_id": "17291cdb4d684d6bfc16c35e",
+            "flyFrom": "KEF",
+            "cityFrom": "Reykjavik",
+            "flyTo": "FRA",
+            "cityTo": "Frankfurt",
+            "local_departure": "2024-04-07T07:25:00.000Z",
+            "utc_departure": "2024-04-07T07:25:00.000Z",
+            "local_arrival": "2024-04-07T13:00:00.000Z",
+            "utc_arrival": "2024-04-07T11:00:00.000Z",
+            "airline": "FI",
+            "flight_no": 520,
+            "operating_carrier": "FI",
+            "operating_flight_no": "520",
+            "return": 1
+          }
+        ]
+      ],
+      "total_legs": 4,
+      "out_legs": 2,
+      "return_legs": 2,
+      "booking_token": "G3F3P9Gtrh0v_CGiRBuCl9FQ2zIYEkUP4aYjtvlWaUBROagJhFqDqkhui2GieSP916d5UuRThySUEJxL2nUOdcd7IKoKMxQ_kcppuw0mlhEaPOrmEZbms-MlFNu8fB_EJlaDe_HfeT11h95NQyiCdLPmSO8sxmo50_MM9FkGl826QQ-0X0KayYpzXwlPt1DRcSmlGdlfoR2h3v1dmiaQyKDmuztZeHsLi-WGY5aRjqdzBEEf4HYCpJXYbJjzLgqnkYp4TvZcNuU4ts3DTpp0umlqeniycm7JR2PXyisfJgbkKWH7WcYni47JMeHDAo_1pkr1A73Q7LXqE4yAIycKaf5DPNy3GctMPXh1K3IwHB4IjJcN04ONh56-Flxxzt5u3wub1fgbWDtHfa5mz4dN4gmejDl8ZbDcnIFQCkBPevunDd6MGxQEYAGMkfcB3A6Hp-FdTvnih5lwQnBVI9G1W4_H_JWnB7toheojClczDSoqpfcsV31n2wreniBC_xI_V",
+      "deep_link": "https://www.kiwi.com/deep?affilid=flightemissionsdwsflightemissionsmetasearch&currency=EUR&flightsId=17291cdb4d684d6bfc16c35e_0%7C17291cdb4d684d6bfc16c35e_1%7C17291cdb4d684d6bfc16c35e_2%7C17291cdb4d684d6bfc16c35e_3&from=FRA&lang=en&passengers=1&searchBags=0.0&to=EWR&booking_token=G3F3P9Gtrh0v_CGiRBuCl9FQ2zIYEkUP4aYjtvlWaUBROagJhFqDqkhui2GieSP916d5UuRThySUEJxL2nUOdcd7IKoKMxQ_kcppuw0mlhEaPOrmEZbms-MlFNu8fB_EJlaDe_HfeT11h95NQyiCdLPmSO8sxmo50_MM9FkGl826QQ-0X0KayYpzXwlPt1DRcSmlGdlfoR2h3v1dmiaQyKDmuztZeHsLi-WGY5aRjqdzBEEf4HYCpJXYbJjzLgqnkYp4TvZcNuU4ts3DTpp0umlqeniycm7JR2PXyisfJgbkKWH7WcYni47JMeHDAo_1pkr1A73Q7LXqE4yAIycKaf5DPNy3GctMPXh1K3IwHB4IjJcN04ONh56-Flxxzt5u3wub1fgbWDtHfa5mz4dN4gmejDl8ZbDcnIFQCkBPevunDd6MGxQEYAGMkfcB3A6Hp-FdTvnih5lwQnBVI9G1W4_H_JWnB7toheojClczDSoqpfcsV31n2wreniBC_xI_V"
+    }
+  ],
+  "Bangkok": [
+    {
+      "id": "172907564d664d6971816eb9_0|172907564d664d6971816eb9_1|172907564d664d6971816eb9_2|172907564d664d6971816eb9_3",
+      "flyFrom": "FRA",
+      "cityFrom": "Frankfurt",
+      "flyTo": "BKK",
+      "cityTo": "Bangkok",
+      "countryFrom": "Germany",
+      "countryTo": "Thailand",
+      "local_departure": "2024-04-01T16:15:00.000Z",
+      "utc_departure": "2024-04-01T14:15:00.000Z",
+      "local_arrival": "2024-04-02T15:40:00.000Z",
+      "utc_arrival": "2024-04-02T08:40:00.000Z",
+      "nightsInDest": 2,
+      "quality": 1042.33257,
+      "distance": 9009.09,
+      "duration": {
+        "departure": 66300,
+        "return": 60300,
+        "total": 126600
+      },
+      "price": 737,
+      "airlines": [
+        "SV"
+      ],
+      "flights": [
+        [
+          {
+            "id": "172907564d664d6971816eb9_0",
+            "combination_id": "172907564d664d6971816eb9",
+            "flyFrom": "FRA",
+            "cityFrom": "Frankfurt",
+            "flyTo": "RUH",
+            "cityTo": "Riyadh",
+            "local_departure": "2024-04-01T16:15:00.000Z",
+            "utc_departure": "2024-04-01T14:15:00.000Z",
+            "local_arrival": "2024-04-01T23:40:00.000Z",
+            "utc_arrival": "2024-04-01T20:40:00.000Z",
+            "airline": "SV",
+            "flight_no": 180,
+            "operating_carrier": "SV",
+            "operating_flight_no": "180",
+            "return": 0
+          },
+          {
+            "id": "172907564d664d6971816eb9_1",
+            "combination_id": "172907564d664d6971816eb9",
+            "flyFrom": "RUH",
+            "cityFrom": "Riyadh",
+            "flyTo": "BKK",
+            "cityTo": "Bangkok",
+            "local_departure": "2024-04-02T04:05:00.000Z",
+            "utc_departure": "2024-04-02T01:05:00.000Z",
+            "local_arrival": "2024-04-02T15:40:00.000Z",
+            "utc_arrival": "2024-04-02T08:40:00.000Z",
+            "airline": "SV",
+            "flight_no": 846,
+            "operating_carrier": "SV",
+            "operating_flight_no": "846",
+            "return": 0
+          }
+        ],
+        [
+          {
+            "id": "172907564d664d6971816eb9_2",
+            "combination_id": "172907564d664d6971816eb9",
+            "flyFrom": "BKK",
+            "cityFrom": "Bangkok",
+            "flyTo": "JED",
+            "cityTo": "Jeddah",
+            "local_departure": "2024-04-04T03:00:00.000Z",
+            "utc_departure": "2024-04-03T20:00:00.000Z",
+            "local_arrival": "2024-04-04T07:00:00.000Z",
+            "utc_arrival": "2024-04-04T04:00:00.000Z",
+            "airline": "SV",
+            "flight_no": 849,
+            "operating_carrier": "SV",
+            "operating_flight_no": "849",
+            "return": 1
+          },
+          {
+            "id": "172907564d664d6971816eb9_3",
+            "combination_id": "172907564d664d6971816eb9",
+            "flyFrom": "JED",
+            "cityFrom": "Jeddah",
+            "flyTo": "FRA",
+            "cityTo": "Frankfurt",
+            "local_departure": "2024-04-04T09:45:00.000Z",
+            "utc_departure": "2024-04-04T06:45:00.000Z",
+            "local_arrival": "2024-04-04T14:45:00.000Z",
+            "utc_arrival": "2024-04-04T12:45:00.000Z",
+            "airline": "SV",
+            "flight_no": 167,
+            "operating_carrier": "SV",
+            "operating_flight_no": "167",
+            "return": 1
+          }
+        ]
+      ],
+      "total_legs": 4,
+      "out_legs": 2,
+      "return_legs": 2,
+      "booking_token": "GmahEqBkdPGVRzxfkWTiiR8up_attgm5T4aHLPE386_8dQjWzfoGKFpHaq_F1Ps1OIIFJCHTQP8TMcRJEtIJVh2cHGtHeqqSqX0LICG_Bt6es_fnesGKFDDJmPgHqS7uimANP0F-1IrDcLHA_XARLipqs9llDGnuOHaw0mdhSzQhLwX3EHqFjLENz2_o9SEeyT-E2O3KSueupKdzFgF04uilIvLg0oZEIeZnbYDsQnzS6s6VYCFOKSIkKScdfsw0AiZDGhRKdOB65vbi_Mf_69j6rhH25N6h2OTEV27_NQCY6g9hcJcDtR89ITauxH7sT3pdGZL4DsP71tDaE6KrO654p9i89-_kz7KI2lz_oiveOBeJZzEaJa0nmD1a20MRBMAyphEJ98g871lOWmuaZg1uqGCY6-S-Bu5THOqTXncKPJrG6WBmKpts3VWlq8z126MWsi-g7Bv4_AJJJr7yyQrzsQ7BwDFrt30IoEXWI5CgNG9ku64D-mFezR_YBzhJ4",
+      "deep_link": "https://www.kiwi.com/deep?affilid=flightemissionsdwsflightemissionsmetasearch&currency=EUR&flightsId=172907564d664d6971816eb9_0%7C172907564d664d6971816eb9_1%7C172907564d664d6971816eb9_2%7C172907564d664d6971816eb9_3&from=FRA&lang=en&passengers=1&searchBags=0.0&to=BKK&booking_token=GmahEqBkdPGVRzxfkWTiiR8up_attgm5T4aHLPE386_8dQjWzfoGKFpHaq_F1Ps1OIIFJCHTQP8TMcRJEtIJVh2cHGtHeqqSqX0LICG_Bt6es_fnesGKFDDJmPgHqS7uimANP0F-1IrDcLHA_XARLipqs9llDGnuOHaw0mdhSzQhLwX3EHqFjLENz2_o9SEeyT-E2O3KSueupKdzFgF04uilIvLg0oZEIeZnbYDsQnzS6s6VYCFOKSIkKScdfsw0AiZDGhRKdOB65vbi_Mf_69j6rhH25N6h2OTEV27_NQCY6g9hcJcDtR89ITauxH7sT3pdGZL4DsP71tDaE6KrO654p9i89-_kz7KI2lz_oiveOBeJZzEaJa0nmD1a20MRBMAyphEJ98g871lOWmuaZg1uqGCY6-S-Bu5THOqTXncKPJrG6WBmKpts3VWlq8z126MWsi-g7Bv4_AJJJr7yyQrzsQ7BwDFrt30IoEXWI5CgNG9ku64D-mFezR_YBzhJ4"
+    }
+  ],
+  "New Delhi": [
+    {
+      "id": "172907114d660000d7d183fa_0|071117294d690000156102a2_0|071117294d690000156102a2_1|071117294d690000156102a2_2",
+      "flyFrom": "FRA",
+      "cityFrom": "Frankfurt",
+      "flyTo": "DEL",
+      "cityTo": "New Delhi",
+      "countryFrom": "Germany",
+      "countryTo": "India",
+      "local_departure": "2024-04-01T21:20:00.000Z",
+      "utc_departure": "2024-04-01T19:20:00.000Z",
+      "local_arrival": "2024-04-02T08:30:00.000Z",
+      "utc_arrival": "2024-04-02T03:00:00.000Z",
+      "nightsInDest": 2,
+      "quality": 1052.999395,
+      "distance": 6127.35,
+      "duration": {
+        "departure": 27600,
+        "return": 70500,
+        "total": 98100
+      },
+      "price": 811,
+      "airlines": [
+        "UK",
+        "KC"
+      ],
+      "flights": [
+        [
+          {
+            "id": "172907114d660000d7d183fa_0",
+            "combination_id": "172907114d660000d7d183fa",
+            "flyFrom": "FRA",
+            "cityFrom": "Frankfurt",
+            "flyTo": "DEL",
+            "cityTo": "New Delhi",
+            "local_departure": "2024-04-01T21:20:00.000Z",
+            "utc_departure": "2024-04-01T19:20:00.000Z",
+            "local_arrival": "2024-04-02T08:30:00.000Z",
+            "utc_arrival": "2024-04-02T03:00:00.000Z",
+            "airline": "UK",
+            "flight_no": 26,
+            "operating_carrier": "UK",
+            "operating_flight_no": "26",
+            "return": 0
+          }
+        ],
+        [
+          {
+            "id": "071117294d690000156102a2_0",
+            "combination_id": "071117294d690000156102a2",
+            "flyFrom": "DEL",
+            "cityFrom": "New Delhi",
+            "flyTo": "ALA",
+            "cityTo": "Almaty",
+            "local_departure": "2024-04-04T01:10:00.000Z",
+            "utc_departure": "2024-04-03T19:40:00.000Z",
+            "local_arrival": "2024-04-04T04:55:00.000Z",
+            "utc_arrival": "2024-04-03T22:55:00.000Z",
+            "airline": "KC",
+            "flight_no": 964,
+            "operating_carrier": "KC",
+            "operating_flight_no": "964",
+            "return": 1
+          },
+          {
+            "id": "071117294d690000156102a2_1",
+            "combination_id": "071117294d690000156102a2",
+            "flyFrom": "ALA",
+            "cityFrom": "Almaty",
+            "flyTo": "NQZ",
+            "cityTo": "Astana",
+            "local_departure": "2024-04-04T09:45:00.000Z",
+            "utc_departure": "2024-04-04T03:45:00.000Z",
+            "local_arrival": "2024-04-04T11:30:00.000Z",
+            "utc_arrival": "2024-04-04T05:30:00.000Z",
+            "airline": "KC",
+            "flight_no": 621,
+            "operating_carrier": "KC",
+            "operating_flight_no": "621",
+            "return": 1
+          },
+          {
+            "id": "071117294d690000156102a2_2",
+            "combination_id": "071117294d690000156102a2",
+            "flyFrom": "NQZ",
+            "cityFrom": "Astana",
+            "flyTo": "FRA",
+            "cityTo": "Frankfurt",
+            "local_departure": "2024-04-04T13:15:00.000Z",
+            "utc_departure": "2024-04-04T07:15:00.000Z",
+            "local_arrival": "2024-04-04T17:15:00.000Z",
+            "utc_arrival": "2024-04-04T15:15:00.000Z",
+            "airline": "KC",
+            "flight_no": 921,
+            "operating_carrier": "KC",
+            "operating_flight_no": "921",
+            "return": 1
+          }
+        ]
+      ],
+      "total_legs": 4,
+      "out_legs": 1,
+      "return_legs": 3,
+      "booking_token": "GzHCJybsbS4wF9P3W9I5F2lUEUtvZUrw11WCpdo6i_RMBobJOGvlbnjT9X1lovQ6HRKkyuUJ2V4mQMn_qrObc1tjYFvy1UVvBI13IlXBuCSa6fgMB6fkShqGnvkmh8HUIitVWFBCQqPi2yTIPV8Hd-fn_VHETdOWIsTKIxQpRgK9aojvsm1Z2k7Z2ZS_qiejvhwjzg9UwoaFJxIBsWP0BBPfuduq8UTzDmlelJ5lAsoKbL6FQZ6vLek3hq8Y_pH50nLFY9Uqq9V6BwcOmH__GSdGnCM84ZCK7kzakE3snSeJIJLwGLSW_z7vSrs2SA8Kj8T0dbNq_SGMjgVK0OVJBgB640_ELtfJijA5q286Nns2YCEXUo3dGZ_EYSwFyG5TCZljhsKEUHJOzDcqrfZ23U20lr0L0eYFCc0sBGhaRGstgN2Tq1TIFbZB3_kf_jAFLq-L-MGe2SplNweoaDuSsk8C8AsrCjH-gqEbG_uDntm7MyP1nPTn_xZhIGzEUtZPmC7fMKcpGI5fHFo5X1NCh6h_bXt3OjYwVC-UrzDjkqY9KqYZtej4W1Xv98sqhNek6QE13uDU40QsGunMs6cVtuotdFiNjaGZ7qeE7XpLKhp8=",
+      "deep_link": "https://www.kiwi.com/deep?affilid=flightemissionsdwsflightemissionsmetasearch&currency=EUR&flightsId=172907114d660000d7d183fa_0%7C071117294d690000156102a2_0%7C071117294d690000156102a2_1%7C071117294d690000156102a2_2&from=FRA&lang=en&passengers=1&searchBags=0.0&to=DEL&booking_token=GzHCJybsbS4wF9P3W9I5F2lUEUtvZUrw11WCpdo6i_RMBobJOGvlbnjT9X1lovQ6HRKkyuUJ2V4mQMn_qrObc1tjYFvy1UVvBI13IlXBuCSa6fgMB6fkShqGnvkmh8HUIitVWFBCQqPi2yTIPV8Hd-fn_VHETdOWIsTKIxQpRgK9aojvsm1Z2k7Z2ZS_qiejvhwjzg9UwoaFJxIBsWP0BBPfuduq8UTzDmlelJ5lAsoKbL6FQZ6vLek3hq8Y_pH50nLFY9Uqq9V6BwcOmH__GSdGnCM84ZCK7kzakE3snSeJIJLwGLSW_z7vSrs2SA8Kj8T0dbNq_SGMjgVK0OVJBgB640_ELtfJijA5q286Nns2YCEXUo3dGZ_EYSwFyG5TCZljhsKEUHJOzDcqrfZ23U20lr0L0eYFCc0sBGhaRGstgN2Tq1TIFbZB3_kf_jAFLq-L-MGe2SplNweoaDuSsk8C8AsrCjH-gqEbG_uDntm7MyP1nPTn_xZhIGzEUtZPmC7fMKcpGI5fHFo5X1NCh6h_bXt3OjYwVC-UrzDjkqY9KqYZtej4W1Xv98sqhNek6QE13uDU40QsGunMs6cVtuotdFiNjaGZ7qeE7XpLKhp8="
+    }
+  ],
+  "Canc\u00fan": [
+    {
+      "id": "17291cfb4d670000311ce2a0_0|17291cfb4d670000311ce2a0_1|1cfb0a224d6a0000206948d5_0|0a2217294d6b0000ad9b86d8_0",
+      "flyFrom": "FRA",
+      "cityFrom": "Frankfurt",
+      "flyTo": "CUN",
+      "cityTo": "Canc\u00fan",
+      "countryFrom": "Germany",
+      "countryTo": "Mexico",
+      "local_departure": "2024-04-02T10:55:00.000Z",
+      "utc_departure": "2024-04-02T08:55:00.000Z",
+      "local_arrival": "2024-04-02T18:30:00.000Z",
+      "utc_arrival": "2024-04-02T23:30:00.000Z",
+      "nightsInDest": 3,
+      "quality": 1324.665975,
+      "distance": 8615.59,
+      "duration": {
+        "departure": 52500,
+        "return": 61200,
+        "total": 113700
+      },
+      "price": 1048,
+      "airlines": [
+        "2W",
+        "UX",
+        "LH"
+      ],
+      "flights": [
+        [
+          {
+            "id": "17291cfb4d670000311ce2a0_0",
+            "combination_id": "17291cfb4d670000311ce2a0",
+            "flyFrom": "FRA",
+            "cityFrom": "Frankfurt",
+            "flyTo": "MAD",
+            "cityTo": "Madrid",
+            "local_departure": "2024-04-02T10:55:00.000Z",
+            "utc_departure": "2024-04-02T08:55:00.000Z",
+            "local_arrival": "2024-04-02T13:40:00.000Z",
+            "utc_arrival": "2024-04-02T11:40:00.000Z",
+            "airline": "UX",
+            "flight_no": 1502,
+            "operating_carrier": "UX",
+            "operating_flight_no": "1502",
+            "return": 0
+          },
+          {
+            "id": "17291cfb4d670000311ce2a0_1",
+            "combination_id": "17291cfb4d670000311ce2a0",
+            "flyFrom": "MAD",
+            "cityFrom": "Madrid",
+            "flyTo": "CUN",
+            "cityTo": "Canc\u00fan",
+            "local_departure": "2024-04-02T15:15:00.000Z",
+            "utc_departure": "2024-04-02T13:15:00.000Z",
+            "local_arrival": "2024-04-02T18:30:00.000Z",
+            "utc_arrival": "2024-04-02T23:30:00.000Z",
+            "airline": "UX",
+            "flight_no": 63,
+            "operating_carrier": "UX",
+            "operating_flight_no": "63",
+            "return": 0
+          }
+        ],
+        [
+          {
+            "id": "1cfb0a224d6a0000206948d5_0",
+            "combination_id": "1cfb0a224d6a0000206948d5",
+            "flyFrom": "CUN",
+            "cityFrom": "Canc\u00fan",
+            "flyTo": "MAD",
+            "cityTo": "Madrid",
+            "local_departure": "2024-04-05T19:40:00.000Z",
+            "utc_departure": "2024-04-06T00:40:00.000Z",
+            "local_arrival": "2024-04-06T12:10:00.000Z",
+            "utc_arrival": "2024-04-06T10:10:00.000Z",
+            "airline": "2W",
+            "flight_no": 2502,
+            "operating_carrier": "2W",
+            "operating_flight_no": "2502",
+            "return": 1
+          },
+          {
+            "id": "0a2217294d6b0000ad9b86d8_0",
+            "combination_id": "0a2217294d6b0000ad9b86d8",
+            "flyFrom": "MAD",
+            "cityFrom": "Madrid",
+            "flyTo": "FRA",
+            "cityTo": "Frankfurt",
+            "local_departure": "2024-04-06T17:10:00.000Z",
+            "utc_departure": "2024-04-06T15:10:00.000Z",
+            "local_arrival": "2024-04-06T19:40:00.000Z",
+            "utc_arrival": "2024-04-06T17:40:00.000Z",
+            "airline": "LH",
+            "flight_no": 1115,
+            "operating_carrier": "LH",
+            "operating_flight_no": "1115",
+            "return": 1
+          }
+        ]
+      ],
+      "total_legs": 4,
+      "out_legs": 2,
+      "return_legs": 2,
+      "booking_token": "GUNQaXduSrRHwsNzbJGPYH0xWdcqVbZ0r6h35JfMTECKrxuSkU3R5OpOmxb9Zzvmjgl52NOFZHIP0V5QlOzBDUdNT6oBjBPZh3YRgCVBwPNLoa1EufkDKTFmAK2WRwQv5c9kLSQ5oBrZZFAxYpRNAT4rq6uXxuWNocFctQEb4WGjXPWsYgW8Nd3ke54WazvPGa0lCOV5lMUoZ3CbimQx9afVv30xN6g8sdmePh0tyga83r1atQ8YxcMdwTDsr58keND8oFlgGl0dpqgqIHefF86Vf8YGtW-lx51yGxyULRLW1h7D1-i523BBI49Esa2bzsHFjWPkkwMuDUAErgFs2xZPy0UHIXE-VADBPmffHvxfs1Iwq-xqpxDJR0ok367G7QPkBh8tngKQUBbh7LiGmxK-sX-gPeZYxc-RRs9ltHjYf1RQiooSsvRlwBHOjBkx9hXA2r4SykRAmUOix59qRfIYVLD83vrwfcIAJXbaqpf4div1nrokaw3ULE9jq7tWyRZTcEsoXrgJgu37p_CLE8r538CGy6aGGbmlD5L7BTuyYlO5xarooPAiSFjnI1Ngh2xACV1HCkykN87cvHzYp9z0cTrlXT5F-JI9K68BqFelv3dThEGL9nQCEdwkx1KqSwRYR7_m1dj3DPSyVyvmpeKK1Txj2YPduO0zxp8CuRmai2Is2Zwxho8gCc0800rru",
+      "deep_link": "https://www.kiwi.com/deep?affilid=flightemissionsdwsflightemissionsmetasearch&currency=EUR&flightsId=17291cfb4d670000311ce2a0_0%7C17291cfb4d670000311ce2a0_1%7C1cfb0a224d6a0000206948d5_0%7C0a2217294d6b0000ad9b86d8_0&from=FRA&lang=en&passengers=1&searchBags=0.0&to=CUN&booking_token=GUNQaXduSrRHwsNzbJGPYH0xWdcqVbZ0r6h35JfMTECKrxuSkU3R5OpOmxb9Zzvmjgl52NOFZHIP0V5QlOzBDUdNT6oBjBPZh3YRgCVBwPNLoa1EufkDKTFmAK2WRwQv5c9kLSQ5oBrZZFAxYpRNAT4rq6uXxuWNocFctQEb4WGjXPWsYgW8Nd3ke54WazvPGa0lCOV5lMUoZ3CbimQx9afVv30xN6g8sdmePh0tyga83r1atQ8YxcMdwTDsr58keND8oFlgGl0dpqgqIHefF86Vf8YGtW-lx51yGxyULRLW1h7D1-i523BBI49Esa2bzsHFjWPkkwMuDUAErgFs2xZPy0UHIXE-VADBPmffHvxfs1Iwq-xqpxDJR0ok367G7QPkBh8tngKQUBbh7LiGmxK-sX-gPeZYxc-RRs9ltHjYf1RQiooSsvRlwBHOjBkx9hXA2r4SykRAmUOix59qRfIYVLD83vrwfcIAJXbaqpf4div1nrokaw3ULE9jq7tWyRZTcEsoXrgJgu37p_CLE8r538CGy6aGGbmlD5L7BTuyYlO5xarooPAiSFjnI1Ngh2xACV1HCkykN87cvHzYp9z0cTrlXT5F-JI9K68BqFelv3dThEGL9nQCEdwkx1KqSwRYR7_m1dj3DPSyVyvmpeKK1Txj2YPduO0zxp8CuRmai2Is2Zwxho8gCc0800rru"
+    }
+  ]
+}
