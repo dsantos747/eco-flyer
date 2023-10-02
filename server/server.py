@@ -1,4 +1,4 @@
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request
 from flask_cors import CORS
 from dotenv import load_dotenv
 import os
@@ -55,7 +55,6 @@ def tequila_query(flight_origin,flight_destination):
 #-- This function acts as a pre-sort, to which we then add emissions data, and then we can present all info to user.
 def tequila_parse(tequila_dict):
     parsed_dict = {}
-    route_length_list = []
     # route_length_list = [0] * len(tequila_dict["data"])
     # route_index = 0
     for route in tequila_dict["data"]: # TASK: Replace this with map(), for performance?
@@ -88,10 +87,6 @@ def tequila_parse(tequila_dict):
                     count_out += 1
                 else:
                     flights_arr[1].append(leg_object)
-
-                # flights_arr[0].append(leg_object) if leg["return"] == 0 else flights_arr[1].append(leg_object)
-                # count_out += 1 if leg["return"] == 0
-                # count_return += 1 if leg["return"] == 0 else count_return += 1
 
             route_object = {
                 "id": route["id"],
@@ -181,25 +176,30 @@ def emissions_parse(flights_dict,emissions_results):
             for outbound_flights in option["flights"][0]:
                 emissions = emissions_results.pop(0)
                 if emissions == 0:
-                    print(f"no emissions data for flight to {outbound_flights['flyTo']}") # do something here
+                    # print(f"no emissions data for flight to {outbound_flights['flyTo']}") # do something here
+                    outbound_flights["flight_emissions"] = emissions # CURRENTLY ADDING 0 EMISSIONS TO FILE - WILL NEED TO FIX THIS
+                else:
+                    outbound_flights["flight_emissions"] = emissions
                 outbound_emissions += emissions
-                outbound_flights["emissions"] = emissions
-            print(f"total outbound leg emissions = {outbound_emissions}")
+            # print(f"total outbound leg emissions = {outbound_emissions}")
             
             return_emissions=0
             for return_flights in option["flights"][1]:
                 emissions = emissions_results.pop(0)
                 if emissions == 0:
-                    print("no emissions data") # do something here
+                    # print("no emissions data") # do something here
+                    return_flights["flight_emissions"] = emissions # CURRENTLY ADDING 0 EMISSIONS TO FILE - WILL NEED TO FIX THIS
+                else:
+                    return_flights["flight_emissions"] = emissions
                 return_emissions += emissions
-                return_flights["emissions"] = emissions
-            print(f"total return leg emissions = {return_emissions}")
+            # print(f"total return leg emissions = {return_emissions}")
             
             total_emissions = outbound_emissions + return_emissions
-            print(f"total trip emissions = {total_emissions}")
-        print("next destination")
+            option["trip_emissions"] = total_emissions
+            # print(f"total trip emissions = {total_emissions}")
+        # print("next destination")
 
-    return "dummy return"
+    return flights_dict
 
 
 ### Function to generate KIWI api result for user booking
@@ -215,7 +215,7 @@ TEQUILA_KEY = os.getenv("TEQUILA_API_KEY")
 RAPID_API_KEY = os.getenv("RAPID_API_KEY")
 
 # Load all airports
-with open(os.path.join(current_dir, "lib", "airports.json"), "r") as json_file:
+with open(os.path.join(current_dir, "data", "airports.json"), "r") as json_file:
     full_airports_list = json.load(json_file)
 
 # App instance
@@ -223,38 +223,41 @@ app = Flask(__name__)
 CORS(app)
 
 ##### TEST - Dummy variables section
-user_location = (38.7813, -9.13592)
-search_radius = 1500 # km
+# user_location = (38.7813, -9.13592)
+# search_radius = 1500 # km
 
 ##### TEST airport list fetching
-origin_airports = get_airport_list(*user_location, 100) # List of airports in a 100km radius from user's location ### FIX: Change this to a single value?
-destination_airports = get_airport_list(*user_location, search_radius)
+# origin_airports = get_airport_list(*user_location, 100) # List of airports in a 100km radius from user's location ### FIX: Change this to a single value?
+# destination_airports = get_airport_list(*user_location, search_radius)
 
 
 ##### TEST read data from tequila response, filter and create flights list for emissions testing
-with open(os.path.join(current_dir, "lib", "test_tequila_response.json"), 'r', encoding="utf-8") as file:
+with open(os.path.join(current_dir, "data", "test_tequila_response.json"), 'r', encoding="utf-8") as file:
     json_data = json.load(file)
 
 processed_data = tequila_parse(json_data)
 
-with open(os.path.join(current_dir, "lib", "processed_tequila_data.json"), 'w') as file:
+with open(os.path.join(current_dir, "data", "processed_tequila_data.json"), 'w') as file:
     json.dump(processed_data, file, indent=2)
 
 tim_processed_data = emissions_flights_list(processed_data)
 
-with open(os.path.join(current_dir, "lib", "prepped_TIM_list.json"), 'w') as file:
+with open(os.path.join(current_dir, "data", "prepped_TIM_list.json"), 'w') as file:
     json.dump(tim_processed_data, file, indent=2)
 
 ##### TEST emissions checking
 
 emissions_results = emissions_fetch(tim_processed_data)
 
-with open(os.path.join(current_dir, "lib", "emissions_results_list.json"), 'w') as file:
+with open(os.path.join(current_dir, "data", "emissions_results_list.json"), 'w') as file:
     json.dump(emissions_results, file, indent=2) 
 
 ##### TEST emissions parsing
 
-emissions_parse(processed_data,emissions_results)
+processed_data_with_emissions = emissions_parse(processed_data,emissions_results)
+
+with open(os.path.join(current_dir, "data", "processed_data_with_emissions.json"), 'w') as file:
+    json.dump(processed_data_with_emissions, file, indent=2) 
 
 
 
@@ -285,10 +288,22 @@ def return_home():
     })
 
 # App route to run request to Travel Impact Model API
-@app.route("/api/results", methods=["GET", "POST"])
+@app.route("/api/emissions", methods=["GET"])
 def emissions_route():
-    emissions_fetch()
-    # return jsonify(emissions_fetch())
+
+    # Add additional client-side filters for tequila API here
+    user_location = tuple(map(float, request.args.get("loc").split(',')))
+    search_radius = int(request.args.get("rad"))
+    origin_airports = get_airport_list(*user_location, 100) # List of airports in a 100km radius from user's location ### FIX: Change this to a single value?
+    destination_airports = get_airport_list(*user_location, search_radius)
+
+    ### Add tequila api call here
+    processed_data = tequila_parse(json_data)
+    tim_processed_data = emissions_flights_list(processed_data)
+    emissions_results = emissions_fetch(tim_processed_data)
+    processed_data_with_emissions = emissions_parse(processed_data,emissions_results)
+    return jsonify(processed_data_with_emissions)
+    
 
 # Initialise app
 if __name__ == "__main__":
