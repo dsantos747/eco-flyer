@@ -132,6 +132,134 @@
       "virtual_interlining": false
     },
     {
+      "id": "241a032d4d660000fdeb4d76_0|032d241a4d690000cc154221_0",
+      "flyFrom": "HHN",
+      "flyTo": "STN",
+      "cityFrom": "Frankfurt",
+      "cityCodeFrom": "FRA",
+      "cityTo": "London",
+      "cityCodeTo": "LON",
+      "countryFrom": {
+        "code": "DE",
+        "name": "Germany"
+      },
+      "countryTo": {
+        "code": "GB",
+        "name": "United Kingdom"
+      },
+      "local_departure": "2024-04-08T00:50:00.000Z",
+      "utc_departure": "2024-03-31T22:50:00.000Z",
+      "local_arrival": "2024-04-08T01:10:00.000Z",
+      "utc_arrival": "2024-04-01T00:10:00.000Z",
+      "nightsInDest": 3,
+      "quality": 112.33322,
+      "distance": 538.03,
+      "duration": {
+        "departure": 4800,
+        "return": 4800,
+        "total": 9600
+      },
+      "price": 67,
+      "conversion": {
+        "EUR": 67
+      },
+      "fare": {
+        "adults": 67,
+        "children": 67,
+        "infants": 67
+      },
+      "bags_price": {
+        "1": 74.22,
+        "2": 148.44
+      },
+      "baglimit": {
+        "hand_height": 40,
+        "hand_length": 55,
+        "hand_weight": 10,
+        "hand_width": 20,
+        "hold_dimensions_sum": 319,
+        "hold_height": 119,
+        "hold_length": 119,
+        "hold_weight": 20,
+        "hold_width": 81,
+        "personal_item_height": 25,
+        "personal_item_length": 40,
+        "personal_item_weight": 10,
+        "personal_item_width": 20
+      },
+      "availability": {
+        "seats": null
+      },
+      "airlines": ["FR"],
+      "route": [
+        {
+          "id": "241a032d4d660000fdeb4d76_0",
+          "combination_id": "241a032d4d660000fdeb4d76",
+          "flyFrom": "HHN",
+          "flyTo": "STN",
+          "cityFrom": "Frankfurt",
+          "cityCodeFrom": "FRA",
+          "cityTo": "London",
+          "cityCodeTo": "LON",
+          "local_departure": "2024-04-08T00:50:00.000Z",
+          "utc_departure": "2024-03-31T22:50:00.000Z",
+          "local_arrival": "2024-04-08T01:10:00.000Z",
+          "utc_arrival": "2024-04-01T00:10:00.000Z",
+          "airline": "FR",
+          "flight_no": 6198,
+          "operating_carrier": "",
+          "operating_flight_no": "",
+          "fare_basis": "",
+          "fare_category": "M",
+          "fare_classes": "",
+          "fare_family": "",
+          "return": 0,
+          "bags_recheck_required": false,
+          "vi_connection": false,
+          "guarantee": false,
+          "equipment": null,
+          "vehicle_type": "aircraft"
+        },
+        {
+          "id": "032d241a4d690000cc154221_0",
+          "combination_id": "032d241a4d690000cc154221",
+          "flyFrom": "STN",
+          "flyTo": "HHN",
+          "cityFrom": "London",
+          "cityCodeFrom": "LON",
+          "cityTo": "Frankfurt",
+          "cityCodeTo": "FRA",
+          "local_departure": "2024-04-09T07:35:00.000Z",
+          "utc_departure": "2024-04-09T06:35:00.000Z",
+          "local_arrival": "2024-04-09T09:55:00.000Z",
+          "utc_arrival": "2024-04-09T07:55:00.000Z",
+          "airline": "FR",
+          "flight_no": 6199,
+          "operating_carrier": "",
+          "operating_flight_no": "",
+          "fare_basis": "",
+          "fare_category": "M",
+          "fare_classes": "",
+          "fare_family": "",
+          "return": 1,
+          "bags_recheck_required": false,
+          "vi_connection": false,
+          "guarantee": false,
+          "equipment": null,
+          "vehicle_type": "aircraft"
+        }
+      ],
+      "booking_token": "GSL4bsAPSw4OxFJmreRL1JewwPNusMKXhOd4fvdO4u4VTktGETnXxWucJz2pVlKLgRvXrKIudhW2JyfRL_627KVTa26picf_grIYbVMpNgtR5TfSDN-WA-BBrDRHAohW2jguYBQecKkyqfcQRqEwMSLYiDvzHJz47elRZKiZ08JwKTqzd0MzmrlV_NZ3eu9gkXy4e_I327dlIOlOeT0cb6jolrWd9pX-yHo0Aiv3J9w_OP3ZziRjakcHahPUnK5-tMwyNGe3Yi5V4Qj2OAkL4luIEAR5pihKJjiqlgScknHd9y-Md7rzBVYGqvG6miB9DbUnGgQ1cqOdMX83q9V4h5hdSB7sye7p8UH-3vTMxWqqnle-Bs784m-UyX2dzhYbVopqE2-EbeaXGHgYkDek1TuowZUDgsc_liZSUAOskpDNXwBTBlsRZkdxZuqZCS-m_ERXm8Nw-8yI3ojx261mA92I-vsdhV4mWOqTmxs5zmnKYXfAqm1ru3OVt7ctC3Zw5",
+      "deep_link": "https://www.kiwi.com/deep?affilid=flightemissionsdwsflightemissionsmetasearch&currency=EUR&flightsId=241a032d4d660000fdeb4d76_0%7C032d241a4d690000cc154221_0&from=HHN&lang=en&passengers=1&searchBags=0.0&to=STN&booking_token=GSL4bsAPSw4OxFJmreRL1JewwPNusMKXhOd4fvdO4u4VTktGETnXxWucJz2pVlKLgRvXrKIudhW2JyfRL_627KVTa26picf_grIYbVMpNgtR5TfSDN-WA-BBrDRHAohW2jguYBQecKkyqfcQRqEwMSLYiDvzHJz47elRZKiZ08JwKTqzd0MzmrlV_NZ3eu9gkXy4e_I327dlIOlOeT0cb6jolrWd9pX-yHo0Aiv3J9w_OP3ZziRjakcHahPUnK5-tMwyNGe3Yi5V4Qj2OAkL4luIEAR5pihKJjiqlgScknHd9y-Md7rzBVYGqvG6miB9DbUnGgQ1cqOdMX83q9V4h5hdSB7sye7p8UH-3vTMxWqqnle-Bs784m-UyX2dzhYbVopqE2-EbeaXGHgYkDek1TuowZUDgsc_liZSUAOskpDNXwBTBlsRZkdxZuqZCS-m_ERXm8Nw-8yI3ojx261mA92I-vsdhV4mWOqTmxs5zmnKYXfAqm1ru3OVt7ctC3Zw5",
+      "facilitated_booking_available": false,
+      "pnr_count": 2,
+      "has_airport_change": false,
+      "technical_stops": 0,
+      "throw_away_ticketing": false,
+      "hidden_city_ticketing": false,
+      "virtual_interlining": false
+    },
+    {
       "id": "17290a224d670000c823a7a9_0|0a2217294d69000041ea450f_0",
       "flyFrom": "FRA",
       "flyTo": "MAD",

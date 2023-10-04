@@ -1,4 +1,4 @@
 /** @type {import('next').NextConfig} */
-const nextConfig = {}
+const nextConfig = {}; // Consider: server actions
 
-module.exports = nextConfig
+module.exports = nextConfig;

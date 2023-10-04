@@ -5,7 +5,7 @@ const error = ({ error, reset }) => {
     <div>
       <div>{error.message}</div>
       <div>
-        <button onCLick={reset}>Try again</button>
+        <button onClick={() => reset()}>Retry</button>
       </div>
     </div>
   );

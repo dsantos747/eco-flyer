@@ -21,9 +21,7 @@
         "total": 9600
       },
       "price": 67,
-      "airlines": [
-        "FR"
-      ],
+      "airlines": ["FR"],
       "flights": [
         [
           {
@@ -42,7 +40,7 @@
             "operating_carrier": "",
             "operating_flight_no": "",
             "return": 0,
-            "flight_emissions": 0
+            "flight_emissions": 44659
           }
         ],
         [
@@ -71,7 +69,7 @@
       "return_legs": 1,
       "booking_token": "GSL4bsAPSw4OxFJmreRL1JewwPNusMKXhOd4fvdO4u4VTktGETnXxWucJz2pVlKLgRvXrKIudhW2JyfRL_627KVTa26picf_grIYbVMpNgtR5TfSDN-WA-BBrDRHAohW2jguYBQecKkyqfcQRqEwMSLYiDvzHJz47elRZKiZ08JwKTqzd0MzmrlV_NZ3eu9gkXy4e_I327dlIOlOeT0cb6jolrWd9pX-yHo0Aiv3J9w_OP3ZziRjakcHahPUnK5-tMwyNGe3Yi5V4Qj2OAkL4luIEAR5pihKJjiqlgScknHd9y-Md7rzBVYGqvG6miB9DbUnGgQ1cqOdMX83q9V4h5hdSB7sye7p8UH-3vTMxWqqnle-Bs784m-UyX2dzhYbVopqE2-EbeaXGHgYkDek1TuowZUDgsc_liZSUAOskpDNXwBTBlsRZkdxZuqZCS-m_ERXm8Nw-8yI3ojx261mA92I-vsdhV4mWOqTmxs5zmnKYXfAqm1ru3OVt7ctC3Zw5",
       "deep_link": "https://www.kiwi.com/deep?affilid=flightemissionsdwsflightemissionsmetasearch&currency=EUR&flightsId=241a032d4d660000fdeb4d76_0%7C032d241a4d690000cc154221_0&from=HHN&lang=en&passengers=1&searchBags=0.0&to=STN&booking_token=GSL4bsAPSw4OxFJmreRL1JewwPNusMKXhOd4fvdO4u4VTktGETnXxWucJz2pVlKLgRvXrKIudhW2JyfRL_627KVTa26picf_grIYbVMpNgtR5TfSDN-WA-BBrDRHAohW2jguYBQecKkyqfcQRqEwMSLYiDvzHJz47elRZKiZ08JwKTqzd0MzmrlV_NZ3eu9gkXy4e_I327dlIOlOeT0cb6jolrWd9pX-yHo0Aiv3J9w_OP3ZziRjakcHahPUnK5-tMwyNGe3Yi5V4Qj2OAkL4luIEAR5pihKJjiqlgScknHd9y-Md7rzBVYGqvG6miB9DbUnGgQ1cqOdMX83q9V4h5hdSB7sye7p8UH-3vTMxWqqnle-Bs784m-UyX2dzhYbVopqE2-EbeaXGHgYkDek1TuowZUDgsc_liZSUAOskpDNXwBTBlsRZkdxZuqZCS-m_ERXm8Nw-8yI3ojx261mA92I-vsdhV4mWOqTmxs5zmnKYXfAqm1ru3OVt7ctC3Zw5",
-      "trip_emissions": 55065
+      "trip_emissions": 99724
     }
   ],
   "Madrid": [
@@ -96,10 +94,7 @@
         "total": 20400
       },
       "price": 156,
-      "airlines": [
-        "IB",
-        "VY"
-      ],
+      "airlines": ["IB", "VY"],
       "flights": [
         [
           {
@@ -172,10 +167,7 @@
         "total": 35700
       },
       "price": 171,
-      "airlines": [
-        "FR",
-        "IB"
-      ],
+      "airlines": ["FR", "IB"],
       "flights": [
         [
           {
@@ -266,11 +258,7 @@
         "total": 37500
       },
       "price": 223,
-      "airlines": [
-        "FR",
-        "LH",
-        "VY"
-      ],
+      "airlines": ["FR", "LH", "VY"],
       "flights": [
         [
           {
@@ -289,7 +277,7 @@
             "operating_carrier": "",
             "operating_flight_no": "",
             "return": 0,
-            "flight_emissions": 0
+            "flight_emissions": 74756
           },
           {
             "id": "13a201af4d6800005accfed9_0",
@@ -307,7 +295,7 @@
             "operating_carrier": "",
             "operating_flight_no": "",
             "return": 0,
-            "flight_emissions": 0
+            "flight_emissions": 34568
           }
         ],
         [
@@ -345,7 +333,7 @@
             "operating_carrier": "LH",
             "operating_flight_no": "253",
             "return": 1,
-            "flight_emissions": 54859
+            "flight_emissions": 55017
           }
         ]
       ],
@@ -354,7 +342,7 @@
       "return_legs": 2,
       "booking_token": "GX-awTeiC4hleb4IQJF-lRRqChN-XLJSvE2U5En5AMjUTD9KT5NW0XRhczYgKV371X5hwUGaxHnI35F61c01miZIEiIWA-n4XK2BvOQD7rPI9hqCIFyP_YtMj_7LZtMhGZGcinrn3ppVRlHpYiOAwNEh8MxnJCpN5Gdp63rdJyRVb_Xln_mF-1GBLv4RBdNlx9egxFo3tMkGBRvZmhEr4zPczyoNDBM_57c2cTZGg70nJIp3im62SKViNI9FP1ibQVnBXUSVKOTi0St0Dy399sQ3ILR-HcrWoysXtQOqGYU2PEYbg_lCQo8XwspcG5FMJeqj0VcW__klWLyfHJ9NgWeq6FbMBFGgT39C4l5MzyqijP3XjjUzR61-78u_4Yw6k7k1dFXLzp5BtiJKU12BOgAUBC2Gq0e6wnBc4jyiSOHV8lCU8ydZj7yc2qmqT5Qey7yxwcoq9zhNM6EI4-X8GdvAMxNHJgvTu_XvsdL1gh3cPghBuJmkfXVm6NZB3z7g58-XS4oT1Yv5-Y7WEyB57GmVLsqzbfxFK6aBYgpClrz675dlWnknq0Jr3JbTHA1Xq7xZazRusokp9bB_aGfnE0feNL8dXYDVnA3asuXogso6gOmKcRpEKLB2KABlqVD6ff79L3KjKMonwAOfDHS-UUhrcNxK9hcZ4CubItkywyJ5p5L-3W-SZ13o86e29l6YY18mEFPLKRtg251nx0IsZSly6Zel6sihtk-ZdACzk-Ck=",
       "deep_link": "https://www.kiwi.com/deep?affilid=flightemissionsdwsflightemissionsmetasearch&currency=EUR&flightsId=241a13a24d6800007dc140e5_0%7C13a201af4d6800005accfed9_0%7C01af07f04d6b0000544cb483_0%7C07f017294d6b00005f358e79_0&from=HHN&lang=en&passengers=1&searchBags=0.0&to=BCN&booking_token=GX-awTeiC4hleb4IQJF-lRRqChN-XLJSvE2U5En5AMjUTD9KT5NW0XRhczYgKV371X5hwUGaxHnI35F61c01miZIEiIWA-n4XK2BvOQD7rPI9hqCIFyP_YtMj_7LZtMhGZGcinrn3ppVRlHpYiOAwNEh8MxnJCpN5Gdp63rdJyRVb_Xln_mF-1GBLv4RBdNlx9egxFo3tMkGBRvZmhEr4zPczyoNDBM_57c2cTZGg70nJIp3im62SKViNI9FP1ibQVnBXUSVKOTi0St0Dy399sQ3ILR-HcrWoysXtQOqGYU2PEYbg_lCQo8XwspcG5FMJeqj0VcW__klWLyfHJ9NgWeq6FbMBFGgT39C4l5MzyqijP3XjjUzR61-78u_4Yw6k7k1dFXLzp5BtiJKU12BOgAUBC2Gq0e6wnBc4jyiSOHV8lCU8ydZj7yc2qmqT5Qey7yxwcoq9zhNM6EI4-X8GdvAMxNHJgvTu_XvsdL1gh3cPghBuJmkfXVm6NZB3z7g58-XS4oT1Yv5-Y7WEyB57GmVLsqzbfxFK6aBYgpClrz675dlWnknq0Jr3JbTHA1Xq7xZazRusokp9bB_aGfnE0feNL8dXYDVnA3asuXogso6gOmKcRpEKLB2KABlqVD6ff79L3KjKMonwAOfDHS-UUhrcNxK9hcZ4CubItkywyJ5p5L-3W-SZ13o86e29l6YY18mEFPLKRtg251nx0IsZSly6Zel6sihtk-ZdACzk-Ck=",
-      "trip_emissions": 117461
+      "trip_emissions": 226943
     }
   ],
   "Istanbul": [
@@ -379,10 +367,7 @@
         "total": 22200
       },
       "price": 286,
-      "airlines": [
-        "TK",
-        "LH"
-      ],
+      "airlines": ["TK", "LH"],
       "flights": [
         [
           {
@@ -421,7 +406,7 @@
             "operating_carrier": "LH",
             "operating_flight_no": "1299",
             "return": 1,
-            "flight_emissions": 137351
+            "flight_emissions": 138014
           }
         ]
       ],
@@ -430,7 +415,7 @@
       "return_legs": 1,
       "booking_token": "GraHQu-IjuWlm4qsraHhsMn1qr7TEG8Hwm2E9f_yhCFhtg1jSXVHbhjanajHOhzfYvGXX0YGmQIW8WOMq1FLjFQe6hUtrzkLlhfseBwANgtsQRLcK2glMD6kF1fcG_eAQ2MByYwB9-hF5TzOryqXQMuLqGMJQVq5UBKRT37FaZO5DyWgccxz-FaASBYVDk1je1nmZR91bDkeGQYlHvgBRGrZE7nZVBQw6XZSAp9W5u-A-xP7rMJgn5Rbpj6yllkVwz6rdBextcLnDVd2xi0oU-QBk8H4ozZOkwpHEv1AsgKxUT6KHvkiItbk9kfVbNTBH9t-ZXkAldTZdn5Bknp62SN9gATfByNK02XuqlWI-4P8ZA-qtF56sgOb38MsZ71H-yBXwcAqB4SOmV80_57InAob6pWPrlAusz3QzDmkPLMyeUVKoFeRbbnbYWST9w320mDX-RZBLZWyjnShcGItoxLXla6eEw3OQQHIZhjGWXrkwTi_f63gBZ1Rd4E214rbwYXMRXeykdd5lmUalau7ACGePXDYmuvAQzCLugUw2zsE=",
       "deep_link": "https://www.kiwi.com/deep?affilid=flightemissionsdwsflightemissionsmetasearch&currency=EUR&flightsId=1729170f4d6800001d04fef3_0%7C170f17294d6b0000e3615d6e_0&from=FRA&lang=en&passengers=1&searchBags=0.0&to=IST&booking_token=GraHQu-IjuWlm4qsraHhsMn1qr7TEG8Hwm2E9f_yhCFhtg1jSXVHbhjanajHOhzfYvGXX0YGmQIW8WOMq1FLjFQe6hUtrzkLlhfseBwANgtsQRLcK2glMD6kF1fcG_eAQ2MByYwB9-hF5TzOryqXQMuLqGMJQVq5UBKRT37FaZO5DyWgccxz-FaASBYVDk1je1nmZR91bDkeGQYlHvgBRGrZE7nZVBQw6XZSAp9W5u-A-xP7rMJgn5Rbpj6yllkVwz6rdBextcLnDVd2xi0oU-QBk8H4ozZOkwpHEv1AsgKxUT6KHvkiItbk9kfVbNTBH9t-ZXkAldTZdn5Bknp62SN9gATfByNK02XuqlWI-4P8ZA-qtF56sgOb38MsZ71H-yBXwcAqB4SOmV80_57InAob6pWPrlAusz3QzDmkPLMyeUVKoFeRbbnbYWST9w320mDX-RZBLZWyjnShcGItoxLXla6eEw3OQQHIZhjGWXrkwTi_f63gBZ1Rd4E214rbwYXMRXeykdd5lmUalau7ACGePXDYmuvAQzCLugUw2zsE=",
-      "trip_emissions": 274841
+      "trip_emissions": 275504
     }
   ],
   "Dubai": [
@@ -455,9 +440,7 @@
         "total": 102000
       },
       "price": 522,
-      "airlines": [
-        "SV"
-      ],
+      "airlines": ["SV"],
       "flights": [
         [
           {
@@ -566,9 +549,7 @@
         "total": 78300
       },
       "price": 587,
-      "airlines": [
-        "FI"
-      ],
+      "airlines": ["FI"],
       "flights": [
         [
           {
@@ -677,9 +658,7 @@
         "total": 126600
       },
       "price": 737,
-      "airlines": [
-        "SV"
-      ],
+      "airlines": ["SV"],
       "flights": [
         [
           {
@@ -788,10 +767,7 @@
         "total": 98100
       },
       "price": 811,
-      "airlines": [
-        "UK",
-        "KC"
-      ],
+      "airlines": ["UK", "KC"],
       "flights": [
         [
           {
@@ -900,11 +876,7 @@
         "total": 113700
       },
       "price": 1048,
-      "airlines": [
-        "2W",
-        "UX",
-        "LH"
-      ],
+      "airlines": ["2W", "UX", "LH"],
       "flights": [
         [
           {

@@ -201,6 +201,10 @@ def emissions_parse(flights_dict,emissions_results):
 
     return flights_dict
 
+def results_sort(results):
+    sorted_results = dict(sorted(results.items(), key=lambda item: item[1][0]['trip_emissions']))
+    return sorted_results
+
 
 ### Function to generate KIWI api result for user booking
 ##### Input: a list of flight options, as returned by emissions_fetch:
@@ -235,29 +239,29 @@ CORS(app)
 with open(os.path.join(current_dir, "data", "test_tequila_response.json"), 'r', encoding="utf-8") as file:
     json_data = json.load(file)
 
-processed_data = tequila_parse(json_data)
+# processed_data = tequila_parse(json_data)
 
-with open(os.path.join(current_dir, "data", "processed_tequila_data.json"), 'w') as file:
-    json.dump(processed_data, file, indent=2)
+# with open(os.path.join(current_dir, "data", "processed_tequila_data.json"), 'w') as file:
+#     json.dump(processed_data, file, indent=2)
 
-tim_processed_data = emissions_flights_list(processed_data)
+# tim_processed_data = emissions_flights_list(processed_data)
 
-with open(os.path.join(current_dir, "data", "prepped_TIM_list.json"), 'w') as file:
-    json.dump(tim_processed_data, file, indent=2)
+# with open(os.path.join(current_dir, "data", "prepped_TIM_list.json"), 'w') as file:
+#     json.dump(tim_processed_data, file, indent=2)
 
 ##### TEST emissions checking
 
-emissions_results = emissions_fetch(tim_processed_data)
+# emissions_results = emissions_fetch(tim_processed_data)
 
-with open(os.path.join(current_dir, "data", "emissions_results_list.json"), 'w') as file:
-    json.dump(emissions_results, file, indent=2) 
+# with open(os.path.join(current_dir, "data", "emissions_results_list.json"), 'w') as file:
+#     json.dump(emissions_results, file, indent=2) 
 
 ##### TEST emissions parsing
 
-processed_data_with_emissions = emissions_parse(processed_data,emissions_results)
+# processed_data_with_emissions = emissions_parse(processed_data,emissions_results)
 
-with open(os.path.join(current_dir, "data", "processed_data_with_emissions.json"), 'w') as file:
-    json.dump(processed_data_with_emissions, file, indent=2) 
+# with open(os.path.join(current_dir, "data", "processed_data_with_emissions.json"), 'w') as file:
+#     json.dump(processed_data_with_emissions, file, indent=2) 
 
 
 
@@ -302,7 +306,8 @@ def emissions_route():
     tim_processed_data = emissions_flights_list(processed_data)
     emissions_results = emissions_fetch(tim_processed_data)
     processed_data_with_emissions = emissions_parse(processed_data,emissions_results)
-    return jsonify(processed_data_with_emissions)
+    sorted_result = results_sort(processed_data_with_emissions)
+    return jsonify(sorted_result)
     
 
 # Initialise app
