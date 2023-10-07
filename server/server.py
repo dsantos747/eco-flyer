@@ -61,7 +61,6 @@ def tequila_parse(tequila_dict):
         if route["cityTo"] not in parsed_dict: # Check if no entry exists yet for this destination, add if so
             parsed_dict[route["cityTo"]] = []
         if len(parsed_dict[route["cityTo"]]) < 3: # Only add entry if less than 3 entries exist for this destination
-            # Add all relevant info to an object.
             flights_arr = [[],[]]
             count_out = 0
             for leg in route["route"]: # TASK: Replace this with map(), for performance?
@@ -92,10 +91,8 @@ def tequila_parse(tequila_dict):
                 "id": route["id"],
                 "flyFrom": route["flyFrom"],
                 "cityFrom": route["cityFrom"],
-                # "cityCodeFrom": route["cityCodeFrom"],
                 "flyTo": route["flyTo"],
                 "cityTo": route["cityTo"],
-                # "cityCodeTo": route["cityCodeTo"],
                 "countryFrom": route["countryFrom"]["name"],
                 "countryTo": route["countryTo"]["name"],
                 "local_departure": route["local_departure"],
@@ -109,15 +106,15 @@ def tequila_parse(tequila_dict):
                 "price": route["price"],
                 "airlines": route["airlines"],
                 "flights": flights_arr,
-                "total_legs": len(route["route"]), # Use this to know the total amount of flights in a booking
-                "out_legs": count_out, # Use this to know the outbound amount of flights in a booking
-                "return_legs": len(route["route"])-count_out, # Use this to know the return amount of flights in a booking
+                "total_legs": len(route["route"]),
+                "out_legs": count_out,
+                "return_legs": len(route["route"])-count_out,
                 "booking_token": route["booking_token"],
-                "deep_link": route["deep_link"]
+                "deep_link": route["deep_link"],
+                "img_url": unsplash_fetch(route["cityTo"]) if parsed_dict[route["cityTo"]] == [] else parsed_dict[route["cityTo"]][0]["img_url"]
             }
-            # Append it to the array for this destination
             parsed_dict[route["cityTo"]].append(route_object)
-    
+
     return parsed_dict
 
 ### Function to prepare an array of flights for inputting to emissions_fetch
@@ -156,15 +153,6 @@ def emissions_fetch(flights_object,flight_class="economy"):
     emissions_results = []
     for flight in result_json["flightEmissions"]:
         emissions_results.append(0 if flight.get('emissionsGramsPerPax') == None else flight['emissionsGramsPerPax'][flight_class])
-
-    # emissions_results = []
-    # for flight in result_json["flightEmissions"]: ### Add a method to sort results by emissions
-    #     flight_carrier = flight['flight']['operatingCarrierCode']
-    #     flight_number = flight['flight']['flightNumber']
-    #     flight_destination = flight['flight']['destination']
-    #     flight_emissions = "Unknown" if flight.get('emissionsGramsPerPax') == None else f"{flight['emissionsGramsPerPax'][flight_class]}g"
-    #     flight_object = f"Flight {flight_carrier}{flight_number} to {flight_destination} - {flight_emissions} emissions per person."
-    #     emissions_results.append(flight_object)
     
     return emissions_results
 
@@ -205,6 +193,23 @@ def results_sort(results):
     sorted_results = dict(sorted(results.items(), key=lambda item: item[1][0]['trip_emissions']))
     return sorted_results
 
+def unsplash_fetch(query):
+    url = f"https://api.unsplash.com/search/photos/"
+    headers = {
+        "Content-Type": "application/json",
+        "Accept-Version": "v1",
+        "Authorization": f"Client-ID {UNSPLASH_ACCESS}"
+    }
+    params = {
+    "query": query,
+    "orientation": "portrait",
+    "per_page": 1
+    }
+
+    result = get(url, headers=headers, params=params).json()
+    img_url = result["results"][0]["urls"]["raw"]
+    img_url_resized = img_url + "&w=400&h=600&fit=crop&crop=top,bottom,left,right"
+    return img_url_resized
 
 ### Function to generate KIWI api result for user booking
 ##### Input: a list of flight options, as returned by emissions_fetch:
@@ -217,6 +222,8 @@ load_dotenv()
 TIM_KEY = os.getenv("TIM_API_KEY")
 TEQUILA_KEY = os.getenv("TEQUILA_API_KEY")
 RAPID_API_KEY = os.getenv("RAPID_API_KEY")
+UNSPLASH_ACCESS = os.getenv("UNSPLASH_ACCESS_KEY")
+UNSPLASH_SECRET_KEY = os.getenv("UNSPLASH_SECRET_KEY")
 
 # Load all airports
 with open(os.path.join(current_dir, "data", "airports.json"), "r") as json_file:
@@ -263,7 +270,8 @@ with open(os.path.join(current_dir, "data", "test_tequila_response.json"), 'r', 
 # with open(os.path.join(current_dir, "data", "processed_data_with_emissions.json"), 'w') as file:
 #     json.dump(processed_data_with_emissions, file, indent=2) 
 
-
+#### TEST Unsplash API Call
+# unsplash_fetch("London") # CALL THIS WHEN BUILDING ROUTE OBJECT
 
 ##### TEST individual manual emissions check
 # test_flight = {
@@ -282,6 +290,8 @@ with open(os.path.join(current_dir, "data", "test_tequila_response.json"), 'r', 
 #     ]
 # }
 # print(emissions_fetch(test_flight))
+
+
 
 
 # App route to return simple JSON message

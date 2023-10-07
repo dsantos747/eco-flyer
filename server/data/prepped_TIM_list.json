@@ -28,6 +28,32 @@
     ],
     [
       {
+        "origin": "HHN",
+        "destination": "STN",
+        "operatingCarrierCode": "FR",
+        "flightNumber": 6198,
+        "departureDate": {
+          "year": "2024",
+          "month": "04",
+          "day": "08"
+        }
+      }
+    ],
+    [
+      {
+        "origin": "STN",
+        "destination": "HHN",
+        "operatingCarrierCode": "FR",
+        "flightNumber": 6199,
+        "departureDate": {
+          "year": "2024",
+          "month": "04",
+          "day": "09"
+        }
+      }
+    ],
+    [
+      {
         "origin": "FRA",
         "destination": "MAD",
         "operatingCarrierCode": "IB",
