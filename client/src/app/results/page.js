@@ -22,6 +22,7 @@ export const emissionsFetch = async () => {
 };
 
 async function page() {
+  // fetch params from homepage from Next.js server
   const route_results = await emissionsFetch();
   const sorted_result = Object.fromEntries(Object.entries(route_results).sort((a, b) => a[1][0].trip_emissions - b[1][0].trip_emissions));
   const destinations = Object.keys(sorted_result); // Array used for referring to for sort order (objects may be re-ordered depending on JS compiler)
