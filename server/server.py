@@ -6,23 +6,30 @@ from requests import get, post
 import json
 import numpy as np
 from geopy.distance import geodesic
+from datetime import datetime
+
+def normalise_date(ugly_date):
+    return datetime.strptime(ugly_date, "%Y-%m-%d").strftime("%d/%m/%Y")
 
 ### Function to get a list of locations based on user's departure location and distance
 ##### Maybe use a different API? There should be a free one
 ####### MAYBE DO THIS IN NEXT
-def get_airport_list(latitude,longitude,radius):
+def get_airport_list(latitude,longitude,max_radius,min_radius=0):
     def distance_calculator(item):
         ## item[0] = IATA code, item[1] = latitude, item[2] = longitude
         distance = geodesic((latitude,longitude),(item[1],item[2])).kilometers # Calculate airport distance from user
-        return item[0] if distance <= radius else None # Return airport code if distance from user is less than radius
+        return item[0] if min_radius <= distance <= max_radius else None # Return airport code if distance from user is less than radius
 
-    result = list(filter(None, map(distance_calculator, full_airports_list))) 
+    # result = list(filter(None, map(distance_calculator, full_airports_list))) 
+    result = ",".join(filter(None, map(distance_calculator, full_airports_list))) 
 
     return(result)
 
-### Function to query KIWI api based on user preferences
-##### Input:
-def tequila_query(flight_origin,flight_destination):
+
+def tequila_query(flight_origin,flight_destination,outbound_date,return_date,outbound_date_end_range=None,return_date_end_range=None,price_limit=None):
+
+    if outbound_date_end_range == None: outbound_date_end_range = outbound_date
+    if return_date_end_range == None: return_date_end_range = return_date
 
     url = f"https://api.tequila.kiwi.com/v2/search"
     headers = {
@@ -30,20 +37,24 @@ def tequila_query(flight_origin,flight_destination):
         "apikey": TEQUILA_KEY
     }
     params= {"fly_from": flight_origin,
-             "fly_to": flight_destination, #If this is left out you get "aggregated results for destination airports relevant to the departure location"
-             "date_from": "DUMMY",
-             "date_to": "DUMMY",
-             "return_from": "DUMMY",
-             "return_to": "DUMMY",
-             "max_fly_duration": "DUMMY", #Use this to set bands of how far to travel. MIGHT NOT BE NECESSARY if destination list is precomputed above
-             "price_to": "DUMMY", #might be useful to control the results a bit.
-             "curr": "DUMMY",
-             "sort": "DUMMY", # quality or price(default)
+             "fly_to": flight_destination,
+             "date_from": outbound_date,
+             "date_to": outbound_date_end_range,
+             "return_from": return_date,
+             "return_to": return_date_end_range,
+            #  "max_fly_duration": "DUMMY", #Use this to set bands of how far to travel. MIGHT NOT BE NECESSARY if destination list is precomputed above
+            #  "price_to": price_limit, #might be useful to control the results a bit.
+             "curr": "EUR",
+             "sort": "quality", # quality or price(default)
              "limit": 200} #max 1000, 200 default
 
-
-    # result = get(url, headers=headers, data=params)
-    return "tequila_query"
+    result = get(url, headers=headers, params=params)
+    if (result.status_code != 200):
+        print(f"Tequila response is {result}")
+        print(result.text)
+        # throw error here
+    else:
+        return result.json()
 
 ### Function to parse data from KIWI api
 #-- Will need to filter through results with the following strategy:
@@ -234,8 +245,8 @@ app = Flask(__name__)
 CORS(app)
 
 ##### TEST - Dummy variables section
-# user_location = (38.7813, -9.13592)
-# search_radius = 1500 # km
+user_location = (38.7813, -9.13592)
+radius_range = [4000, 1500] # km
 
 ##### TEST airport list fetching
 # origin_airports = get_airport_list(*user_location, 100) # List of airports in a 100km radius from user's location ### FIX: Change this to a single value?
@@ -292,6 +303,17 @@ with open(os.path.join(current_dir, "data", "test_tequila_response.json"), 'r', 
 # print(emissions_fetch(test_flight))
 
 
+##### TEST tequila API call
+# origin_airports = get_airport_list(*user_location, 100)
+# destination_airports = get_airport_list(*user_location, *radius_range)
+# outboundDate = "01/11/2023"
+# returnDate = "10/11/2023"
+# outboundDateEndRange = "03/11/2023"
+# returnDateEndRange = "12/11/2023"
+# tequila_result = tequila_query(origin_airports, destination_airports, outboundDate, returnDate, outboundDateEndRange, returnDateEndRange)
+# processed_data = tequila_parse(tequila_result)
+# print(processed_data)
+
 
 
 # App route to return simple JSON message
@@ -305,14 +327,25 @@ def return_home():
 @app.route("/api/emissions", methods=["GET"])
 def emissions_route():
 
-    # Add additional client-side filters for tequila API here
-    user_location = tuple(map(float, request.args.get("loc").split(',')))
-    search_radius = int(request.args.get("rad"))
-    origin_airports = get_airport_list(*user_location, 100) # List of airports in a 100km radius from user's location ### FIX: Change this to a single value?
-    destination_airports = get_airport_list(*user_location, search_radius)
+    # user_location = tuple(map(float, request.args.get("loc").split(',')))
+    user_location = [float(request.args.get("lat")),float(request.args.get("long"))]
+    trip_length = request.args.get("len")
+    radius_range = [1500,0] if trip_length == "trip-short" else [4000,1500] if trip_length == "trip-medium" else [15000,4000]
+    outboundDate = normalise_date(request.args.get("out"))
+    outboundDateEndRange = normalise_date(request.args.get("outEnd"))
+    returnDate = normalise_date(request.args.get("ret"))
+    returnDateEndRange = normalise_date(request.args.get("retEnd"))
 
-    ### Add tequila api call here
-    processed_data = tequila_parse(json_data)
+    origin_airports = get_airport_list(*user_location, 100) # List of airports in a 100km radius from user's location ### FIX: Change this to a single value?
+    destination_airports = get_airport_list(*user_location, *radius_range)
+
+    # COMMENT OUT THESE TWO LINES TO AVOID TEQUILA API CALLS DURING DEVELOPMENT
+    tequila_result = tequila_query(origin_airports, destination_airports, outboundDate, returnDate, outboundDateEndRange, returnDateEndRange)
+    processed_data = tequila_parse(tequila_result)
+
+    # Use this in development instead
+    # processed_data = tequila_parse(json_data)
+
     tim_processed_data = emissions_flights_list(processed_data)
     emissions_results = emissions_fetch(tim_processed_data)
     processed_data_with_emissions = emissions_parse(processed_data,emissions_results)

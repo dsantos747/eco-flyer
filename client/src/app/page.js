@@ -2,8 +2,6 @@ import Link from "next/link";
 import { FlightForm } from "./flightForm";
 
 async function page() {
-  async function onSubmit(event) {}
-
   return (
     <div className="flex justify-center items-center justify-items-center flex-col">
       <div className="flex-col py-8">

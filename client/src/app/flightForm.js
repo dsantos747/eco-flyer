@@ -4,14 +4,30 @@ import { experimental_useFormStatus as useFormStatus } from "react-dom";
 import { experimental_useFormState as useFormState } from "react-dom";
 import { useState, useEffect } from "react";
 import { revalidateTag } from "next/cache";
+import { createContext } from "react";
+import Link from "next/link";
+import { createRequestCookies } from "./formServer";
+
+const requestContext = createContext();
+
+const formatDate = (date, offset = 0) => {
+  const year = date.getFullYear();
+  const month = date.getMonth() + 1;
+  const day = date.getDate() + offset;
+
+  const formattedMonth = String(month).padStart(2, "0");
+  const formattedDate = String(day).padStart(2, "0");
+
+  return `${year}-${formattedMonth}-${formattedDate}`;
+};
 
 export function FlightForm() {
   const [formData, setFormData] = useState({
     location: "", // Change this to be co-ordinates, calculated from the inputted location
-    outboundDate: "",
-    outboundDateEndRange: "",
-    returnDate: "",
-    returnDateEndRange: "",
+    outboundDate: "2023-11-01", //formatDate(new Date()),
+    outboundDateEndRange: "2023-11-03", //formatDate(new Date(), 2),
+    returnDate: "2023-11-10", //formatDate(new Date(), 5),
+    returnDateEndRange: "2023-11-12", //formatDate(new Date(), 7),
     tripLength: "trip-medium",
   });
   const [suggestions, setSuggestions] = useState([]);
@@ -53,10 +69,10 @@ export function FlightForm() {
   }, [debouncedSuggestions]);
 
   const handleSuggestionClick = (location) => {
-    // Set the suggestions state to the selected suggestion and clear the suggestions list
     setFormData((prevData) => ({
       ...prevData,
       "location": location.display_name,
+      "latLong": { "lat": location.lat, "long": location.lon },
     }));
     setSuggestions([]);
   };
@@ -69,18 +85,13 @@ export function FlightForm() {
     }));
   };
 
-  const handleSubmit = (form) => {
+  const handleSubmit = async (form) => {
     form.preventDefault(); //Prevent page refresh upon form submission
 
     const formDataJSON = JSON.stringify(formData, null, 2);
     console.log("Form Data (JSON):", formDataJSON);
 
-    // revalidateTag("emissions"); // This should hopefully trigger a new fetch - test to see if this works globally
-
-    // NEED to add some sort of type checking here, to ensure data passed to server is valid
-
-    // redirect to results route
-    // pass location, dates, etc as props?
+    createRequestCookies(formDataJSON);
   };
 
   const getUserLocation = () => {
@@ -173,7 +184,9 @@ export function FlightForm() {
           ></input>
           <label htmlFor="trip-long">Really Far</label>
         </div>
-        <button type="submit">Submit & make flight search</button>
+        <button type="submit" className="h-10 px-2 text-center rounded-md font-semibold bg-blue-400 text-rose-200">
+          Submit & make flight search
+        </button>
       </form>
     </div>
   );
