@@ -11,17 +11,14 @@ from datetime import datetime
 def normalise_date(ugly_date):
     return datetime.strptime(ugly_date, "%Y-%m-%d").strftime("%d/%m/%Y")
 
-### Function to get a list of locations based on user's departure location and distance
-##### Maybe use a different API? There should be a free one
-####### MAYBE DO THIS IN NEXT
 def get_airport_list(latitude,longitude,max_radius,min_radius=0):
     def distance_calculator(item):
         ## item[0] = IATA code, item[1] = latitude, item[2] = longitude
         distance = geodesic((latitude,longitude),(item[1],item[2])).kilometers # Calculate airport distance from user
         return item[0] if min_radius <= distance <= max_radius else None # Return airport code if distance from user is less than radius
 
-    # result = list(filter(None, map(distance_calculator, full_airports_list))) 
     result = ",".join(filter(None, map(distance_calculator, full_airports_list))) 
+    # FIX: the tequila API has a "URI limit". So maybe stop adding destinations to the list after a certain point (we don't need ALL the medium-sized airports)
 
     return(result)
 
@@ -56,20 +53,10 @@ def tequila_query(flight_origin,flight_destination,outbound_date,return_date,out
     else:
         return result.json()
 
-### Function to parse data from KIWI api
-#-- Will need to filter through results with the following strategy:
-#----- Results should be outputted from previous function sorted by quality
-#----- Only up to X (maybe 3?) alternatives should be maintained for each destination
-#----- Subobjects of destinations should be created, as below. This allows us to calculate the emissions for each destination
-#----- and present the minimum one, but also provide some backup dates.
-#
-#-- This function acts as a pre-sort, to which we then add emissions data, and then we can present all info to user.
 def tequila_parse(tequila_dict):
     parsed_dict = {}
-    # route_length_list = [0] * len(tequila_dict["data"])
-    # route_index = 0
     for route in tequila_dict["data"]: # TASK: Replace this with map(), for performance?
-        if route["cityTo"] not in parsed_dict: # Check if no entry exists yet for this destination, add if so
+        if route["cityTo"] not in parsed_dict:
             parsed_dict[route["cityTo"]] = []
         if len(parsed_dict[route["cityTo"]]) < 3: # Only add entry if less than 3 entries exist for this destination
             flights_arr = [[],[]]
@@ -128,8 +115,6 @@ def tequila_parse(tequila_dict):
 
     return parsed_dict
 
-### Function to prepare an array of flights for inputting to emissions_fetch
-##### Input: dictionary (as output from tequila_parse)
 def emissions_flights_list(flights_dict):
     flights_list = []
     for destination in flights_dict:
@@ -142,14 +127,11 @@ def tim_params_builder(flight_object):
     return {
         "origin": flight_object["flyFrom"],
         "destination": flight_object["flyTo"],
-        # "operatingCarrierCode": flight_object["airline"], ### FIX: May need to check if operating carrier is preferred over airline or not
-        # "flightNumber": int(flight_object["flight_no"]), ### FIX: May need to check if operating flight no is preferred over flight no or not
         "operatingCarrierCode": flight_object["operating_carrier"] if flight_object["operating_carrier"] != "" else flight_object["airline"], ### FIX: May need to check if operating carrier is preferred over airline or not
         "flightNumber": int(flight_object["operating_flight_no"]) if flight_object["operating_flight_no"] != "" else int(flight_object["flight_no"]), ### FIX: May need to check if operating flight no is preferred over flight no or not
         "departureDate": {"year": flight_object["local_departure"][:4], "month": flight_object["local_departure"][5:7], "day": flight_object["local_departure"][8:10]}
     }
 
-### Function to calculate emissions from an array of flights
 def emissions_fetch(flights_object,flight_class="economy"):
 
     url = f"https://travelimpactmodel.googleapis.com/v1/flights:computeFlightEmissions?key={TIM_KEY}"
@@ -167,7 +149,6 @@ def emissions_fetch(flights_object,flight_class="economy"):
     
     return emissions_results
 
-### Function to add emissions_results to tequila_parse output
 def emissions_parse(flights_dict,emissions_results):
     for destination in flights_dict:
         for option in flights_dict[destination]:
@@ -175,28 +156,26 @@ def emissions_parse(flights_dict,emissions_results):
             for outbound_flights in option["flights"][0]:
                 emissions = emissions_results.pop(0)
                 if emissions == 0:
-                    # print(f"no emissions data for flight to {outbound_flights['flyTo']}") # do something here
-                    outbound_flights["flight_emissions"] = emissions # CURRENTLY ADDING 0 EMISSIONS TO FILE - WILL NEED TO FIX THIS
+                    # FIX: add proper error handling here
+                    print(f"no emissions data for flight to {outbound_flights['flyTo']}")
+                    outbound_flights["flight_emissions"] = emissions
                 else:
                     outbound_flights["flight_emissions"] = emissions
                 outbound_emissions += emissions
-            # print(f"total outbound leg emissions = {outbound_emissions}")
             
             return_emissions=0
             for return_flights in option["flights"][1]:
                 emissions = emissions_results.pop(0)
                 if emissions == 0:
-                    # print("no emissions data") # do something here
-                    return_flights["flight_emissions"] = emissions # CURRENTLY ADDING 0 EMISSIONS TO FILE - WILL NEED TO FIX THIS
+                    # FIX: add proper error handling here
+                    print(f"no emissions data for flight to {return_flights['flyTo']}")
+                    return_flights["flight_emissions"] = emissions 
                 else:
                     return_flights["flight_emissions"] = emissions
                 return_emissions += emissions
-            # print(f"total return leg emissions = {return_emissions}")
             
             total_emissions = outbound_emissions + return_emissions
             option["trip_emissions"] = total_emissions
-            # print(f"total trip emissions = {total_emissions}")
-        # print("next destination")
 
     return flights_dict
 
@@ -222,11 +201,6 @@ def unsplash_fetch(query):
     img_url_resized = img_url + "&w=400&h=600&fit=crop&crop=top,bottom,left,right"
     return img_url_resized
 
-### Function to generate KIWI api result for user booking
-##### Input: a list of flight options, as returned by emissions_fetch:
-
-
-current_dir = os.path.dirname(os.path.realpath(__file__))
 
 # Get API key from environment variables
 load_dotenv()
@@ -235,6 +209,8 @@ TEQUILA_KEY = os.getenv("TEQUILA_API_KEY")
 RAPID_API_KEY = os.getenv("RAPID_API_KEY")
 UNSPLASH_ACCESS = os.getenv("UNSPLASH_ACCESS_KEY")
 UNSPLASH_SECRET_KEY = os.getenv("UNSPLASH_SECRET_KEY")
+
+current_dir = os.path.dirname(os.path.realpath(__file__))
 
 # Load all airports
 with open(os.path.join(current_dir, "data", "airports.json"), "r") as json_file:
