@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg viewBox="0 0 500 50" width="100%" height="100%" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+<title>Clouds</title>
+<g>
+<title>Layer 1</title>
+<path d="m15.667 39.733c-14.917 0-27-9.3978-27-21s12.083-21 27-21 27 9.3978 27 21-12.083 21-27 21z" fill="#fff" opacity="undefined" stroke="#000" stroke-width="0"/>
+<path d="m48.333 46.4c-14.917 0-27-9.3978-27-21s12.083-21 27-21 27 9.3978 27 21-12.083 21-27 21z" fill="#fff" opacity="undefined" stroke="#000" stroke-width="0"/>
+<path d="m79 40.4c-12.339 0-22.333-7.9061-22.333-17.667s9.9945-17.667 22.333-17.667c12.339 0 22.333 7.9061 22.333 17.667s-9.9945 17.667-22.333 17.667z" fill="#fff" opacity="undefined" stroke="#000" stroke-width="0"/>
+<path d="m101.67 43.067c-14.917 0-27-9.3978-27-21s12.083-21 27-21c14.917 0 27 9.3978 27 21s-12.083 21-27 21z" fill="#fff" opacity="undefined" stroke="#000" stroke-width="0"/>
+<path d="m128.33 47.733c-14.917 0-27-9.3978-27-21s12.083-21 27-21 27 9.3978 27 21-12.083 21-27 21z" fill="#fff" opacity="undefined" stroke="#000" stroke-width="0"/>
+<path d="m155 45.733c-12.339 0-22.333-8.5028-22.333-19s9.9945-19 22.333-19 22.333 8.5028 22.333 19-9.9945 19-22.333 19z" fill="#fff" opacity="undefined" stroke="#000" stroke-width="0"/>
+<path d="m184.33 47.067c-14.917 0-27-9.3978-27-21s12.083-21 27-21 27 9.3978 27 21-12.083 21-27 21z" fill="#fff" opacity="undefined" stroke="#000" stroke-width="0"/>
+<path d="m212.67 47.733c-14.365 0-26-7.7569-26-17.333 0-9.5764 11.635-17.333 26-17.333s26 7.7569 26 17.333c0 9.5764-11.635 17.333-26 17.333z" fill="#fff" opacity="undefined" stroke="#000" stroke-width="0"/>
+<path d="m235.67 45.733c-5.709 0-10.333-4.6243-10.333-10.333s4.6243-10.333 10.333-10.333 10.333 4.6243 10.333 10.333-4.6243 10.333-10.333 10.333z" fill="#fff" opacity="undefined" stroke="#000" stroke-width="0"/>
+<path d="m253.67 47.067c-14.917 0-27-9.3978-27-21s12.083-21 27-21 27 9.3978 27 21-12.083 21-27 21z" fill="#fff" opacity="undefined" stroke="#000" stroke-width="0"/>
+<path d="m286.33 46.4c-12.339 0-22.333-7.9061-22.333-17.667s9.9945-17.667 22.333-17.667 22.333 7.9061 22.333 17.667-9.9945 17.667-22.333 17.667z" fill="#fff" opacity="undefined" stroke="#000" stroke-width="0"/>
+<path d="m317 47.067c-14.917 0-27-9.3978-27-21s12.083-21 27-21 27 9.3978 27 21-12.083 21-27 21z" fill="#fff" opacity="undefined" stroke="#000" stroke-width="0"/>
+<path d="m346 45.067c-13.996 0-25.333-8.9503-25.333-20s11.337-20 25.333-20 25.333 8.9503 25.333 20-11.337 20-25.333 20z" fill="#fff" opacity="undefined" stroke="#000" stroke-width="0"/>
+<path d="m375.33 42.4c-11.418 0-20.667-8.6519-20.667-19.333s9.2486-19.333 20.667-19.333 20.667 8.6519 20.667 19.333-9.2486 19.333-20.667 19.333z" fill="#fff" opacity="undefined" stroke="#000" stroke-width="0"/>
+<path d="m400.33 46.4c-14.917 0-27-9.3978-27-21s12.083-21 27-21 27 9.3978 27 21-12.083 21-27 21z" fill="#fff" opacity="undefined" stroke="#000" stroke-width="0"/>
+<path d="m446 43.067c-17.311 0-31.333-8.3536-31.333-18.667s14.022-18.667 31.333-18.667c17.311 0 31.333 8.3536 31.333 18.667s-14.022 18.667-31.333 18.667z" fill="#fff" opacity="undefined" stroke="#000" stroke-width="0"/>
+<path d="m488.33 39.733c-14.549 0-26.333-9.2486-26.333-20.667s11.785-20.667 26.333-20.667c14.549 0 26.333 9.2486 26.333 20.667s-11.785 20.667-26.333 20.667z" fill="#fff" opacity="undefined" stroke="#000" stroke-width="0"/>
+<rect x="-4.0041" y="-6.0667" width="510" height="27.333" fill="#fff" stroke="#000" stroke-width="0"/>
+</g>
+</svg>

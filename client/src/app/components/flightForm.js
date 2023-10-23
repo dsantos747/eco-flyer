@@ -92,11 +92,8 @@ export function FlightForm() {
   };
 
   const handleSubmit = async (form) => {
-    form.preventDefault(); //Prevent page refresh upon form submission
-
+    form.preventDefault();
     const formDataJSON = JSON.stringify(formData, null, 2);
-    console.log("Form Data (JSON):", formDataJSON);
-
     createRequestCookies(formDataJSON);
   };
 
@@ -110,9 +107,8 @@ export function FlightForm() {
             `https://nominatim.openstreetmap.org/reverse?lat=${crd.latitude}&lon=${crd.longitude}&zoom=10&format=json`
           );
           const userLocation = await response.json();
-          let parsedUserLocation = `${userLocation.address.city || ""}, ${userLocation.address.county || ""}, ${
-            userLocation.address.country || ""
-          }`;
+          // prettier-ignore
+          let parsedUserLocation = `${userLocation.address.city || ""}${userLocation.address.city == undefined ? "" : ", "}${userLocation.address.county || ""}${userLocation.address.county == undefined ? "" : ", "}${userLocation.address.country || ""}`;
           setFormData((prevData) => ({
             ...prevData,
             "location": parsedUserLocation,
@@ -129,13 +125,13 @@ export function FlightForm() {
   return (
     <div className="w-full">
       <form id="flightForm" onSubmit={handleSubmit} className="flex justify-center items-center flex-col gap-4">
-        <div className="flex gap-1 w-full">
+        <div className="flex flex-col md:flex-row gap-1 w-full px-20 items-center">
           <p className="flex-none">
             Departure Location<span className="text-red-500">*</span>
           </p>
           <div className="flex-auto">
             <input
-              className="w-full"
+              className="w-full text-center md:text-start"
               type="text"
               name="location"
               placeholder="Starting Location"
@@ -143,6 +139,7 @@ export function FlightForm() {
               onFocus={handleFocus}
               onBlur={handleBlur}
               onChange={handleLocationInputChange}
+              required
             ></input>
             <ul className="z-10 fixed bg-white">
               {suggestions.map((location) => (
@@ -165,7 +162,7 @@ export function FlightForm() {
           </button>
         </div>
         <div className="flex justify-evenly gap-2 w-full">
-          <div className="flex gap-1 flex-wrap w-1/2">
+          <div className="flex gap-1 flex-wrap w-1/2 justify-end">
             <label htmlFor="outboundDate" className="flex-auto text-right">
               Outbound Date<span className="text-red-500">*</span>
             </label>
@@ -192,7 +189,7 @@ export function FlightForm() {
           </div>
         </div>
         <div className="flex justify-evenly gap-2 w-full">
-          <div className="flex gap-1 flex-wrap w-1/2">
+          <div className="flex gap-1 flex-wrap w-1/2 justify-end">
             <label htmlFor="returnDate" className="flex-auto text-right">
               Return Date<span className="text-red-500">*</span>
             </label>
@@ -219,7 +216,7 @@ export function FlightForm() {
           </div>
         </div>
 
-        <div className="flex justify-between gap-2">
+        <div className="flex flex-col md:flex-row justify-between gap-2">
           <p>
             How far would you like to travel?<span className="text-red-500">*</span>
           </p>
@@ -258,7 +255,7 @@ export function FlightForm() {
           </div>
         </div>
         <button type="submit" className="h-10 px-2 text-center rounded-md font-semibold bg-blue-400 text-black">
-          Take me Away!
+          Let's Fly!
         </button>
       </form>
     </div>

@@ -7,3 +7,90 @@ blue-400
 rose-200
 blue-900
 gray-900 */
+
+.plane {
+  position: relative;
+  top: 50%;
+  display: flex;
+  align-items: center;
+}
+
+/* .planeBg {
+  display: flex;
+} */
+
+.planePath {
+  width: 100vw;
+  overflow: hidden;
+}
+
+.planePath:nth-child(1) {
+  transform: rotate(5deg);
+  top: 70%;
+  left: 20%;
+}
+.planePath:nth-child(2) {
+  transform: rotate(40deg);
+  top: 40%;
+  left: -20%;
+}
+.planePath:nth-child(3) {
+  transform: rotate(-80deg);
+  top: 50%;
+  left: 50%;
+}
+.planePath:nth-child(4) {
+  transform: rotate(170deg);
+  top: 50%;
+  left: -20%;
+}
+.planePath:nth-child(5) {
+  transform: rotate(-130deg);
+  top: 50%;
+  left: 0%;
+}
+.planePath:nth-child(6) {
+  transform: rotate(100deg);
+  top: 70%;
+  left: 20%;
+}
+.planePath:nth-child(7) {
+  transform: rotate(-30deg);
+  top: 25%;
+  left: 5%;
+}
+.planePath:nth-child(8) {
+  transform: rotate(20deg);
+  top: 50%;
+  left: 0%;
+}
+.planePath:nth-child(9) {
+  transform: rotate(-110deg);
+  top: 50%;
+  left: -20%;
+}
+.planePath:nth-child(10) {
+  transform: rotate(150deg);
+  top: 30%;
+  left: 0%;
+}
+
+.trail {
+  position: relative;
+  height: 20px;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  overflow: visible;
+}
+
+.dot {
+  position: absolute;
+  display: inline-block;
+  border-radius: 50%;
+  background-color: hsl(229, 100%, 29%);
+  /* width: 10px;
+  height: 10px; */
+  /* direction: rtl; */
+}

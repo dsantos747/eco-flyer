@@ -3,7 +3,6 @@ import { emissionsError } from "@/lib/exceptions";
 import { TripCard } from "../components/tripCard.js";
 import { Suspense } from "react";
 import { cookies } from "next/headers";
-// import { TailSpin } from "react-loader-spinner";
 
 export const emissionsFetch = async (latLong, outboundDate, outboundDateEndRange, returnDate, returnDateEndRange, tripLength) => {
   // const user_location = { lat: 38.7813, long: -9.13592 };
