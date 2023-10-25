@@ -68,21 +68,16 @@ def tequila_query(
         return result.json()
 
 
+########## TASK - need to rewrite this to get rid of list levels, replace with dict
 def tequila_parse(tequila_dict):
     parsed_dict = {}
-    for route in tequila_dict[
-        "data"
-    ]:  # TASK: Replace this with map(), for performance?
+    for route in tequila_dict["data"]:
         if route["cityTo"] not in parsed_dict:
-            parsed_dict[route["cityTo"]] = []
-        if (
-            len(parsed_dict[route["cityTo"]]) < 5
-        ):  # Only add entry if less than 5 entries exist for this destination
-            flights_arr = [[], []]
+            parsed_dict[route["cityTo"]] = []  # This should be {}
+        if len(parsed_dict[route["cityTo"]]) < 5:
+            flights_arr = [[], []]  # This should be [{},{}]
             count_out = 0
-            for leg in route[
-                "route"
-            ]:  # TASK: Replace this with map(), for performance?
+            for leg in route["route"]:
                 leg_object = {
                     "id": leg["id"],
                     "combination_id": leg["combination_id"],
@@ -101,10 +96,10 @@ def tequila_parse(tequila_dict):
                     "return": leg["return"],
                 }
                 if leg["return"] == 0:
-                    flights_arr[0].append(leg_object)
+                    flights_arr[0].append(leg_object)  # Add keys here (e.g. flight 1)
                     count_out += 1
                 else:
-                    flights_arr[1].append(leg_object)
+                    flights_arr[1].append(leg_object)  # Add keys here (e.g. flight 1)
 
             route_object = {
                 "id": route["id"],
@@ -138,6 +133,8 @@ def tequila_parse(tequila_dict):
                 if parsed_dict[route["cityTo"]] == []
                 else parsed_dict[route["cityTo"]][0]["img_url"],
             }
+            # Below would be more like parsed_dict[route["cityTo"]]["flight_1"] = route_object
+            # Use f-string: f"flight_{(len(parsed_dict[route["cityTo"]]) + 1)}"
             parsed_dict[route["cityTo"]].append(route_object)
 
     return parsed_dict
@@ -195,9 +192,12 @@ def emissions_fetch(flights_object, flight_class="economy"):
     return emissions_results
 
 
+################################################################## NEED TO CREATE A NEW DICT, RATHER THAN MUTATING THE ITERATED DICT
 def emissions_parse(flights_dict, emissions_results):
+    # new_flights_dict = flights_dict
     for destination in flights_dict:
-        for option in flights_dict[destination]:
+        for index, option in enumerate(flights_dict[destination]):
+            # print(index)
             outbound_emissions = 0
             remove_option = False
             for outbound_flights in option["flights"][0]:
@@ -212,11 +212,13 @@ def emissions_parse(flights_dict, emissions_results):
                     outbound_flights["flight_emissions"] = emissions
                 else:
                     outbound_flights["flight_emissions"] = emissions
+                    # new_flights_dict[destination][index]["flights"][0]["flight_emissions"] = emissions #NEED TO RE-WRITE THIS ONCE TEQUILA OUTPUT IS ENTIRELY DICTIONARIES - NO LISTS (EXCEPT MAYBE OUT/RETURN FLIGHTS)
                 outbound_emissions += emissions
 
-            if remove_option:
-                flights_dict[destination].remove(option)
-                continue
+            # if remove_option:
+            #     del flights_dict[destination][option]
+            #     print(f"removed trip to {destination}")
+            #     continue
 
             return_emissions = 0
             for return_flights in option["flights"][1]:
@@ -231,14 +233,20 @@ def emissions_parse(flights_dict, emissions_results):
                     return_flights["flight_emissions"] = emissions
                 return_emissions += emissions
 
-            if remove_option:
-                flights_dict[destination].remove(option)
-                continue
+            # if remove_option:
+            #     del flights_dict[destination][index]
+            #     print(f"removed trip to {destination}")
+            #     continue
 
             total_emissions = outbound_emissions + return_emissions
             option["trip_emissions"] = total_emissions
 
-    return flights_dict
+        # If destination array is now empty, delete it too (sad)
+        # if flights_dict[destination] == []:
+        #     print(f"removed {destination} as a destination")
+        #     del flights_dict[destination]
+
+    return flights_dict  # Here should return new_flights_dict
 
 
 def results_sort(results):

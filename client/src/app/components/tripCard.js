@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 import { ActionButton } from "./actionButton.js";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faChevronRight } from "@fortawesome/free-solid-svg-icons";
 
 const formatDate = (date) => {
   const year = date.slice(0, 4);
@@ -36,23 +38,39 @@ export function TripCard({ emissions, destinations, option }) {
   const firstOutbound = currentTrip.flights[0][0];
   const firstReturn = currentTrip.flights[currentTrip.flights.length - 1][0];
   return (
-    <div className="flex justify-center items-center gap-3 h-screen">
-      <div>
-        <ActionButton
-          onChange={handleDestinationChange}
-          direction={-1}
-          className={"h-20 w-20 font-semibold text-4xl text-center rounded-full bg-slate-200 text-slate-400"}
-        >
-          &lt;
-        </ActionButton>
-      </div>
+    <div className="">
+      {/* flex justify-center items-center gap-3 */}
+      {/* <div className="sm:max-md:relative sm:max-md:left-44 z-20"></div> */}
       <div className="flex flex-col items-center">
         <div className="relative">
-          <img src={currentTrip.img_url} className="object-cover rounded-xl max-h-[75vh]" alt={currentTrip.cityTo}></img>
+          <img
+            src={currentTrip.img_url}
+            className="object-cover rounded-xl max-w-[80vw] md:max-w-[90vw] max-h-[75vh]"
+            alt={currentTrip.cityTo}
+          ></img>
           <div className="absolute top-0 left-0 right-0 bottom-0 flex flex-col justify-between">
             <div className="bg-white bg-opacity-60 rounded-t-xl rounded-b-md py-2 px-2">
-              From {currentTrip.cityFrom} ({firstOutbound.flyFrom}), how about:
+              From {currentTrip.cityFrom} (<span className="font-semibold text-blue-900">{firstOutbound.flyFrom}</span>), how about:
             </div>
+            {/* sm:max-md:absolute sm:max-md:left-44 */}
+            <ActionButton
+              onChange={handleDestinationChange}
+              direction={-1}
+              className={
+                "left-2 top-1/2 absolute md:-left-20 lg:-left-28 bg-opacity-70 md:bg-opacity-100 h-16 w-16 lg:h-20 lg:w-20 flex items-center justify-center rounded-full active:scale-95 bg-white text-blue-900 hover:text-sky-500"
+              }
+            >
+              <FontAwesomeIcon icon={faChevronRight} className="text-xl md:text-xl lg:text-2xl  rotate-180 " />
+            </ActionButton>
+            <ActionButton
+              onChange={handleDestinationChange}
+              direction={1}
+              className={
+                "right-2 top-1/2 absolute md:-right-20 lg:-right-28 bg-opacity-70 md:bg-opacity-100 h-16 w-16 lg:h-20 lg:w-20 flex items-center justify-center rounded-full active:scale-95 bg-white text-blue-900 hover:text-sky-500"
+              }
+            >
+              <FontAwesomeIcon icon={faChevronRight} className="text-xl md:text-xl lg:text-2xl" />
+            </ActionButton>
             <div className="bg-gradient-destination pb-2 pt-28 px-2 rounded-bl-xl">
               <h2 className="text-2xl text-blue-900 font-bold">{currentTrip.cityTo}</h2>
               <div>Fly out: {formatDate(firstOutbound.local_departure)}</div>
@@ -65,23 +83,18 @@ export function TripCard({ emissions, destinations, option }) {
         </div>
 
         <div className="flex justify-between py-2 gap-2">
-          <ActionButton onChange={handleOptionChange} direction={1} className={"h-10 w-48 text-center rounded-md bg-slate-300"}>
-            Alternate Flights
+          <ActionButton
+            onChange={handleOptionChange}
+            direction={1}
+            className={"h-10 w-36 md:w-48 text-center rounded-md bg-white hover:bg-slate-300 active:scale-95"}
+          >
+            Shuffle Flights
           </ActionButton>
-          <button className="h-10 w-48 text-center rounded-md font-semibold bg-teal-600 text-white">
+          <button className="h-10 w-36 md:w-48 text-center rounded-md font-semibold bg-teal-600 hover:bg-teal-700 active:scale-95 text-white">
             {currentTrip.price}€ on Kiwi.com
           </button>
           {/*Add multi-currency support*/}
         </div>
-      </div>
-      <div>
-        <ActionButton
-          onChange={handleDestinationChange}
-          direction={1}
-          className={"h-20 w-20 font-semibold text-4xl rounded-full bg-slate-200 text-slate-400"}
-        >
-          &gt;
-        </ActionButton>
       </div>
     </div>
   );

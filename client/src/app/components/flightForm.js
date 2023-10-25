@@ -4,9 +4,11 @@ import { useState, useEffect } from "react";
 import { createRequestCookies } from "./formServer";
 
 const formatDate = (date, offset = 0) => {
+  date = new Date(date.setDate(date.getDate() + offset));
+
   const year = date.getFullYear();
   const month = date.getMonth() + 1;
-  const day = date.getDate() + offset;
+  const day = date.getDate(); // + offset
 
   const formattedMonth = String(month).padStart(2, "0");
   const formattedDate = String(day).padStart(2, "0");
@@ -94,6 +96,7 @@ export function FlightForm() {
   const handleSubmit = async (form) => {
     form.preventDefault();
     const formDataJSON = JSON.stringify(formData, null, 2);
+    console.log(formDataJSON);
     createRequestCookies(formDataJSON);
   };
 
@@ -131,17 +134,17 @@ export function FlightForm() {
           </p>
           <div className="flex-auto">
             <input
-              className="w-full text-center md:text-start"
+              className="w-full text-center md:text-start bg-rose-50"
               type="text"
               name="location"
-              placeholder="Starting Location"
+              placeholder="Enter your departure location or airport"
               value={formData.location}
               onFocus={handleFocus}
               onBlur={handleBlur}
               onChange={handleLocationInputChange}
               required
             ></input>
-            <ul className="z-10 fixed bg-white">
+            <ul className="z-10 text-start fixed bg-rose-50">
               {suggestions.map((location) => (
                 <li key={location.place_id} className="cursor-pointer" onClick={() => handleSuggestionClick(location)}>
                   {location.display_name}
@@ -168,6 +171,7 @@ export function FlightForm() {
             </label>
             <input
               id="outboundDate"
+              className="bg-rose-50"
               type="date"
               name="outboundDate"
               placeholder="Outbound Date"
@@ -179,6 +183,7 @@ export function FlightForm() {
           <div className="flex gap-1 flex-wrap-reverse w-1/2">
             <input
               id="outboundDateEndRange"
+              className="bg-rose-50"
               type="date"
               name="outboundDateEndRange"
               placeholder="Outbound Date End Range"
@@ -195,6 +200,7 @@ export function FlightForm() {
             </label>
             <input
               id="returnDate"
+              className="bg-rose-50"
               type="date"
               name="returnDate"
               placeholder="Return Date"
@@ -206,6 +212,7 @@ export function FlightForm() {
           <div className="flex gap-1 flex-wrap-reverse w-1/2">
             <input
               id="returnDateEndRange"
+              className="bg-rose-50"
               type="date"
               name="returnDateEndRange"
               placeholder="Return Date End Range"
@@ -216,42 +223,46 @@ export function FlightForm() {
           </div>
         </div>
 
-        <div className="flex flex-col md:flex-row justify-between gap-2">
-          <p>
-            How far would you like to travel?<span className="text-red-500">*</span>
-          </p>
-          <div className="flex gap-1">
-            <input
-              type="radio"
-              id="trip-short"
-              name="tripLength"
-              value="trip-short"
-              checked={formData.tripLength === "trip-short"}
-              onChange={handleInputChange}
-            ></input>
-            <label htmlFor="trip-short">Near</label>
+        <div className="flex flex-col items-center md:flex-row justify-between gap-2">
+          <div>
+            <p>
+              How far would you like to travel?<span className="text-red-500">*</span>
+            </p>
           </div>
-          <div className="flex gap-1">
-            <input
-              type="radio"
-              id="trip-medium"
-              name="tripLength"
-              value="trip-medium"
-              checked={formData.tripLength === "trip-medium"}
-              onChange={handleInputChange}
-            ></input>
-            <label htmlFor="trip-medium">Far</label>
-          </div>
-          <div className="flex gap-1">
-            <input
-              type="radio"
-              id="trip-long"
-              name="tripLength"
-              value="trip-long"
-              checked={formData.tripLength === "trip-long"}
-              onChange={handleInputChange}
-            ></input>
-            <label htmlFor="trip-long">Really Far</label>
+          <div className="flex flex-col md:flex-row md:gap-2">
+            <div className="flex gap-4 md:gap-1">
+              <input
+                type="radio"
+                id="trip-short"
+                name="tripLength"
+                value="trip-short"
+                checked={formData.tripLength === "trip-short"}
+                onChange={handleInputChange}
+              ></input>
+              <label htmlFor="trip-short">Near</label>
+            </div>
+            <div className="flex gap-4 md:gap-1">
+              <input
+                type="radio"
+                id="trip-medium"
+                name="tripLength"
+                value="trip-medium"
+                checked={formData.tripLength === "trip-medium"}
+                onChange={handleInputChange}
+              ></input>
+              <label htmlFor="trip-medium">Far</label>
+            </div>
+            <div className="flex gap-4 md:gap-1">
+              <input
+                type="radio"
+                id="trip-long"
+                name="tripLength"
+                value="trip-long"
+                checked={formData.tripLength === "trip-long"}
+                onChange={handleInputChange}
+              ></input>
+              <label htmlFor="trip-long">Really Far</label>
+            </div>
           </div>
         </div>
         <button type="submit" className="h-10 px-2 text-center rounded-md font-semibold bg-blue-400 text-black">

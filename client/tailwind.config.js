@@ -8,6 +8,9 @@ module.exports = {
           "radial-gradient(farthest-side at 20% 95%,rgb(255,255,255,0.8),rgb(255,255,255,0.8) 20%,rgb(255,255,255,0.5) 60%,rgb(255,255,255,0.1) 80%, transparent 95%)",
       },
     },
+    animation: {
+      "spin-slow": "spin 1.5s linear infinite",
+    },
   },
   plugins: [],
 };
