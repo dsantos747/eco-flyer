@@ -300,7 +300,8 @@ def unsplash_fetch(query):
 
 
 # Get API key from environment variables
-load_dotenv()
+env_path = os.path.join(os.path.dirname(__file__), "..", ".env.local")
+load_dotenv(dotenv_path=env_path)
 FLASK_ENV = os.getenv("FLASK_ENV")
 TIM_KEY = os.getenv("TIM_API_KEY")
 TEQUILA_KEY = os.getenv("TEQUILA_API_KEY")

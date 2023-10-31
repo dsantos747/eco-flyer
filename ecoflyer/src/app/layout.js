@@ -11,7 +11,6 @@ export const metadata = {
   applicationName: "Eco-Flyer",
   authors: [{ name: "Daniel Santos", url: "https://github.com/dsantos747" }],
   keywords: ["flights", "emissions", "environment", "travel", "low emissions"],
-  colorScheme: "normal",
   creator: "Daniel Santos",
 };
 
