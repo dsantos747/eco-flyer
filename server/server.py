@@ -4,9 +4,9 @@ from dotenv import load_dotenv
 import os
 from requests import get, post
 import json
-import numpy as np
 from geopy.distance import geodesic
 from datetime import datetime
+import copy
 
 
 def normalise_date(ugly_date):
@@ -16,12 +16,8 @@ def normalise_date(ugly_date):
 def get_airport_list(latitude, longitude, max_radius, min_radius=0):
     def distance_calculator(item):
         ## item[0] = IATA code, item[1] = latitude, item[2] = longitude
-        distance = geodesic(
-            (latitude, longitude), (item[1], item[2])
-        ).kilometers  # Calculate airport distance from user
-        return (
-            item[0] if min_radius <= distance <= max_radius else None
-        )  # Return airport code if distance from user is less than radius
+        distance = geodesic((latitude, longitude), (item[1], item[2])).kilometers
+        return item[0] if min_radius <= distance <= max_radius else None
 
     result = ",".join(filter(None, map(distance_calculator, full_airports_list)))
     # FIX: the tequila API has a "URI limit". So maybe stop adding destinations to the list after a certain point (we don't need ALL the medium-sized airports)
@@ -52,12 +48,12 @@ def tequila_query(
         "date_to": outbound_date_end_range,
         "return_from": return_date,
         "return_to": return_date_end_range,
-        #  "max_fly_duration": "DUMMY", #Use this to set bands of how far to travel. MIGHT NOT BE NECESSARY if destination list is precomputed above
+        #  "max_fly_duration": "DUMMY",
         #  "price_to": price_limit, #might be useful to control the results a bit.
         "curr": "EUR",
         "sort": "quality",  # quality or price(default)
-        "limit": 200,
-    }  # max 1000, 200 default
+        "limit": 500,  # max 1000
+    }
 
     result = get(url, headers=headers, params=params)
     if result.status_code != 200:
@@ -68,15 +64,15 @@ def tequila_query(
         return result.json()
 
 
-########## TASK - need to rewrite this to get rid of list levels, replace with dict
 def tequila_parse(tequila_dict):
     parsed_dict = {}
     for route in tequila_dict["data"]:
         if route["cityTo"] not in parsed_dict:
-            parsed_dict[route["cityTo"]] = []  # This should be {}
+            parsed_dict[route["cityTo"]] = {}
         if len(parsed_dict[route["cityTo"]]) < 5:
-            flights_arr = [[], []]  # This should be [{},{}]
+            flights_arr = [{}, {}]
             count_out = 0
+            count_ret = 0
             for leg in route["route"]:
                 leg_object = {
                     "id": leg["id"],
@@ -96,10 +92,11 @@ def tequila_parse(tequila_dict):
                     "return": leg["return"],
                 }
                 if leg["return"] == 0:
-                    flights_arr[0].append(leg_object)  # Add keys here (e.g. flight 1)
                     count_out += 1
+                    flights_arr[0][f"step_{count_out}"] = leg_object
                 else:
-                    flights_arr[1].append(leg_object)  # Add keys here (e.g. flight 1)
+                    count_ret += 1
+                    flights_arr[1][f"step_{count_ret}"] = leg_object
 
             route_object = {
                 "id": route["id"],
@@ -124,18 +121,21 @@ def tequila_parse(tequila_dict):
                 "price": route["price"],
                 "airlines": route["airlines"],
                 "flights": flights_arr,
-                "total_legs": len(route["route"]),
+                "total_legs": count_out + count_ret,
                 "out_legs": count_out,
-                "return_legs": len(route["route"]) - count_out,
+                "return_legs": count_ret,
                 "booking_token": route["booking_token"],
                 "deep_link": route["deep_link"],
                 "img_url": unsplash_fetch(route["cityTo"])
-                if parsed_dict[route["cityTo"]] == []
-                else parsed_dict[route["cityTo"]][0]["img_url"],
+                # "img_url": unsplash_fetch(f"{route['cityTo']}, {route['countryTo']['name']}")
+                if parsed_dict[route["cityTo"]] == {}
+                else parsed_dict[route["cityTo"]]["option_1"]["img_url"],
             }
-            # Below would be more like parsed_dict[route["cityTo"]]["flight_1"] = route_object
-            # Use f-string: f"flight_{(len(parsed_dict[route["cityTo"]]) + 1)}"
-            parsed_dict[route["cityTo"]].append(route_object)
+
+            # parsed_dict[route["cityTo"]].append(route_object)
+            parsed_dict[route["cityTo"]][
+                f"option_{(len(parsed_dict[route['cityTo']]) + 1)}"
+            ] = route_object
 
     return parsed_dict
 
@@ -144,10 +144,19 @@ def emissions_flights_list(flights_dict):
     flights_list = []
     for destination in flights_dict:
         for option in flights_dict[destination]:
-            flights_list.append(
-                list(map(tim_params_builder, option["flights"][0]))
-            )  # FIX: This is not accounting for when there are multiple flights in a direction - if you see the json output you'll see that flights are grouped into subarrays. Doesn't seem to be causing errors with getting emissions though.
-            flights_list.append(list(map(tim_params_builder, option["flights"][1])))
+            for flight in flights_dict[destination][option]["flights"][0]:
+                flights_list.append(
+                    tim_params_builder(
+                        flights_dict[destination][option]["flights"][0][flight]
+                    )
+                )
+            for flight in flights_dict[destination][option]["flights"][1]:
+                flights_list.append(
+                    tim_params_builder(
+                        flights_dict[destination][option]["flights"][1][flight]
+                    )
+                )
+
     return {"flights": flights_list}
 
 
@@ -157,14 +166,10 @@ def tim_params_builder(flight_object):
         "destination": flight_object["flyTo"],
         "operatingCarrierCode": flight_object["operating_carrier"]
         if flight_object["operating_carrier"] != ""
-        else flight_object[
-            "airline"
-        ],  ### FIX: May need to check if operating carrier is preferred over airline or not
+        else flight_object["airline"],
         "flightNumber": int(flight_object["operating_flight_no"])
         if flight_object["operating_flight_no"] != ""
-        else int(
-            flight_object["flight_no"]
-        ),  ### FIX: May need to check if operating flight no is preferred over flight no or not
+        else int(flight_object["flight_no"]),
         "departureDate": {
             "year": flight_object["local_departure"][:4],
             "month": flight_object["local_departure"][5:7],
@@ -192,66 +197,89 @@ def emissions_fetch(flights_object, flight_class="economy"):
     return emissions_results
 
 
-################################################################## NEED TO CREATE A NEW DICT, RATHER THAN MUTATING THE ITERATED DICT
 def emissions_parse(flights_dict, emissions_results):
-    # new_flights_dict = flights_dict
+    new_flights_dict = copy.deepcopy(flights_dict)
     for destination in flights_dict:
-        for index, option in enumerate(flights_dict[destination]):
-            # print(index)
+        for option in flights_dict[destination]:
             outbound_emissions = 0
             remove_option = False
-            for outbound_flights in option["flights"][0]:
+            for outbound_flight in flights_dict[destination][option]["flights"][0]:
                 emissions = emissions_results.pop(0)
                 if emissions == 0:
-                    # FIX: add proper error handling here
-                    print(
-                        f"no emissions data for flight to {outbound_flights['flyTo']}"
-                    )
-                    # remove_option = True
-                    # break
-                    outbound_flights["flight_emissions"] = emissions
+                    # print(
+                    #     f"no emissions data for flight to {flights_dict[destination][option]['flights'][0][outbound_flight]['flyTo']}"
+                    # )
+                    remove_option = True
+                    break
                 else:
-                    outbound_flights["flight_emissions"] = emissions
-                    # new_flights_dict[destination][index]["flights"][0]["flight_emissions"] = emissions #NEED TO RE-WRITE THIS ONCE TEQUILA OUTPUT IS ENTIRELY DICTIONARIES - NO LISTS (EXCEPT MAYBE OUT/RETURN FLIGHTS)
+                    new_flights_dict[destination][option]["flights"][0][
+                        outbound_flight
+                    ]["flight_emissions"] = emissions
                 outbound_emissions += emissions
 
-            # if remove_option:
-            #     del flights_dict[destination][option]
-            #     print(f"removed trip to {destination}")
-            #     continue
+            if remove_option:
+                del new_flights_dict[destination][option]
+                # print(f"removed trip to {destination}")
+                continue
 
             return_emissions = 0
-            for return_flights in option["flights"][1]:
+            for return_flight in flights_dict[destination][option]["flights"][1]:
                 emissions = emissions_results.pop(0)
                 if emissions == 0:
-                    # FIX: add proper error handling here
-                    print(f"no emissions data for flight to {return_flights['flyTo']}")
-                    # remove_option = True
-                    # break
-                    return_flights["flight_emissions"] = emissions
+                    # print(
+                    #     f"no emissions data for flight to {flights_dict[destination][option]['flights'][1][return_flight]['flyTo']}"
+                    # )
+                    remove_option = True
+                    break
                 else:
-                    return_flights["flight_emissions"] = emissions
+                    new_flights_dict[destination][option]["flights"][1][return_flight][
+                        "flight_emissions"
+                    ] = emissions
                 return_emissions += emissions
 
-            # if remove_option:
-            #     del flights_dict[destination][index]
-            #     print(f"removed trip to {destination}")
-            #     continue
+            if remove_option:
+                del new_flights_dict[destination][option]
+                # print(f"removed trip to {destination}")
+                continue
 
             total_emissions = outbound_emissions + return_emissions
-            option["trip_emissions"] = total_emissions
+            new_flights_dict[destination][option]["trip_emissions"] = total_emissions
 
         # If destination array is now empty, delete it too (sad)
-        # if flights_dict[destination] == []:
-        #     print(f"removed {destination} as a destination")
-        #     del flights_dict[destination]
+        if not new_flights_dict[destination]:
+            # print(f"removed {destination} as a destination")
+            del new_flights_dict[destination]
 
-    return flights_dict  # Here should return new_flights_dict
+    return reset_option_numbers(new_flights_dict)
+
+
+# Can refactor this for sure, probably incorporate this methodology into emissions_parse
+def reset_option_numbers(dict):
+    output_dict = {}
+
+    for destination, options in dict.items():
+        new_options = {}
+        count = 1
+
+        for option_key, option_value in options.items():
+            new_option_key = f"option_{count}"
+            new_options[new_option_key] = option_value
+            count += 1
+
+        output_dict[destination] = new_options
+
+    return output_dict
 
 
 def results_sort(results):
     sorted_results = dict(
-        sorted(results.items(), key=lambda item: item[1][0]["trip_emissions"])
+        sorted(
+            results.items(),
+            key=lambda item: min(
+                option.get("trip_emissions", float("inf"))
+                for option in item[1].values()
+            ),
+        )
     )
     return sorted_results
 
@@ -273,6 +301,7 @@ def unsplash_fetch(query):
 
 # Get API key from environment variables
 load_dotenv()
+FLASK_ENV = os.getenv("FLASK_ENV")
 TIM_KEY = os.getenv("TIM_API_KEY")
 TEQUILA_KEY = os.getenv("TEQUILA_API_KEY")
 RAPID_API_KEY = os.getenv("RAPID_API_KEY")
@@ -290,8 +319,8 @@ app = Flask(__name__)
 CORS(app)
 
 ##### TEST - Dummy variables section
-user_location = (38.7813, -9.13592)
-radius_range = [4000, 1500]  # km
+# user_location = (38.7813, -9.13592)
+# radius_range = [4000, 1500]
 
 ##### TEST airport list fetching
 # origin_airports = get_airport_list(*user_location, 100) # List of airports in a 100km radius from user's location ### FIX: Change this to a single value?
@@ -299,16 +328,18 @@ radius_range = [4000, 1500]  # km
 
 
 ##### TEST read data from tequila response, filter and create flights list for emissions testing
-with open(
-    os.path.join(current_dir, "data", "test_tequila_response.json"),
-    "r",
-    encoding="utf-8",
-) as file:
-    json_data = json.load(file)
+# with open(
+#     os.path.join(current_dir, "data", "test_tequila_response.json"),
+#     "r",
+#     encoding="utf-8",
+# ) as file:
+#     json_data = json.load(file)
 
 # processed_data = tequila_parse(json_data)
 
-# with open(os.path.join(current_dir, "data", "processed_tequila_data.json"), 'w') as file:
+# with open(
+#     os.path.join(current_dir, "data", "processed_tequila_data.json"), "w"
+# ) as file:
 #     json.dump(processed_data, file, indent=2)
 
 # tim_processed_data = emissions_flights_list(processed_data)
@@ -325,9 +356,11 @@ with open(
 
 ##### TEST emissions parsing
 
-# processed_data_with_emissions = emissions_parse(processed_data,emissions_results)
+# processed_data_with_emissions = emissions_parse(processed_data, emissions_results)
 
-# with open(os.path.join(current_dir, "data", "processed_data_with_emissions.json"), 'w') as file:
+# with open(
+#     os.path.join(current_dir, "data", "processed_data_with_emissions.json"), "w"
+# ) as file:
 #     json.dump(processed_data_with_emissions, file, indent=2)
 
 #### TEST Unsplash API Call
@@ -373,7 +406,6 @@ def return_home():
 # App route to run request to Travel Impact Model API
 @app.route("/api/emissions", methods=["GET"])
 def emissions_route():
-    # user_location = tuple(map(float, request.args.get("loc").split(',')))
     user_location = [float(request.args.get("lat")), float(request.args.get("long"))]
     trip_length = request.args.get("len")
     radius_range = (
@@ -388,24 +420,22 @@ def emissions_route():
     returnDate = normalise_date(request.args.get("ret"))
     returnDateEndRange = normalise_date(request.args.get("retEnd"))
 
-    origin_airports = get_airport_list(
-        *user_location, 100
-    )  # List of airports in a 100km radius from user's location ### FIX: Change this to a single value?
+    origin_airports = get_airport_list(*user_location, 100)
     destination_airports = get_airport_list(*user_location, *radius_range)
 
-    # COMMENT OUT THESE TWO LINES TO AVOID TEQUILA API CALLS DURING DEVELOPMENT
-    # tequila_result = tequila_query(
-    #     origin_airports,
-    #     destination_airports,
-    #     outboundDate,
-    #     returnDate,
-    #     outboundDateEndRange,
-    #     returnDateEndRange,
-    # )
-    # processed_data = tequila_parse(tequila_result)
+    # COMMENT OUT THESE LINES TO AVOID TEQUILA API CALLS DURING DEVELOPMENT
+    tequila_result = tequila_query(
+        origin_airports,
+        destination_airports,
+        outboundDate,
+        returnDate,
+        outboundDateEndRange,
+        returnDateEndRange,
+    )
+    processed_data = tequila_parse(tequila_result)
 
-    # Use this in development instead
-    processed_data = tequila_parse(json_data)
+    # USE THIS INSTEAD TO AVOID TEQUILA API CALLS
+    # processed_data = tequila_parse(json_data)
 
     tim_processed_data = emissions_flights_list(processed_data)
     emissions_results = emissions_fetch(tim_processed_data)
@@ -416,4 +446,7 @@ def emissions_route():
 
 # Initialise app
 if __name__ == "__main__":
-    app.run(debug=True, port=8080)
+    if FLASK_ENV == "production":
+        app.run()
+    else:
+        app.run(debug=True, port=8080)

@@ -2,10 +2,12 @@
 
 const error = ({ error, reset }) => {
   return (
-    <div>
+    <div className="text-center flex flex-col gap-3">
       <div>{error.message}</div>
       <div>
-        <button onClick={() => reset()}>Retry</button>
+        <button className="flex-none px-2 text-center rounded-md bg-rose-50 border-2" onClick={() => reset()}>
+          Retry
+        </button>
       </div>
     </div>
   );

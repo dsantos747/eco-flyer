@@ -21,22 +21,21 @@ export function TripCard({ emissions, destinations, option }) {
 
   const handleDestinationChange = (change) => {
     if (tripDestination + change < destinations.length && tripDestination + change >= 0) {
-      setTripOption(0);
+      setTripOption(1);
       settripDestination(tripDestination + change);
     }
   };
   const handleOptionChange = (change) => {
-    if (tripOption + change == emissions[destinations[tripDestination]].length) {
-      setTripOption(0);
+    if (tripOption + change == Object.keys(emissions[destinations[tripDestination]]).length) {
+      setTripOption(1);
     } else {
       setTripOption(tripOption + change);
     }
   };
 
-  const currentTrip = emissions[destinations[tripDestination]][tripOption];
-
-  const firstOutbound = currentTrip.flights[0][0];
-  const firstReturn = currentTrip.flights[currentTrip.flights.length - 1][0];
+  const currentTrip = emissions[destinations[tripDestination]][`option_${tripOption}`];
+  const firstOutbound = currentTrip.flights[0]["step_1"];
+  const firstReturn = currentTrip.flights[currentTrip.flights.length - 1]["step_1"];
   return (
     <div className="">
       {/* flex justify-center items-center gap-3 */}
