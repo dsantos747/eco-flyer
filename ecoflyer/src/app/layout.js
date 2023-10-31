@@ -19,12 +19,12 @@ async function wakeUpServer() {
     const baseUrl = process.env.API_URL;
     const response = await fetch(`${baseUrl}/api/ping`);
     if (response.ok) {
-      // Flask server awake
+      console.log("flask server awake");
     } else {
-      console.log("error code 1");
+      console.log("error code p1");
     }
   } catch (error) {
-    console.log("error code 2");
+    console.log("error code p2");
   }
 }
 
