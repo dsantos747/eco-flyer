@@ -14,7 +14,22 @@ export const metadata = {
   creator: "Daniel Santos",
 };
 
+async function wakeUpServer() {
+  try {
+    const baseUrl = process.env.API_URL;
+    const response = await fetch(`${baseUrl}/api/ping`);
+    if (response.ok) {
+      // Flask server awake
+    } else {
+      console.log("error code 1");
+    }
+  } catch (error) {
+    console.log("error code 2");
+  }
+}
+
 export default function RootLayout({ children }) {
+  wakeUpServer();
   return (
     <html lang="en">
       <body className={DM_sans.className}>{children}</body>

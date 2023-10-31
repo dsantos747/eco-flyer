@@ -96,7 +96,6 @@ export function FlightForm() {
   const handleSubmit = async (form) => {
     form.preventDefault();
     const formDataJSON = JSON.stringify(formData, null, 2);
-    console.log(formDataJSON);
     createRequestCookies(formDataJSON);
   };
 
