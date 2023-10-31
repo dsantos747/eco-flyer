@@ -30,7 +30,7 @@ export const emissionsFetch = async (latLong, outboundDate, outboundDateEndRange
   console.log("step 3");
   // const query_url = `http://localhost:8080/api/emissions?${paramsURL.toString()}`;
   const query_url = `${baseUrl}/api/emissions?${paramsURL.toString()}`;
-  console.log("step 4");
+  console.log(query_url);
 
   // const res = await fetch(query_url, {
   //   next: { tags: ["emissions"] },
