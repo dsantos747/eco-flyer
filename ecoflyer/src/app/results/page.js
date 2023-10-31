@@ -43,6 +43,7 @@ export const emissionsFetch = async (latLong, outboundDate, outboundDateEndRange
     const result = await fetch(query_url, {
       next: { tags: ["emissions"] },
     });
+    console.log(`Result is ${result}`);
     return result.json();
   } catch (error) {
     console.log(error);
@@ -52,8 +53,9 @@ export const emissionsFetch = async (latLong, outboundDate, outboundDateEndRange
 
 async function page() {
   const response = JSON.parse(cookies().get("request")?.value);
+  console.log(`Cookies parsed as ${response}`);
   const { location, outboundDate, outboundDateEndRange, returnDate, returnDateEndRange, tripLength, latLong } = response;
-
+  console.log("About to step into emissions fetch");
   const route_results = await emissionsFetch(latLong, outboundDate, outboundDateEndRange, returnDate, returnDateEndRange, tripLength);
   const sorted_result = Object.fromEntries(
     Object.entries(route_results).sort((a, b) => getFirstTripEmissions(a[1]) - getFirstTripEmissions(b[1]))
