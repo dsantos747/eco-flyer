@@ -4,6 +4,7 @@ import { useState } from "react";
 import { ActionButton } from "./actionButton.js";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronRight } from "@fortawesome/free-solid-svg-icons";
+import Image from "next/image";
 
 const formatDate = (date) => {
   const year = date.slice(0, 4);

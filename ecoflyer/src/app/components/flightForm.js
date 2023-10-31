@@ -266,7 +266,7 @@ export function FlightForm() {
           </div>
         </div>
         <button type="submit" className="h-10 px-2 text-center rounded-md font-semibold bg-blue-400 text-black">
-          Let's Fly!
+          Let&apos;s Fly!
         </button>
       </form>
     </div>
