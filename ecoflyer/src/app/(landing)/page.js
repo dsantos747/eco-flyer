@@ -8,7 +8,10 @@ async function page() {
     <div className="text-center z-0 max-w-3xl pt-6">
       <h1 className={`text-2xl md:text-4xl ${major.className}`}>We cannot afford to ignore the climate emergency.</h1>
       <div className="px-8 md:px-12 py-4">
-        <h2>This shouldn't mean we can't fly away once in a while. How about choosing a holiday with the smallest environmental impact?</h2>
+        <h2>
+          This shouldn&apos;t mean we can&apos;t fly away once in a while. How about choosing a holiday with the smallest environmental
+          impact?
+        </h2>
         {/* <h2>So, if it's time to get away, how about choosing the option with the smallest environmental impact?</h2> */}
         <h2>
           eco-flyer cleverly reviews potential holiday destinations, then presents you with the flight options with the lowest emissions.

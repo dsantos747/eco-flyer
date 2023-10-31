@@ -305,7 +305,7 @@ load_dotenv(dotenv_path=env_path)
 FLASK_ENV = os.getenv("FLASK_ENV")
 TIM_KEY = os.getenv("TIM_API_KEY")
 TEQUILA_KEY = os.getenv("TEQUILA_API_KEY")
-RAPID_API_KEY = os.getenv("RAPID_API_KEY")
+# RAPID_API_KEY = os.getenv("RAPID_API_KEY")
 UNSPLASH_ACCESS = os.getenv("UNSPLASH_ACCESS_KEY")
 UNSPLASH_SECRET_KEY = os.getenv("UNSPLASH_SECRET_KEY")
 
