@@ -22,15 +22,12 @@ export const emissionsFetch = async (latLong, outboundDate, outboundDateEndRange
     retEnd: returnDateEndRange,
   };
 
-  console.log("step 1");
   const baseUrl = process.env.API_URL;
-  console.log("step 2");
   const paramsURL = new URLSearchParams(params);
   revalidateTag("emissions"); // This is used to trigger a re-fetching of data. Figure out where best to place this
-  console.log("step 3");
   // const query_url = `http://localhost:8080/api/emissions?${paramsURL.toString()}`;
   const query_url = `${baseUrl}/api/emissions?${paramsURL.toString()}`;
-  console.log(query_url);
+  console.log(`Query URL: ${query_url}`);
 
   // const res = await fetch(query_url, {
   //   next: { tags: ["emissions"] },
@@ -43,14 +40,12 @@ export const emissionsFetch = async (latLong, outboundDate, outboundDateEndRange
   // }
 
   try {
-    console.log("try 1");
     const result = await fetch(query_url, {
       next: { tags: ["emissions"] },
     });
-    console.log("try 2");
     return result.json();
   } catch (error) {
-    console.log("err 1");
+    console.log(error);
     throw new emissionsError();
   }
 };
