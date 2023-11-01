@@ -16,9 +16,10 @@ export const metadata = {
 
 async function wakeUpServer() {
   try {
-    const baseUrl = process.env.API_URL;
-    console.log("ping base url is ", baseUrl);
-    const response = await fetch(`${baseUrl}/api/ping`);
+    // const baseUrl = process.env.API_URL;
+    // console.log("ping base url is ", baseUrl);
+    const response = await fetch(`https://eco-flyer.vercel.app/api/index/api/ping`);
+    // const response = await fetch(`${baseUrl}/api/ping`);
     if (response.ok) {
       console.log("flask server awake");
     } else {
