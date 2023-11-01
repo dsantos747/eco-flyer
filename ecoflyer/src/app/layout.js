@@ -17,6 +17,7 @@ export const metadata = {
 async function wakeUpServer() {
   try {
     const baseUrl = process.env.API_URL;
+    console.log("ping base url is ", baseUrl);
     const response = await fetch(`${baseUrl}/api/ping`);
     if (response.ok) {
       console.log("flask server awake");
