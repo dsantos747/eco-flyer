@@ -407,6 +407,7 @@ def ping():
 # App route to run request to Travel Impact Model API
 @app.route("/api/emissions", methods=["GET"])
 def emissions_route():
+    print("flask 1")
     user_location = [float(request.args.get("lat")), float(request.args.get("long"))]
     trip_length = request.args.get("len")
     radius_range = (
@@ -422,7 +423,9 @@ def emissions_route():
     returnDateEndRange = normalise_date(request.args.get("retEnd"))
 
     origin_airports = get_airport_list(*user_location, 100)
+    print("flask 2")
     destination_airports = get_airport_list(*user_location, *radius_range)
+    print("flask 3")
 
     # COMMENT OUT THESE LINES TO AVOID TEQUILA API CALLS DURING DEVELOPMENT
     tequila_result = tequila_query(
@@ -433,15 +436,23 @@ def emissions_route():
         outboundDateEndRange,
         returnDateEndRange,
     )
+    print("flask 4")
     processed_data = tequila_parse(tequila_result)
+    print("flask 5")
 
     # USE THIS INSTEAD TO AVOID TEQUILA API CALLS
     # processed_data = tequila_parse(json_data)
 
     tim_processed_data = emissions_flights_list(processed_data)
+    print("flask 6")
     emissions_results = emissions_fetch(tim_processed_data)
+    print("flask 7")
     processed_data_with_emissions = emissions_parse(processed_data, emissions_results)
+    print("flask 8")
     sorted_result = results_sort(processed_data_with_emissions)
+    print("flask 9")
+    print(sorted_result)
+    print(jsonify(sorted_result))
     return jsonify(sorted_result)
 
 
