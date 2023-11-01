@@ -40,11 +40,17 @@ export const emissionsFetch = async (latLong, outboundDate, outboundDateEndRange
   // }
 
   try {
-    const result = await fetch(query_url, {
+    const response = await fetch(query_url, {
       next: { tags: ["emissions"] },
     });
-    console.log(`Result is ${result}`);
-    return result.json();
+    if (response.ok) {
+      console.log(`response ok`, response.status, response.statusText);
+      return await response.json();
+    } else {
+      console.log("Response not Ok", response.status, response.statusText);
+      console.log(`R2 is ${response.Response}`);
+      console.error("Err: response not Ok", response.status, response.statusText);
+    }
   } catch (error) {
     console.log(error);
     throw new emissionsError();

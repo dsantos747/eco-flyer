@@ -14,22 +14,22 @@ export const metadata = {
   creator: "Daniel Santos",
 };
 
-// async function wakeUpServer() {
-//   try {
-//     const baseUrl = process.env.API_URL;
-//     const response = await fetch(`${baseUrl}/api/ping`);
-//     if (response.ok) {
-//       console.log("flask server awake");
-//     } else {
-//       console.log("error code p1");
-//     }
-//   } catch (error) {
-//     console.log("error code p2");
-//   }
-// }
+async function wakeUpServer() {
+  try {
+    const baseUrl = process.env.API_URL;
+    const response = await fetch(`${baseUrl}/api/ping`);
+    if (response.ok) {
+      console.log("flask server awake");
+    } else {
+      console.log("error code p1");
+    }
+  } catch (error) {
+    console.log("error code p2");
+  }
+}
 
 export default function RootLayout({ children }) {
-  // wakeUpServer();
+  wakeUpServer();
   return (
     <html lang="en">
       <body className={DM_sans.className}>{children}</body>
