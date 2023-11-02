@@ -101,10 +101,11 @@ export function FlightForm() {
 
   const getUserLocation = () => {
     if ("geolocation" in navigator) {
+      setLocationButton(true);
       navigator.geolocation.getCurrentPosition(async (pos) => {
         const crd = pos.coords;
         try {
-          setLocationButton(true);
+          // setLocationButton(true);
           const response = await fetch(
             `https://nominatim.openstreetmap.org/reverse?lat=${crd.latitude}&lon=${crd.longitude}&zoom=10&format=json`
           );
@@ -116,10 +117,11 @@ export function FlightForm() {
             "location": parsedUserLocation,
             "latLong": { "lat": crd.latitude, "long": crd.longitude },
           }));
-          setLocationButton(false);
+          // setLocationButton(false);
         } catch (error) {
           console.error("Error fetching location", error);
         }
+        setLocationButton(false);
       });
     }
   };
@@ -127,11 +129,11 @@ export function FlightForm() {
   return (
     <div className="w-full">
       <form id="flightForm" onSubmit={handleSubmit} className="flex justify-center items-center flex-col gap-4">
-        <div className="flex flex-col md:flex-row gap-1 w-full px-20 items-center">
-          <p className="flex-none">
+        <div className="flex flex-col md:flex-row gap-1 w-full px-10 md:px-20 items-center">
+          <p className="md:flex-none">
             Departure Location<span className="text-red-500">*</span>
           </p>
-          <div className="flex-auto">
+          <div className="w-full flex-auto max-w-md">
             <input
               className="w-full text-center md:text-start bg-rose-50"
               type="text"
@@ -165,12 +167,12 @@ export function FlightForm() {
         </div>
         <div className="flex justify-evenly gap-2 w-full">
           <div className="flex gap-1 flex-wrap w-1/2 justify-end">
-            <label htmlFor="outboundDate" className="flex-auto text-right">
+            <label htmlFor="outboundDate" className="w-36 text-right">
               Outbound Date<span className="text-red-500">*</span>
             </label>
             <input
               id="outboundDate"
-              className="bg-rose-50"
+              className="bg-rose-50 h-6"
               type="date"
               name="outboundDate"
               placeholder="Outbound Date"
@@ -182,24 +184,26 @@ export function FlightForm() {
           <div className="flex gap-1 flex-wrap-reverse w-1/2">
             <input
               id="outboundDateEndRange"
-              className="bg-rose-50"
+              className="bg-rose-50 h-6"
               type="date"
               name="outboundDateEndRange"
               placeholder="Outbound Date End Range"
               value={formData.outboundDateEndRange}
               onChange={handleInputChange}
             ></input>
-            <label htmlFor="outboundDateEndRange">Outbound Date Range</label>
+            <label htmlFor="outboundDateEndRange" className="w-36 text-left">
+              Outbound - Range
+            </label>
           </div>
         </div>
         <div className="flex justify-evenly gap-2 w-full">
           <div className="flex gap-1 flex-wrap w-1/2 justify-end">
-            <label htmlFor="returnDate" className="flex-auto text-right">
+            <label htmlFor="returnDate" className="w-36 text-right">
               Return Date<span className="text-red-500">*</span>
             </label>
             <input
               id="returnDate"
-              className="bg-rose-50"
+              className="bg-rose-50 h-6"
               type="date"
               name="returnDate"
               placeholder="Return Date"
@@ -211,14 +215,16 @@ export function FlightForm() {
           <div className="flex gap-1 flex-wrap-reverse w-1/2">
             <input
               id="returnDateEndRange"
-              className="bg-rose-50"
+              className="bg-rose-50 h-6"
               type="date"
               name="returnDateEndRange"
               placeholder="Return Date End Range"
               value={formData.returnDateEndRange}
               onChange={handleInputChange}
             ></input>
-            <label htmlFor="returnDateEndRange">Return Date Range</label>
+            <label htmlFor="returnDateEndRange" className="w-36 text-left">
+              Return - Range
+            </label>
           </div>
         </div>
 
@@ -228,8 +234,8 @@ export function FlightForm() {
               How far would you like to travel?<span className="text-red-500">*</span>
             </p>
           </div>
-          <div className="flex flex-col md:flex-row md:gap-2">
-            <div className="flex gap-4 md:gap-1">
+          <div className="flex flex-row gap-3">
+            <div className="flex gap-1">
               <input
                 type="radio"
                 id="trip-short"
@@ -240,7 +246,7 @@ export function FlightForm() {
               ></input>
               <label htmlFor="trip-short">Near</label>
             </div>
-            <div className="flex gap-4 md:gap-1">
+            <div className="flex gap-1">
               <input
                 type="radio"
                 id="trip-medium"
@@ -251,7 +257,7 @@ export function FlightForm() {
               ></input>
               <label htmlFor="trip-medium">Far</label>
             </div>
-            <div className="flex gap-4 md:gap-1">
+            <div className="flex gap-1">
               <input
                 type="radio"
                 id="trip-long"

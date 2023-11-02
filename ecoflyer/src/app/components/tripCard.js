@@ -27,7 +27,7 @@ export function TripCard({ emissions, destinations, option }) {
     }
   };
   const handleOptionChange = (change) => {
-    if (tripOption + change == Object.keys(emissions[destinations[tripDestination]]).length) {
+    if (tripOption + change >= Object.keys(emissions[destinations[tripDestination]]).length) {
       setTripOption(1);
     } else {
       setTripOption(tripOption + change);
@@ -90,7 +90,10 @@ export function TripCard({ emissions, destinations, option }) {
           >
             Shuffle Flights
           </ActionButton>
-          <button className="h-10 w-36 md:w-48 text-center rounded-md font-semibold bg-teal-600 hover:bg-teal-700 active:scale-95 text-white">
+          <button
+            href={currentTrip.deep_link}
+            className="h-10 w-36 md:w-48 text-center rounded-md font-semibold bg-teal-600 hover:bg-teal-700 active:scale-95 text-white"
+          >
             {currentTrip.price}€ on Kiwi.com
           </button>
           {/*Add multi-currency support*/}

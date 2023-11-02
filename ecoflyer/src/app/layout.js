@@ -31,7 +31,7 @@ async function wakeUpServer() {
 }
 
 export default function RootLayout({ children }) {
-  wakeUpServer();
+  // wakeUpServer();
   return (
     <html lang="en">
       <body className={DM_sans.className}>{children}</body>
