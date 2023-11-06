@@ -48,8 +48,8 @@ def tequila_query(
         "date_to": outbound_date_end_range,
         "return_from": return_date,
         "return_to": return_date_end_range,
-        #  "max_fly_duration": "DUMMY",
-        #  "price_to": price_limit, #might be useful to control the results a bit.
+        # "max_fly_duration": "DUMMY",
+        # "price_to": price_limit,
         "curr": "EUR",
         "sort": "quality",  # quality or price(default)
         "limit": 500,  # max 1000
@@ -75,16 +75,16 @@ def tequila_parse(tequila_dict):
             count_ret = 0
             for leg in route["route"]:
                 leg_object = {
-                    "id": leg["id"],
-                    "combination_id": leg["combination_id"],
+                    # "id": leg["id"],
+                    # "combination_id": leg["combination_id"],
                     "flyFrom": leg["flyFrom"],
                     "cityFrom": leg["cityFrom"],
                     "flyTo": leg["flyTo"],
                     "cityTo": leg["cityTo"],
                     "local_departure": leg["local_departure"],
-                    "utc_departure": leg["utc_departure"],
-                    "local_arrival": leg["local_arrival"],
-                    "utc_arrival": leg["utc_arrival"],
+                    # "utc_departure": leg["utc_departure"],
+                    # "local_arrival": leg["local_arrival"],
+                    # "utc_arrival": leg["utc_arrival"],
                     "airline": leg["airline"],
                     "flight_no": leg["flight_no"],
                     "operating_carrier": leg["operating_carrier"],
@@ -99,32 +99,32 @@ def tequila_parse(tequila_dict):
                     flights_arr[1][f"step_{count_ret}"] = leg_object
 
             route_object = {
-                "id": route["id"],
+                # "id": route["id"],
                 "flyFrom": route["flyFrom"],
                 "cityFrom": route["cityFrom"],
                 "flyTo": route["flyTo"],
                 "cityTo": route["cityTo"],
-                "countryFrom": route["countryFrom"]["name"],
-                "countryTo": route["countryTo"]["name"],
+                # "countryFrom": route["countryFrom"]["name"],
+                # "countryTo": route["countryTo"]["name"],
                 "local_departure": route["local_departure"],
-                "utc_departure": route["utc_departure"],
-                "local_arrival": route["local_arrival"],
-                "utc_arrival": route["utc_arrival"],
-                "nightsInDest": route["nightsInDest"],
-                "quality": route["quality"],
-                "distance": route["distance"],
-                "duration": {
-                    "departure": route["duration"]["departure"],
-                    "return": route["duration"]["return"],
-                    "total": route["duration"]["total"],
-                },
+                # "utc_departure": route["utc_departure"],
+                # "local_arrival": route["local_arrival"],
+                # "utc_arrival": route["utc_arrival"],
+                # "nightsInDest": route["nightsInDest"],
+                # "quality": route["quality"],
+                # "distance": route["distance"],
+                # "duration": {
+                #     "departure": route["duration"]["departure"],
+                #     "return": route["duration"]["return"],
+                #     "total": route["duration"]["total"],
+                # },
                 "price": route["price"],
-                "airlines": route["airlines"],
+                # "airlines": route["airlines"],
                 "flights": flights_arr,
                 "total_legs": count_out + count_ret,
                 "out_legs": count_out,
                 "return_legs": count_ret,
-                "booking_token": route["booking_token"],
+                # "booking_token": route["booking_token"],
                 "deep_link": route["deep_link"],
                 "img_url": unsplash_fetch(route["cityTo"])
                 # "img_url": unsplash_fetch(f"{route['cityTo']}, {route['countryTo']['name']}")
@@ -132,7 +132,6 @@ def tequila_parse(tequila_dict):
                 else parsed_dict[route["cityTo"]]["option_1"]["img_url"],
             }
 
-            # parsed_dict[route["cityTo"]].append(route_object)
             parsed_dict[route["cityTo"]][
                 f"option_{(len(parsed_dict[route['cityTo']]) + 1)}"
             ] = route_object
@@ -305,7 +304,6 @@ load_dotenv(dotenv_path=env_path)
 FLASK_ENV = os.getenv("FLASK_ENV")
 TIM_KEY = os.getenv("TIM_API_KEY")
 TEQUILA_KEY = os.getenv("TEQUILA_API_KEY")
-# RAPID_API_KEY = os.getenv("RAPID_API_KEY")
 UNSPLASH_ACCESS = os.getenv("UNSPLASH_ACCESS_KEY")
 UNSPLASH_SECRET_KEY = os.getenv("UNSPLASH_SECRET_KEY")
 
@@ -319,84 +317,6 @@ with open(os.path.join(current_dir, "data", "airports.json"), "r") as json_file:
 app = Flask(__name__)
 CORS(app)
 
-##### TEST - Dummy variables section
-# user_location = (38.7813, -9.13592)
-# radius_range = [4000, 1500]
-
-##### TEST airport list fetching
-# origin_airports = get_airport_list(*user_location, 100) # List of airports in a 100km radius from user's location ### FIX: Change this to a single value?
-# destination_airports = get_airport_list(*user_location, search_radius)
-
-
-##### TEST read data from tequila response, filter and create flights list for emissions testing
-# with open(
-#     os.path.join(current_dir, "data", "test_tequila_response.json"),
-#     "r",
-#     encoding="utf-8",
-# ) as file:
-#     json_data = json.load(file)
-
-# processed_data = tequila_parse(json_data)
-
-# with open(
-#     os.path.join(current_dir, "data", "processed_tequila_data.json"), "w"
-# ) as file:
-#     json.dump(processed_data, file, indent=2)
-
-# tim_processed_data = emissions_flights_list(processed_data)
-
-# with open(os.path.join(current_dir, "data", "prepped_TIM_list.json"), 'w') as file:
-#     json.dump(tim_processed_data, file, indent=2)
-
-##### TEST emissions checking
-
-# emissions_results = emissions_fetch(tim_processed_data)
-
-# with open(os.path.join(current_dir, "data", "emissions_results_list.json"), 'w') as file:
-#     json.dump(emissions_results, file, indent=2)
-
-##### TEST emissions parsing
-
-# processed_data_with_emissions = emissions_parse(processed_data, emissions_results)
-
-# with open(
-#     os.path.join(current_dir, "data", "processed_data_with_emissions.json"), "w"
-# ) as file:
-#     json.dump(processed_data_with_emissions, file, indent=2)
-
-#### TEST Unsplash API Call
-# unsplash_fetch("London") # CALL THIS WHEN BUILDING ROUTE OBJECT
-
-##### TEST individual manual emissions check
-# test_flight = {
-#     "flights": [
-#         {
-#         "origin": "PMI",
-#         "destination": "BCN",
-#         "operatingCarrierCode": "FR",
-#         "flightNumber": 3071,
-#         "departureDate": {
-#           "year": "2024",
-#           "month": "04",
-#           "day": "03"
-#         }
-#       }
-#     ]
-# }
-# print(emissions_fetch(test_flight))
-
-
-##### TEST tequila API call
-# origin_airports = get_airport_list(*user_location, 100)
-# destination_airports = get_airport_list(*user_location, *radius_range)
-# outboundDate = "01/11/2023"
-# returnDate = "10/11/2023"
-# outboundDateEndRange = "03/11/2023"
-# returnDateEndRange = "12/11/2023"
-# tequila_result = tequila_query(origin_airports, destination_airports, outboundDate, returnDate, outboundDateEndRange, returnDateEndRange)
-# processed_data = tequila_parse(tequila_result)
-# print(processed_data)
-
 
 # App route to return simple JSON message
 @app.route("/api/ping", methods=["GET"])
@@ -407,7 +327,6 @@ def ping():
 # App route to run request to Travel Impact Model API
 @app.route("/api/emissions", methods=["GET"])
 def emissions_route():
-    print("flask 1")
     user_location = [float(request.args.get("lat")), float(request.args.get("long"))]
     trip_length = request.args.get("len")
     radius_range = (
@@ -423,11 +342,8 @@ def emissions_route():
     returnDateEndRange = normalise_date(request.args.get("retEnd"))
 
     origin_airports = get_airport_list(*user_location, 100)
-    print("flask 2")
     destination_airports = get_airport_list(*user_location, *radius_range)
-    print("flask 3")
 
-    # COMMENT OUT THESE LINES TO AVOID TEQUILA API CALLS DURING DEVELOPMENT
     tequila_result = tequila_query(
         origin_airports,
         destination_airports,
@@ -436,23 +352,12 @@ def emissions_route():
         outboundDateEndRange,
         returnDateEndRange,
     )
-    print("flask 4")
     processed_data = tequila_parse(tequila_result)
-    print("flask 5")
-
-    # USE THIS INSTEAD TO AVOID TEQUILA API CALLS
-    # processed_data = tequila_parse(json_data)
 
     tim_processed_data = emissions_flights_list(processed_data)
-    print("flask 6")
     emissions_results = emissions_fetch(tim_processed_data)
-    print("flask 7")
     processed_data_with_emissions = emissions_parse(processed_data, emissions_results)
-    print("flask 8")
     sorted_result = results_sort(processed_data_with_emissions)
-    print("flask 9")
-    print(sorted_result)
-    print(jsonify(sorted_result))
     return jsonify(sorted_result)
 
 

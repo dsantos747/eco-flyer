@@ -72,7 +72,9 @@ export function TripCard({ emissions, destinations, option }) {
               <FontAwesomeIcon icon={faChevronRight} className="text-xl md:text-xl lg:text-2xl" />
             </ActionButton>
             <div className="bg-gradient-destination pb-2 pt-28 px-2 rounded-bl-xl">
-              <h2 className="text-2xl text-blue-900 font-bold">{currentTrip.cityTo}</h2>
+              <h2 className="text-2xl text-blue-900 font-bold">
+                {currentTrip.cityTo} (<span className="font-semibold text-blue-900">{firstOutbound.flyTo}</span>)
+              </h2>
               <div>Fly out: {formatDate(firstOutbound.local_departure)}</div>
               <div>Return: {formatDate(firstReturn.local_departure)}</div>
               <div>
