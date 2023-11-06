@@ -321,7 +321,7 @@ CORS(app)
 # App route to return simple JSON message
 @app.route("/api/ping", methods=["GET"])
 def ping():
-    return "I am awake!"
+    return "<p>I am awake!<p>"
 
 
 # App route to run request to Travel Impact Model API
