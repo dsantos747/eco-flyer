@@ -11,7 +11,7 @@ const loading = () => {
       {/* bg-gradient-to-t from-rose-100 via-sky-100 to-blue-400 */}
       <div className="flex flex-col gap-3">
         <div>
-          <h3 className="text-2xlfont-bold">Please wait while we fetch you your personalised travel suggestions.</h3>
+          <h3 className="text-2xlfont-bold">Please wait while we prepare your personalised travel suggestions.</h3>
         </div>
         <div className="flex flex-col gap-6 items-center animate-spin-slow">
           <FontAwesomeIcon icon={faPlane} className="text-xl text-rose-200" />

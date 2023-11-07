@@ -197,6 +197,8 @@ def emissions_fetch(flights_object, flight_class="economy"):
 
 
 def emissions_parse(flights_dict, emissions_results):
+    noEmissions = 0
+    removedDestinations = 0
     new_flights_dict = copy.deepcopy(flights_dict)
     for destination in flights_dict:
         for option in flights_dict[destination]:
@@ -208,6 +210,7 @@ def emissions_parse(flights_dict, emissions_results):
                     # print(
                     #     f"no emissions data for flight to {flights_dict[destination][option]['flights'][0][outbound_flight]['flyTo']}"
                     # )
+                    noEmissions += 1
                     remove_option = True
                     break
                 else:
@@ -228,6 +231,7 @@ def emissions_parse(flights_dict, emissions_results):
                     # print(
                     #     f"no emissions data for flight to {flights_dict[destination][option]['flights'][1][return_flight]['flyTo']}"
                     # )
+                    noEmissions += 1
                     remove_option = True
                     break
                 else:
@@ -248,7 +252,10 @@ def emissions_parse(flights_dict, emissions_results):
         if not new_flights_dict[destination]:
             # print(f"removed {destination} as a destination")
             del new_flights_dict[destination]
+            removedDestinations += 1
 
+    print(f"Flights with no emissions: {noEmissions}")
+    print(f"Destinations removed: {removedDestinations}")
     return reset_option_numbers(new_flights_dict)
 
 
@@ -270,7 +277,7 @@ def reset_option_numbers(dict):
     return output_dict
 
 
-def results_sort(results):
+def destinations_sort(results):
     sorted_results = dict(
         sorted(
             results.items(),
@@ -318,15 +325,15 @@ app = Flask(__name__)
 CORS(app)
 
 
-# App route for server wakeup
+# Server wakeup
 @app.route("/api/ping", methods=["GET"])
 def ping():
     return "<p>I am awake!<p>"
 
 
-# App route to run request to Travel Impact Model API
-@app.route("/api/emissions", methods=["GET"])
-def emissions_route():
+# Get origin and destination airport lists
+@app.route("/api/results/airports", methods=["GET"])
+def results_airports():
     user_location = [float(request.args.get("lat")), float(request.args.get("long"))]
     trip_length = request.args.get("len")
     radius_range = (
@@ -336,28 +343,48 @@ def emissions_route():
         if trip_length == "trip-medium"
         else [15000, 4000]
     )
-    outboundDate = normalise_date(request.args.get("out"))
-    outboundDateEndRange = normalise_date(request.args.get("outEnd"))
-    returnDate = normalise_date(request.args.get("ret"))
-    returnDateEndRange = normalise_date(request.args.get("retEnd"))
-
     origin_airports = get_airport_list(*user_location, 100)
     destination_airports = get_airport_list(*user_location, *radius_range)
+    response = {
+        "origin_airports": origin_airports,
+        "destination_airports": destination_airports,
+    }
+    return jsonify(response)
 
+
+# Get potential route options
+@app.route("/api/results/tequila", methods=["POST"])
+def results_tequila():
+    data = request.json
     tequila_result = tequila_query(
-        origin_airports,
-        destination_airports,
-        outboundDate,
-        returnDate,
-        outboundDateEndRange,
-        returnDateEndRange,
+        data["originAirports"],
+        data["destinationAirports"],
+        data["outboundDate"],
+        data["returnDate"],
+        data["outboundDateEndRange"],
+        data["returnDateEndRange"],
     )
     processed_data = tequila_parse(tequila_result)
+    return jsonify(processed_data)
 
-    tim_processed_data = emissions_flights_list(processed_data)
+
+# Get emissions for route options
+@app.route("/api/results/emissions", methods=["POST"])
+def results_emissions():
+    data = request.json
+    tim_processed_data = emissions_flights_list(data)
     emissions_results = emissions_fetch(tim_processed_data)
-    processed_data_with_emissions = emissions_parse(processed_data, emissions_results)
-    sorted_result = results_sort(processed_data_with_emissions)
+    return jsonify(emissions_results)
+
+
+# Append emissions to destinations and parse
+@app.route("/api/results/sort", methods=["POST"])
+def results_sort():
+    data = request.json
+    processed_data_with_emissions = emissions_parse(
+        data["rawDestinations"], data["rawEmissions"]
+    )
+    sorted_result = destinations_sort(processed_data_with_emissions)
     return jsonify(sorted_result)
 
 
