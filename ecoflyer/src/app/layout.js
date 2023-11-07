@@ -2,7 +2,7 @@ import "./globals.css";
 import { DM_sans } from "./fonts";
 import "@fortawesome/fontawesome-svg-core/styles.css";
 import { config } from "@fortawesome/fontawesome-svg-core";
-import fetch from "node-fetch";
+// import fetch from "node-fetch";
 config.autoAddCss = false;
 
 export const metadata = {
@@ -18,17 +18,14 @@ export const metadata = {
 async function wakeUpServer() {
   try {
     const baseUrl = process.env.API_URL;
-    // console.log("ping base url is ", baseUrl);
-    // const response = await fetch(`https://eco-flyer.vercel.app/api/index/api/ping`);
     const response = await fetch(`${baseUrl}/api/ping`);
-    // const response = await fetch(`/api/ping`);
     if (response.ok) {
-      console.log("flask server awake");
+      console.log("Flask Server Awake");
     } else {
-      console.log("error code p1");
+      console.error("Flask server response NOK");
     }
   } catch (error) {
-    console.log("error code p2");
+    console.error("Error contacting Flask Server: ", error);
   }
 }
 

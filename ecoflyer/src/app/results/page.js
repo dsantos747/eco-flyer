@@ -24,9 +24,7 @@ export const emissionsFetch = async (latLong, outboundDate, outboundDateEndRange
 
   const baseUrl = process.env.API_URL;
   const paramsURL = new URLSearchParams(params);
-  revalidateTag("emissions"); // This is used to trigger a re-fetching of data. Figure out where best to place this
-  // const query_url = `http://localhost:8080/api/emissions?${paramsURL.toString()}`;
-  // const query_url = `https://eco-flyer.vercel.app/api/index/api/emissions?${paramsURL.toString()}`;
+  revalidateTag("emissions"); // This is used to trigger a re-fetching of data. Should trigger this only if request body has changed
   const query_url = `${baseUrl}/api/emissions?${paramsURL.toString()}`;
   console.log(`Query URL: ${query_url}`);
 
@@ -45,15 +43,12 @@ export const emissionsFetch = async (latLong, outboundDate, outboundDateEndRange
       next: { tags: ["emissions"] },
     });
     if (response.ok) {
-      console.log(`response ok`, response.status, response.statusText);
       return await response.json();
     } else {
-      console.log("Response not Ok", response.status, response.statusText);
-      console.log(`R2 is ${response.Response}`);
-      console.error("Err: response not Ok", response.status, response.statusText);
+      console.error("Error: response not Ok", response.status, response.statusText);
+      throw new emissionsError();
     }
   } catch (error) {
-    console.log(error);
     throw new emissionsError();
   }
 };

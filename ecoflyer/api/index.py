@@ -318,7 +318,7 @@ app = Flask(__name__)
 CORS(app)
 
 
-# App route to return simple JSON message
+# App route for server wakeup
 @app.route("/api/ping", methods=["GET"])
 def ping():
     return "<p>I am awake!<p>"
