@@ -5,116 +5,116 @@ import { cookies } from "next/headers";
 import { Suspense } from "react";
 import { ResultsFetch } from "../components/resultsFetch.js";
 
-function getFirstTripEmissions(destination) {
-  for (const option in destination) {
-    if (destination.hasOwnProperty(option)) {
-      return destination[option].trip_emissions;
-    }
-  }
-}
-
-// function normaliseDate(uglyDate) {
-//   return `${uglyDate.slice(8)}-${uglyDate.slice(5, 7)}-${uglyDate.slice(0, 4)}`;
+// function getFirstTripEmissions(destination) {
+//   for (const option in destination) {
+//     if (destination.hasOwnProperty(option)) {
+//       return destination[option].trip_emissions;
+//     }
+//   }
 // }
 
-export const emissionsFetch = async (latLong, outboundDate, outboundDateEndRange, returnDate, returnDateEndRange, tripLength) => {
-  const baseUrl = process.env.API_URL;
+// // function normaliseDate(uglyDate) {
+// //   return `${uglyDate.slice(8)}-${uglyDate.slice(5, 7)}-${uglyDate.slice(0, 4)}`;
+// // }
 
-  revalidateTag("emissions"); // This is used to trigger a re-fetching of data. Should trigger this only if request body has changed
-  // Maybe see if there's a way of checking a cookie's age?
+// export const emissionsFetch = async (latLong, outboundDate, outboundDateEndRange, returnDate, returnDateEndRange, tripLength) => {
+//   const baseUrl = process.env.API_URL;
 
-  let params = { lat: latLong.lat, long: latLong.long, len: tripLength };
-  let paramsURL = new URLSearchParams(params);
-  let query_url = `${baseUrl}/api/results/airports?${paramsURL.toString()}`;
+//   revalidateTag("emissions"); // This is used to trigger a re-fetching of data. Should trigger this only if request body has changed
+//   // Maybe see if there's a way of checking a cookie's age?
 
-  // FIX - Remove unnecessary params from all fetch params
+//   let params = { lat: latLong.lat, long: latLong.long, len: tripLength };
+//   let paramsURL = new URLSearchParams(params);
+//   let query_url = `${baseUrl}/api/results/airports?${paramsURL.toString()}`;
 
-  let originAirports, destinationAirports;
+//   // FIX - Remove unnecessary params from all fetch params
 
-  try {
-    const response = await fetch(query_url, {
-      next: { tags: ["emissions"] },
-    });
-    if (response.ok) {
-      const data = await response.json();
-      originAirports = data.origin_airports;
-      destinationAirports = data.destination_airports;
-    } else {
-      console.error("Error: response not Ok", response.status, response.statusText);
-      throw new emissionsError();
-    }
-  } catch (error) {
-    console.error(error);
-    throw new emissionsError(); // Make a more specific error here, such as "Error getting departure location / destination airports"
-  }
+//   let originAirports, destinationAirports;
 
-  let rawDestinations;
-  query_url = `${baseUrl}/api/results/tequila`;
-  try {
-    const response = await fetch(query_url, {
-      method: "POST",
-      body: JSON.stringify({ originAirports, destinationAirports, outboundDate, outboundDateEndRange, returnDate, returnDateEndRange }),
-      headers: { "Content-Type": "application/json" },
-      next: { tags: ["emissions"] },
-    });
-    if (response.ok) {
-      const data = await response.json();
-      rawDestinations = data;
-    } else {
-      console.error("Error: response not Ok", response.status, response.statusText);
-      throw new emissionsError();
-    }
-  } catch (error) {
-    console.error(error);
-    throw new emissionsError();
-  }
+//   try {
+//     const response = await fetch(query_url, {
+//       next: { tags: ["emissions"] },
+//     });
+//     if (response.ok) {
+//       const data = await response.json();
+//       originAirports = data.origin_airports;
+//       destinationAirports = data.destination_airports;
+//     } else {
+//       console.error("Error: response not Ok", response.status, response.statusText);
+//       throw new emissionsError();
+//     }
+//   } catch (error) {
+//     console.error(error);
+//     throw new emissionsError(); // Make a more specific error here, such as "Error getting departure location / destination airports"
+//   }
 
-  let rawEmissions;
-  query_url = `${baseUrl}/api/results/emissions`;
-  try {
-    const response = await fetch(query_url, {
-      method: "POST",
-      body: JSON.stringify(rawDestinations),
-      headers: { "Content-Type": "application/json" },
-      next: { tags: ["emissions"] },
-    });
-    if (response.ok) {
-      const data = await response.json();
-      rawEmissions = data;
-    } else {
-      console.error("Error: response not Ok", response.status, response.statusText);
-      throw new emissionsError();
-    }
-  } catch (error) {
-    console.error(error);
-    throw new emissionsError();
-  }
+//   let rawDestinations;
+//   query_url = `${baseUrl}/api/results/tequila`;
+//   try {
+//     const response = await fetch(query_url, {
+//       method: "POST",
+//       body: JSON.stringify({ originAirports, destinationAirports, outboundDate, outboundDateEndRange, returnDate, returnDateEndRange }),
+//       headers: { "Content-Type": "application/json" },
+//       next: { tags: ["emissions"] },
+//     });
+//     if (response.ok) {
+//       const data = await response.json();
+//       rawDestinations = data;
+//     } else {
+//       console.error("Error: response not Ok", response.status, response.statusText);
+//       throw new emissionsError();
+//     }
+//   } catch (error) {
+//     console.error(error);
+//     throw new emissionsError();
+//   }
 
-  let parsedResults;
-  query_url = `${baseUrl}/api/results/sort`;
-  try {
-    const response = await fetch(query_url, {
-      method: "POST",
-      body: JSON.stringify({ rawDestinations, rawEmissions }),
-      headers: { "Content-Type": "application/json" },
-      next: { tags: ["emissions"] },
-    });
-    if (response.ok) {
-      const data = await response.json();
-      parsedResults = data;
-    } else {
-      console.error("Error: response not Ok", response.status, response.statusText);
-      throw new emissionsError();
-    }
-  } catch (error) {
-    console.error(error);
-    throw new emissionsError();
-  }
+//   let rawEmissions;
+//   query_url = `${baseUrl}/api/results/emissions`;
+//   try {
+//     const response = await fetch(query_url, {
+//       method: "POST",
+//       body: JSON.stringify(rawDestinations),
+//       headers: { "Content-Type": "application/json" },
+//       next: { tags: ["emissions"] },
+//     });
+//     if (response.ok) {
+//       const data = await response.json();
+//       rawEmissions = data;
+//     } else {
+//       console.error("Error: response not Ok", response.status, response.statusText);
+//       throw new emissionsError();
+//     }
+//   } catch (error) {
+//     console.error(error);
+//     throw new emissionsError();
+//   }
 
-  return parsedResults;
-  // Test error throw to stop action
-  // throw new emissionsError();
-};
+//   let parsedResults;
+//   query_url = `${baseUrl}/api/results/sort`;
+//   try {
+//     const response = await fetch(query_url, {
+//       method: "POST",
+//       body: JSON.stringify({ rawDestinations, rawEmissions }),
+//       headers: { "Content-Type": "application/json" },
+//       next: { tags: ["emissions"] },
+//     });
+//     if (response.ok) {
+//       const data = await response.json();
+//       parsedResults = data;
+//     } else {
+//       console.error("Error: response not Ok", response.status, response.statusText);
+//       throw new emissionsError();
+//     }
+//   } catch (error) {
+//     console.error(error);
+//     throw new emissionsError();
+//   }
+
+//   return parsedResults;
+//   // Test error throw to stop action
+//   // throw new emissionsError();
+// };
 
 async function page() {
   // TASKS TO FIX THIS
