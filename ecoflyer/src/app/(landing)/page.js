@@ -1,7 +1,28 @@
 import { FlightForm } from "../components/flightForm";
 import { major } from "../fonts";
+import Link from "next/link";
+import { cookies } from "next/headers";
+
+async function testCookies() {
+  requestObj = {
+    "location": "Agualva-Cacém, Lisbon, Portugal",
+    "latLong": {
+      "lat": 38.702,
+      "long": -9.3997,
+    },
+    "outboundDate": "2023-11-08",
+    "outboundDateEndRange": "2023-11-10",
+    "returnDate": "2023-11-13",
+    "returnDateEndRange": "2023-11-15",
+    "tripLength": "trip-medium",
+  };
+  const requestData = JSON.stringify(requestObj);
+  cookies().set("request", requestData);
+}
 
 async function page() {
+  testCookies();
+
   return (
     // <div className="-z-20 h-full bg-gradient-to-t from-rose-100 via-sky-100 to-blue-400 ">
     // <div className="backdrop-blur-sm w-full h-full flex flex-col justify-evenly items-center">
@@ -21,6 +42,10 @@ async function page() {
       <div className="pt-4">
         <FlightForm></FlightForm>
       </div>
+      {/* This LINK is temporary, to test stupid Vercel */}
+      <Link href="/results" className="text-md bg-green-500 p-2">
+        Test button
+      </Link>
     </div>
     // </div>
     // </div>
