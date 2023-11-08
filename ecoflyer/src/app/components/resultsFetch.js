@@ -38,6 +38,7 @@ export const emissionsFetch = async (latLong, outboundDate, outboundDateEndRange
       const data = await response.json();
       originAirports = data.origin_airports;
       destinationAirports = data.destination_airports;
+      console.log('airports fetched');
     } else {
       console.error('Error: response not Ok', response.status, response.statusText);
       throw new emissionsError();
@@ -47,8 +48,8 @@ export const emissionsFetch = async (latLong, outboundDate, outboundDateEndRange
     throw new emissionsError(); // Make a more specific error here, such as "Error getting departure location / destination airports"
   }
 
-  let rawDestinations;
   query_url = `${baseUrl}/api/results/tequila`;
+  let rawDestinations;
   try {
     const response = await fetch(query_url, {
       method: 'POST',
@@ -59,6 +60,7 @@ export const emissionsFetch = async (latLong, outboundDate, outboundDateEndRange
     if (response.ok) {
       const data = await response.json();
       rawDestinations = data;
+      console.log('raw tequila fetched');
     } else {
       console.error('Error: response not Ok', response.status, response.statusText);
       throw new emissionsError();
@@ -68,8 +70,8 @@ export const emissionsFetch = async (latLong, outboundDate, outboundDateEndRange
     throw new emissionsError();
   }
 
-  let sortedDestinations;
   query_url = `${baseUrl}/api/results/tequilaSort`;
+  let sortedDestinations;
   try {
     const response = await fetch(query_url, {
       method: 'POST',
@@ -80,6 +82,7 @@ export const emissionsFetch = async (latLong, outboundDate, outboundDateEndRange
     if (response.ok) {
       const data = await response.json();
       sortedDestinations = data;
+      console.log('sorted tequila fetched');
     } else {
       console.error('Error: response not Ok', response.status, response.statusText);
       throw new emissionsError();
@@ -89,8 +92,8 @@ export const emissionsFetch = async (latLong, outboundDate, outboundDateEndRange
     throw new emissionsError();
   }
 
-  let rawEmissions;
   query_url = `${baseUrl}/api/results/emissions`;
+  let rawEmissions;
   try {
     const response = await fetch(query_url, {
       method: 'POST',
@@ -101,6 +104,7 @@ export const emissionsFetch = async (latLong, outboundDate, outboundDateEndRange
     if (response.ok) {
       const data = await response.json();
       rawEmissions = data;
+      console.log('emissions fetched');
     } else {
       console.error('Error: response not Ok', response.status, response.statusText);
       throw new emissionsError();
@@ -110,8 +114,8 @@ export const emissionsFetch = async (latLong, outboundDate, outboundDateEndRange
     throw new emissionsError();
   }
 
-  let parsedResults;
   query_url = `${baseUrl}/api/results/sort`;
+  let parsedResults;
   try {
     const response = await fetch(query_url, {
       method: 'POST',
@@ -122,6 +126,7 @@ export const emissionsFetch = async (latLong, outboundDate, outboundDateEndRange
     if (response.ok) {
       const data = await response.json();
       parsedResults = data;
+      console.log('sorted results fetched');
     } else {
       console.error('Error: response not Ok', response.status, response.statusText);
       throw new emissionsError();
