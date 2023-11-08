@@ -115,9 +115,21 @@ export const emissionsFetch = async (latLong, outboundDate, outboundDateEndRange
 };
 
 async function page() {
+  // TASKS TO FIX THIS
+  // I suspect the await on the emissions fetch is making the Vercel thing trip up,
+  // because the "/results" redirect is seen as a serverless function
+  // To fix this, see if you can maybe abstract all this data fetching to within a sub
+  // component (maybe TripCard, although that's CSR), so that the page can be loaded
+  // ("/results" route reached) before the data has been fetched. This will also mean
+  // we need a skeleton on the TripCard.
+
+  // Is probably worth testing out if that is the case first, by deploying to vercel a
+  // modified version of this script with a much simplified fetch (or dummy data)
+
   const response = JSON.parse(cookies().get("request")?.value);
   const { location, outboundDate, outboundDateEndRange, returnDate, returnDateEndRange, tripLength, latLong } = response;
-  const route_results = await emissionsFetch(latLong, outboundDate, outboundDateEndRange, returnDate, returnDateEndRange, tripLength);
+  // const route_results = await emissionsFetch(latLong, outboundDate, outboundDateEndRange, returnDate, returnDateEndRange, tripLength);
+  const route_results = emissionsFetch(latLong, outboundDate, outboundDateEndRange, returnDate, returnDateEndRange, tripLength);
   const sorted_result = Object.fromEntries(
     Object.entries(route_results).sort((a, b) => getFirstTripEmissions(a[1]) - getFirstTripEmissions(b[1]))
   );
@@ -125,7 +137,8 @@ async function page() {
 
   return (
     <div>
-      <TripCard emissions={route_results} destinations={destinations} option={1}></TripCard>
+      <h1 className="text-4xl">This is some test text, to verify if Vercel issues are caused by await on emissionsFetch</h1>
+      {/* <TripCard emissions={route_results} destinations={destinations} option={1}></TripCard> */}
     </div>
   );
 }
