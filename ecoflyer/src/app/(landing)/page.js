@@ -1,23 +1,25 @@
-import { FlightForm } from "../components/flightForm";
-import { major } from "../fonts";
-import Link from "next/link";
-import { cookies } from "next/headers";
+import { FlightForm } from '../components/flightForm';
+import { major } from '../fonts';
+import Link from 'next/link';
+import { cookies } from 'next/headers';
+import { createRequestCookies } from '../components/cookieBaker';
 
 async function testCookies() {
-  requestObj = {
-    "location": "Agualva-Cacém, Lisbon, Portugal",
-    "latLong": {
-      "lat": 38.702,
-      "long": -9.3997,
+  const requestObj = {
+    'location': 'Agualva-Cacém, Lisbon, Portugal',
+    'latLong': {
+      'lat': 38.702,
+      'long': -9.3997,
     },
-    "outboundDate": "2023-11-08",
-    "outboundDateEndRange": "2023-11-10",
-    "returnDate": "2023-11-13",
-    "returnDateEndRange": "2023-11-15",
-    "tripLength": "trip-medium",
+    'outboundDate': '2023-11-08',
+    'outboundDateEndRange': '2023-11-10',
+    'returnDate': '2023-11-13',
+    'returnDateEndRange': '2023-11-15',
+    'tripLength': 'trip-medium',
   };
-  const requestData = JSON.stringify(requestObj);
-  cookies().set("request", requestData);
+  createRequestCookies(requestObj);
+  // const requestData = JSON.stringify(requestObj);
+  // cookies().set('request', requestData);
 }
 
 async function page() {

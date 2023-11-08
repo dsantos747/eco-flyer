@@ -364,7 +364,14 @@ def results_tequila():
         data["outboundDateEndRange"],
         data["returnDateEndRange"],
     )
-    processed_data = tequila_parse(tequila_result)
+    return jsonify(tequila_result)
+
+
+# Sort potential route options
+@app.route("/api/results/tequilaSort", methods=["POST"])
+def results_tequilaSort():
+    data = request.json
+    processed_data = tequila_parse(data)
     return jsonify(processed_data)
 
 
@@ -382,7 +389,7 @@ def results_emissions():
 def results_sort():
     data = request.json
     processed_data_with_emissions = emissions_parse(
-        data["rawDestinations"], data["rawEmissions"]
+        data["sortedDestinations"], data["rawEmissions"]
     )
     sorted_result = destinations_sort(processed_data_with_emissions)
     return jsonify(sorted_result)

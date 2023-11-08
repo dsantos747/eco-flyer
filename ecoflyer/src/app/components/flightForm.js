@@ -1,7 +1,8 @@
-"use client";
+'use client';
 
-import { useState, useEffect } from "react";
-import { createRequestCookies } from "./formServer";
+import { useState, useEffect } from 'react';
+import { createRequestCookies } from './cookieBaker';
+import { useRouter } from 'next/navigation';
 
 const formatDate = (date, offset = 0) => {
   date = new Date(date.setDate(date.getDate() + offset));
@@ -10,21 +11,22 @@ const formatDate = (date, offset = 0) => {
   const month = date.getMonth() + 1;
   const day = date.getDate(); // + offset
 
-  const formattedMonth = String(month).padStart(2, "0");
-  const formattedDate = String(day).padStart(2, "0");
+  const formattedMonth = String(month).padStart(2, '0');
+  const formattedDate = String(day).padStart(2, '0');
 
   return `${year}-${formattedMonth}-${formattedDate}`;
 };
 
 export function FlightForm() {
+  const router = useRouter();
   const [formData, setFormData] = useState({
-    location: "",
-    latLong: "",
+    location: '',
+    latLong: '',
     outboundDate: formatDate(new Date()),
     outboundDateEndRange: formatDate(new Date(), 2),
     returnDate: formatDate(new Date(), 5),
     returnDateEndRange: formatDate(new Date(), 7),
-    tripLength: "trip-medium",
+    tripLength: 'trip-medium',
   });
   const [suggestions, setSuggestions] = useState([]);
   const [debouncedSuggestions, setDebouncedSuggestions] = useState([]);
@@ -65,7 +67,7 @@ export function FlightForm() {
         const data = await response.json();
         setSuggestions(data);
       } catch (error) {
-        console.error("Error fetching location suggestions:", error);
+        console.error('Error fetching location suggestions:', error);
       }
     };
 
@@ -79,8 +81,8 @@ export function FlightForm() {
   const handleSuggestionClick = (location) => {
     setFormData((prevData) => ({
       ...prevData,
-      "location": location.display_name,
-      "latLong": { "lat": location.lat, "long": location.lon },
+      'location': location.display_name,
+      'latLong': { 'lat': location.lat, 'long': location.lon },
     }));
     setSuggestions([]);
   };
@@ -95,12 +97,13 @@ export function FlightForm() {
 
   const handleSubmit = async (form) => {
     form.preventDefault();
-    const formDataJSON = JSON.stringify(formData, null, 2);
-    createRequestCookies(formDataJSON);
+    // const formDataJSON = JSON.stringify(formData, null, 2);
+    createRequestCookies(formData);
+    router.push('/results');
   };
 
   const getUserLocation = () => {
-    if ("geolocation" in navigator) {
+    if ('geolocation' in navigator) {
       setLocationButton(true);
       navigator.geolocation.getCurrentPosition(async (pos) => {
         const crd = pos.coords;
@@ -114,12 +117,12 @@ export function FlightForm() {
           let parsedUserLocation = `${userLocation.address.city || ""}${userLocation.address.city == undefined ? "" : ", "}${userLocation.address.county || ""}${userLocation.address.county == undefined ? "" : ", "}${userLocation.address.country || ""}`;
           setFormData((prevData) => ({
             ...prevData,
-            "location": parsedUserLocation,
-            "latLong": { "lat": crd.latitude, "long": crd.longitude },
+            'location': parsedUserLocation,
+            'latLong': { 'lat': crd.latitude, 'long': crd.longitude },
           }));
           // setLocationButton(false);
         } catch (error) {
-          console.error("Error fetching location", error);
+          console.error('Error fetching location', error);
         }
         setLocationButton(false);
       });
@@ -159,10 +162,10 @@ export function FlightForm() {
             disabled={locationButtonDisabled}
             aria-disabled={locationButtonDisabled}
             className={`flex-none px-2 text-center rounded-md bg-rose-50 border-2 ${
-              locationButtonDisabled ? "cursor-not-allowed" : "hover:bg-gray-400"
+              locationButtonDisabled ? 'cursor-not-allowed' : 'hover:bg-gray-400'
             }`}
           >
-            {locationButtonDisabled ? "Processing..." : "Use My Location"}
+            {locationButtonDisabled ? 'Processing...' : 'Use My Location'}
           </button>
         </div>
         <div className="flex justify-evenly gap-2 w-full">
@@ -241,7 +244,7 @@ export function FlightForm() {
                 id="trip-short"
                 name="tripLength"
                 value="trip-short"
-                checked={formData.tripLength === "trip-short"}
+                checked={formData.tripLength === 'trip-short'}
                 onChange={handleInputChange}
               ></input>
               <label htmlFor="trip-short">Near</label>
@@ -252,7 +255,7 @@ export function FlightForm() {
                 id="trip-medium"
                 name="tripLength"
                 value="trip-medium"
-                checked={formData.tripLength === "trip-medium"}
+                checked={formData.tripLength === 'trip-medium'}
                 onChange={handleInputChange}
               ></input>
               <label htmlFor="trip-medium">Far</label>
@@ -263,7 +266,7 @@ export function FlightForm() {
                 id="trip-long"
                 name="tripLength"
                 value="trip-long"
-                checked={formData.tripLength === "trip-long"}
+                checked={formData.tripLength === 'trip-long'}
                 onChange={handleInputChange}
               ></input>
               <label htmlFor="trip-long">Really Far</label>
