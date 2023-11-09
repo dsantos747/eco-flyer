@@ -1,0 +1,64 @@
+.plane {
+  position: relative;
+  top: 50%;
+  display: flex;
+  align-items: center;
+}
+
+.planePath {
+  --pathWidth: calc(max(100vh, 100vw) + 2714px);
+  width: var(--pathWidth);
+  overflow: hidden;
+  position: absolute;
+}
+
+.planePath:nth-child(1) {
+  top: 30%;
+  left: calc((50% - (var(--pathWidth)) / 2));
+  transform: rotate(170deg);
+}
+.planePath:nth-child(2) {
+  top: 50%;
+  left: calc((50% - (var(--pathWidth)) / 2) + 20%);
+  transform: rotate(40deg);
+}
+.planePath:nth-child(3) {
+  top: 50%;
+  left: calc((50% - (var(--pathWidth)) / 2) - 10%);
+  transform: rotate(-80deg);
+}
+.planePath:nth-child(4) {
+  top: 70%;
+  left: calc((50% - (var(--pathWidth)) / 2));
+  transform: rotate(5deg);
+}
+.planePath:nth-child(5) {
+  top: 50%;
+  left: calc((50% - (var(--pathWidth)) / 2) - 15%);
+  transform: rotate(-130deg);
+}
+.planePath:nth-child(6) {
+  top: 40%;
+  left: calc((50% - (var(--pathWidth)) / 2));
+  transform: rotate(190deg);
+}
+.planePath:nth-child(7) {
+  top: 70%;
+  left: calc((50% - (var(--pathWidth)) / 2) + 10%);
+  transform: rotate(-45deg);
+}
+.planePath:nth-child(8) {
+  top: 20%;
+  left: calc((50% - (var(--pathWidth)) / 2));
+  transform: rotate(20deg);
+}
+.planePath:nth-child(9) {
+  top: 50%;
+  left: calc((50% - (var(--pathWidth)) / 2) + 5%);
+  transform: rotate(-110deg);
+}
+.planePath:nth-child(10) {
+  top: 45%;
+  left: calc((50% - (var(--pathWidth)) / 2));
+  transform: rotate(150deg);
+}

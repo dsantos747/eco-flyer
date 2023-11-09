@@ -23,9 +23,9 @@ export function FlightForm() {
     location: '',
     latLong: '',
     outboundDate: formatDate(new Date()),
-    outboundDateEndRange: formatDate(new Date(), 2),
+    outboundDateEndRange: '', //formatDate(new Date(), 2),
     returnDate: formatDate(new Date(), 5),
-    returnDateEndRange: formatDate(new Date(), 7),
+    returnDateEndRange: '', //formatDate(new Date(), 7),
     tripLength: 'trip-medium',
   });
   const [suggestions, setSuggestions] = useState([]);
@@ -110,7 +110,8 @@ export function FlightForm() {
         try {
           // setLocationButton(true);
           const response = await fetch(
-            `https://nominatim.openstreetmap.org/reverse?lat=${crd.latitude}&lon=${crd.longitude}&zoom=10&format=json`
+            `https://nominatim.openstreetmap.org/reverse?lat=${crd.latitude}&lon=${crd.longitude}&zoom=10&format=json`,
+            { headers: { 'Content-Type': 'application/json', 'Cache-Control': 'max-age=7200' } }
           );
           const userLocation = await response.json();
           // prettier-ignore
@@ -138,7 +139,7 @@ export function FlightForm() {
           </p>
           <div className="w-full flex-auto max-w-md">
             <input
-              className="w-full text-center md:text-start bg-rose-50"
+              className="w-full text-center md:text-start bg-rose-50 rounded-sm"
               type="text"
               name="location"
               placeholder="Enter your departure location or airport"
@@ -161,8 +162,8 @@ export function FlightForm() {
             onClick={getUserLocation}
             disabled={locationButtonDisabled}
             aria-disabled={locationButtonDisabled}
-            className={`flex-none px-2 text-center rounded-md bg-rose-50 border-2 ${
-              locationButtonDisabled ? 'cursor-not-allowed' : 'hover:bg-gray-400'
+            className={`flex-none px-2 text-center rounded-md bg-rose-50 ${
+              locationButtonDisabled ? 'cursor-not-allowed' : 'hover:bg-gray-400 active:scale-95'
             }`}
           >
             {locationButtonDisabled ? 'Processing...' : 'Use My Location'}
@@ -175,10 +176,9 @@ export function FlightForm() {
             </label>
             <input
               id="outboundDate"
-              className="bg-rose-50 h-6"
+              className="bg-rose-50 h-6 rounded-sm"
               type="date"
               name="outboundDate"
-              placeholder="Outbound Date"
               value={formData.outboundDate}
               onChange={handleInputChange}
               required
@@ -187,10 +187,9 @@ export function FlightForm() {
           <div className="flex gap-1 flex-wrap-reverse w-1/2">
             <input
               id="outboundDateEndRange"
-              className="bg-rose-50 h-6"
+              className={`bg-rose-50 h-6 rounded-sm ${formData.outboundDateEndRange == '' ? 'text-gray-400' : 'text-black'}`}
               type="date"
               name="outboundDateEndRange"
-              placeholder="Outbound Date End Range"
               value={formData.outboundDateEndRange}
               onChange={handleInputChange}
             ></input>
@@ -206,10 +205,9 @@ export function FlightForm() {
             </label>
             <input
               id="returnDate"
-              className="bg-rose-50 h-6"
+              className="bg-rose-50 h-6 rounded-sm"
               type="date"
               name="returnDate"
-              placeholder="Return Date"
               value={formData.returnDate}
               onChange={handleInputChange}
               required
@@ -218,7 +216,7 @@ export function FlightForm() {
           <div className="flex gap-1 flex-wrap-reverse w-1/2">
             <input
               id="returnDateEndRange"
-              className="bg-rose-50 h-6"
+              className={`bg-rose-50 h-6 rounded-sm ${formData.returnDateEndRange == '' ? 'text-gray-400' : 'text-black'}`}
               type="date"
               name="returnDateEndRange"
               placeholder="Return Date End Range"
@@ -273,7 +271,10 @@ export function FlightForm() {
             </div>
           </div>
         </div>
-        <button type="submit" className="h-10 px-2 text-center rounded-md font-semibold bg-blue-400 text-black">
+        <button
+          type="submit"
+          className="h-10 px-2 text-center rounded-md font-semibold bg-blue-400 text-black hover:bg-blue-500 active:scale-95"
+        >
           Let&apos;s Fly!
         </button>
       </form>

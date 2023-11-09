@@ -1,9 +1,9 @@
-import { revalidateTag } from "next/cache";
-import { emissionsError } from "@/app/components/exceptions.js";
-import { TripCard } from "../components/tripCard.js";
-import { cookies } from "next/headers";
-import { Suspense } from "react";
-import { ResultsFetch } from "../components/resultsFetch.js";
+import { revalidateTag } from 'next/cache';
+import { emissionsError } from '@/app/components/exceptions.js';
+import { TripCard } from '../components/tripCard.js';
+import { cookies } from 'next/headers';
+import { Suspense } from 'react';
+import { ResultsFetch } from '../components/resultsFetch.js';
 
 // function getFirstTripEmissions(destination) {
 //   for (const option in destination) {
@@ -20,7 +20,7 @@ import { ResultsFetch } from "../components/resultsFetch.js";
 // export const emissionsFetch = async (latLong, outboundDate, outboundDateEndRange, returnDate, returnDateEndRange, tripLength) => {
 //   const baseUrl = process.env.API_URL;
 
-//   revalidateTag("emissions"); // This is used to trigger a re-fetching of data. Should trigger this only if request body has changed
+//   revalidateTag('emissions'); // This is used to trigger a re-fetching of data. Should trigger this only if request body has changed
 //   // Maybe see if there's a way of checking a cookie's age?
 
 //   let params = { lat: latLong.lat, long: latLong.long, len: tripLength };
@@ -33,14 +33,15 @@ import { ResultsFetch } from "../components/resultsFetch.js";
 
 //   try {
 //     const response = await fetch(query_url, {
-//       next: { tags: ["emissions"] },
+//       next: { tags: ['emissions'] },
 //     });
 //     if (response.ok) {
 //       const data = await response.json();
 //       originAirports = data.origin_airports;
 //       destinationAirports = data.destination_airports;
+//       console.log('airports fetched');
 //     } else {
-//       console.error("Error: response not Ok", response.status, response.statusText);
+//       console.error('Error: response not Ok', response.status, response.statusText);
 //       throw new emissionsError();
 //     }
 //   } catch (error) {
@@ -48,20 +49,21 @@ import { ResultsFetch } from "../components/resultsFetch.js";
 //     throw new emissionsError(); // Make a more specific error here, such as "Error getting departure location / destination airports"
 //   }
 
-//   let rawDestinations;
 //   query_url = `${baseUrl}/api/results/tequila`;
+//   let rawDestinations;
 //   try {
 //     const response = await fetch(query_url, {
-//       method: "POST",
+//       method: 'POST',
 //       body: JSON.stringify({ originAirports, destinationAirports, outboundDate, outboundDateEndRange, returnDate, returnDateEndRange }),
-//       headers: { "Content-Type": "application/json" },
-//       next: { tags: ["emissions"] },
+//       headers: { 'Content-Type': 'application/json' },
+//       next: { tags: ['emissions'] },
 //     });
 //     if (response.ok) {
 //       const data = await response.json();
 //       rawDestinations = data;
+//       console.log('raw tequila fetched');
 //     } else {
-//       console.error("Error: response not Ok", response.status, response.statusText);
+//       console.error('Error: response not Ok', response.status, response.statusText);
 //       throw new emissionsError();
 //     }
 //   } catch (error) {
@@ -69,20 +71,43 @@ import { ResultsFetch } from "../components/resultsFetch.js";
 //     throw new emissionsError();
 //   }
 
-//   let rawEmissions;
-//   query_url = `${baseUrl}/api/results/emissions`;
+//   query_url = `${baseUrl}/api/results/tequilaSort`;
+//   let sortedDestinations;
 //   try {
 //     const response = await fetch(query_url, {
-//       method: "POST",
+//       method: 'POST',
 //       body: JSON.stringify(rawDestinations),
-//       headers: { "Content-Type": "application/json" },
-//       next: { tags: ["emissions"] },
+//       headers: { 'Content-Type': 'application/json' },
+//       next: { tags: ['emissions'] },
+//     });
+//     if (response.ok) {
+//       const data = await response.json();
+//       sortedDestinations = data;
+//       console.log('sorted tequila fetched');
+//     } else {
+//       console.error('Error: response not Ok', response.status, response.statusText);
+//       throw new emissionsError();
+//     }
+//   } catch (error) {
+//     console.error(error);
+//     throw new emissionsError();
+//   }
+
+//   query_url = `${baseUrl}/api/results/emissions`;
+//   let rawEmissions;
+//   try {
+//     const response = await fetch(query_url, {
+//       method: 'POST',
+//       body: JSON.stringify(sortedDestinations),
+//       headers: { 'Content-Type': 'application/json' },
+//       next: { tags: ['emissions'] },
 //     });
 //     if (response.ok) {
 //       const data = await response.json();
 //       rawEmissions = data;
+//       console.log('emissions fetched');
 //     } else {
-//       console.error("Error: response not Ok", response.status, response.statusText);
+//       console.error('Error: response not Ok', response.status, response.statusText);
 //       throw new emissionsError();
 //     }
 //   } catch (error) {
@@ -90,20 +115,21 @@ import { ResultsFetch } from "../components/resultsFetch.js";
 //     throw new emissionsError();
 //   }
 
-//   let parsedResults;
 //   query_url = `${baseUrl}/api/results/sort`;
+//   let parsedResults;
 //   try {
 //     const response = await fetch(query_url, {
-//       method: "POST",
-//       body: JSON.stringify({ rawDestinations, rawEmissions }),
-//       headers: { "Content-Type": "application/json" },
-//       next: { tags: ["emissions"] },
+//       method: 'POST',
+//       body: JSON.stringify({ sortedDestinations, rawEmissions }),
+//       headers: { 'Content-Type': 'application/json' },
+//       next: { tags: ['emissions'] },
 //     });
 //     if (response.ok) {
 //       const data = await response.json();
 //       parsedResults = data;
+//       console.log('sorted results fetched');
 //     } else {
-//       console.error("Error: response not Ok", response.status, response.statusText);
+//       console.error('Error: response not Ok', response.status, response.statusText);
 //       throw new emissionsError();
 //     }
 //   } catch (error) {
@@ -117,17 +143,6 @@ import { ResultsFetch } from "../components/resultsFetch.js";
 // };
 
 async function page() {
-  // TASKS TO FIX THIS
-  // I suspect the await on the emissions fetch is making the Vercel thing trip up,
-  // because the "/results" redirect is seen as a serverless function
-  // To fix this, see if you can maybe abstract all this data fetching to within a sub
-  // component (maybe TripCard, although that's CSR), so that the page can be loaded
-  // ("/results" route reached) before the data has been fetched. This will also mean
-  // we need a skeleton on the TripCard.
-
-  // Is probably worth testing out if that is the case first, by deploying to vercel a
-  // modified version of this script with a much simplified fetch (or dummy data)
-
   // const response = JSON.parse(cookies().get("request")?.value);
   // const { location, outboundDate, outboundDateEndRange, returnDate, returnDateEndRange, tripLength, latLong } = response;
   // // const route_results = await emissionsFetch(latLong, outboundDate, outboundDateEndRange, returnDate, returnDateEndRange, tripLength);
