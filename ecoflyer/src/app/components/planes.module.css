@@ -10,6 +10,7 @@
   width: var(--pathWidth);
   overflow: hidden;
   position: absolute;
+  /* background-color: black; */
 }
 
 .planePath:nth-child(1) {

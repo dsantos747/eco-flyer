@@ -155,10 +155,10 @@ async function page() {
   return (
     <div>
       {/* <h1 className="text-4xl">This is some test text, to verify if Vercel issues are caused by await on emissionsFetch</h1> */}
-      <Suspense fallback={<p className="text-2xl">Loading results...</p>}>
-        {/* <TripCard emissions={route_results} destinations={destinations} option={1}></TripCard> */}
-        <ResultsFetch></ResultsFetch>
-      </Suspense>
+      {/* <Suspense fallback={<p className="text-2xl">Loading results...</p>}> */}
+      {/* <TripCard emissions={route_results} destinations={destinations} option={1}></TripCard> */}
+      <ResultsFetch></ResultsFetch>
+      {/* </Suspense> */}
     </div>
   );
 }

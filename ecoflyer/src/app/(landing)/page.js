@@ -34,7 +34,8 @@ async function page() {
           impact?
         </h2>
         <h2>
-          eco-flyer cleverly reviews potential holiday destinations, then presents you with the flight options with the lowest emissions.
+          <strong>eco-flyer</strong> cleverly reviews potential holiday destinations, then presents you with the flight options with the
+          lowest emissions.
         </h2>
       </div>
 

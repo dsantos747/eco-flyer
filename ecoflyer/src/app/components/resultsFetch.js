@@ -16,7 +16,7 @@ function getFirstTripEmissions(destination) {
 //   return `${uglyDate.slice(8)}-${uglyDate.slice(5, 7)}-${uglyDate.slice(0, 4)}`;
 // }
 
-export const emissionsFetch = async (latLong, outboundDate, outboundDateEndRange, returnDate, returnDateEndRange, tripLength) => {
+export const emissionsFetch = async (latLong, outboundDate, outboundDateEndRange, returnDate, returnDateEndRange, tripLength, price) => {
   const baseUrl = process.env.API_URL;
 
   revalidateTag('emissions'); // This is used to trigger a re-fetching of data. Should trigger this only if request body has changed
@@ -53,21 +53,35 @@ export const emissionsFetch = async (latLong, outboundDate, outboundDateEndRange
   try {
     const response = await fetch(query_url, {
       method: 'POST',
-      body: JSON.stringify({ originAirports, destinationAirports, outboundDate, outboundDateEndRange, returnDate, returnDateEndRange }),
+      body: JSON.stringify({
+        originAirports,
+        destinationAirports,
+        outboundDate,
+        outboundDateEndRange,
+        returnDate,
+        returnDateEndRange,
+        price,
+      }),
       headers: { 'Content-Type': 'application/json' },
       next: { tags: ['emissions'] },
     });
     if (response.ok) {
       const data = await response.json();
-      rawDestinations = data;
-      console.log('raw tequila fetched');
+      if (data.error) {
+        console.error('Backend error:', data.error);
+        throw new emissionsError();
+      } else {
+        rawDestinations = data;
+        console.log('raw tequila fetched');
+      }
     } else {
       console.error('Error: response not Ok', response.status, response.statusText);
       throw new emissionsError();
     }
   } catch (error) {
+    //Client-side error
     console.error(error);
-    throw new emissionsError();
+    throw new emissionsError(error.message);
   }
 
   query_url = `${baseUrl}/api/results/tequilaSort`;
@@ -143,8 +157,16 @@ export const emissionsFetch = async (latLong, outboundDate, outboundDateEndRange
 
 export async function ResultsFetch() {
   const response = JSON.parse(cookies().get('request')?.value);
-  const { location, outboundDate, outboundDateEndRange, returnDate, returnDateEndRange, tripLength, latLong } = response;
-  const route_results = await emissionsFetch(latLong, outboundDate, outboundDateEndRange, returnDate, returnDateEndRange, tripLength);
+  const { location, outboundDate, outboundDateEndRange, returnDate, returnDateEndRange, tripLength, latLong, price } = response;
+  const route_results = await emissionsFetch(
+    latLong,
+    outboundDate,
+    outboundDateEndRange,
+    returnDate,
+    returnDateEndRange,
+    tripLength,
+    price
+  );
   // const route_results = emissionsFetch(latLong, outboundDate, outboundDateEndRange, returnDate, returnDateEndRange, tripLength);
   const sorted_result = Object.fromEntries(
     Object.entries(route_results).sort((a, b) => getFirstTripEmissions(a[1]) - getFirstTripEmissions(b[1]))

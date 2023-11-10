@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { createRequestCookies } from './cookieBaker';
 import { useRouter } from 'next/navigation';
+import { ToolTip } from './tooltip';
 
 const formatDate = (date, offset = 0) => {
   date = new Date(date.setDate(date.getDate() + offset));
@@ -27,6 +28,7 @@ export function FlightForm() {
     returnDate: formatDate(new Date(), 5),
     returnDateEndRange: '', //formatDate(new Date(), 7),
     tripLength: 'trip-medium',
+    price: 300,
   });
   const [suggestions, setSuggestions] = useState([]);
   const [debouncedSuggestions, setDebouncedSuggestions] = useState([]);
@@ -97,7 +99,6 @@ export function FlightForm() {
 
   const handleSubmit = async (form) => {
     form.preventDefault();
-    // const formDataJSON = JSON.stringify(formData, null, 2);
     createRequestCookies(formData);
     router.push('/results');
   };
@@ -108,7 +109,6 @@ export function FlightForm() {
       navigator.geolocation.getCurrentPosition(async (pos) => {
         const crd = pos.coords;
         try {
-          // setLocationButton(true);
           const response = await fetch(
             `https://nominatim.openstreetmap.org/reverse?lat=${crd.latitude}&lon=${crd.longitude}&zoom=10&format=json`,
             { headers: { 'Content-Type': 'application/json', 'Cache-Control': 'max-age=7200' } }
@@ -121,7 +121,6 @@ export function FlightForm() {
             'location': parsedUserLocation,
             'latLong': { 'lat': crd.latitude, 'long': crd.longitude },
           }));
-          // setLocationButton(false);
         } catch (error) {
           console.error('Error fetching location', error);
         }
@@ -269,6 +268,49 @@ export function FlightForm() {
               ></input>
               <label htmlFor="trip-long">Really Far</label>
             </div>
+            <ToolTip
+              html="Near: Destinations up to 1500km away<br />Far: Destinations 1500 to 4000km away<br />Really Far: Even Further!"
+              place="bottom"
+            >
+              <p className="text-gray-500">(huh?)</p>
+            </ToolTip>
+          </div>
+        </div>
+        <div className="flex flex-col items-center md:flex-row justify-between gap-2">
+          <p>
+            What's your budget?<span className="text-red-500">*</span>
+          </p>
+          <div className="flex gap-3">
+            <input
+              type="range"
+              id="price"
+              name="price"
+              min="100"
+              max="1500"
+              step="50"
+              value={formData.price}
+              onChange={handleInputChange}
+            ></input>
+            <div className="flex">
+              <input
+                type="number"
+                name="price"
+                min="100"
+                max="1500"
+                step="50"
+                value={formData.price}
+                onChange={handleInputChange}
+                className="w-14 bg-rose-50 h-6 rounded-sm"
+              ></input>
+              <p>&euro;</p>
+            </div>
+
+            <ToolTip
+              html="Set a price to keep results within your budget.<br />However, the following is recommended:<br />'Far' trips: at least 100€<br />'Really Far' trips: at least 600€"
+              place="bottom"
+            >
+              <p className="text-gray-500">(huh?)</p>
+            </ToolTip>
           </div>
         </div>
         <button

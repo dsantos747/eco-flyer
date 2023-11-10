@@ -49,17 +49,17 @@ def tequila_query(
         "return_from": return_date,
         "return_to": return_date_end_range,
         # "max_fly_duration": "DUMMY",
-        # "price_to": price_limit,
+        "price_to": price_limit,
         "curr": "EUR",
         "sort": "quality",  # quality or price(default)
-        "limit": 500,  # max 1000
+        "limit": 300,  # max 1000
     }
 
     result = get(url, headers=headers, params=params)
     if result.status_code != 200:
-        print(f"Tequila response is {result}")
-        print(result.text)
-        # throw error here
+        return {
+            "error": f"A backend error occurred while processing the request - code {result.status_code}"
+        }
     else:
         return result.json()
 
@@ -75,16 +75,11 @@ def tequila_parse(tequila_dict):
             count_ret = 0
             for leg in route["route"]:
                 leg_object = {
-                    # "id": leg["id"],
-                    # "combination_id": leg["combination_id"],
                     "flyFrom": leg["flyFrom"],
                     "cityFrom": leg["cityFrom"],
                     "flyTo": leg["flyTo"],
                     "cityTo": leg["cityTo"],
                     "local_departure": leg["local_departure"],
-                    # "utc_departure": leg["utc_departure"],
-                    # "local_arrival": leg["local_arrival"],
-                    # "utc_arrival": leg["utc_arrival"],
                     "airline": leg["airline"],
                     "flight_no": leg["flight_no"],
                     "operating_carrier": leg["operating_carrier"],
@@ -99,32 +94,16 @@ def tequila_parse(tequila_dict):
                     flights_arr[1][f"step_{count_ret}"] = leg_object
 
             route_object = {
-                # "id": route["id"],
                 "flyFrom": route["flyFrom"],
                 "cityFrom": route["cityFrom"],
                 "flyTo": route["flyTo"],
                 "cityTo": route["cityTo"],
-                # "countryFrom": route["countryFrom"]["name"],
-                # "countryTo": route["countryTo"]["name"],
                 "local_departure": route["local_departure"],
-                # "utc_departure": route["utc_departure"],
-                # "local_arrival": route["local_arrival"],
-                # "utc_arrival": route["utc_arrival"],
-                # "nightsInDest": route["nightsInDest"],
-                # "quality": route["quality"],
-                # "distance": route["distance"],
-                # "duration": {
-                #     "departure": route["duration"]["departure"],
-                #     "return": route["duration"]["return"],
-                #     "total": route["duration"]["total"],
-                # },
                 "price": route["price"],
-                # "airlines": route["airlines"],
                 "flights": flights_arr,
                 "total_legs": count_out + count_ret,
                 "out_legs": count_out,
                 "return_legs": count_ret,
-                # "booking_token": route["booking_token"],
                 "deep_link": route["deep_link"],
                 "img_url": unsplash_fetch(route["cityTo"])
                 # "img_url": unsplash_fetch(f"{route['cityTo']}, {route['countryTo']['name']}")
@@ -297,8 +276,12 @@ def unsplash_fetch(query):
         "Accept-Version": "v1",
         "Authorization": f"Client-ID {UNSPLASH_ACCESS}",
     }
-    params = {"query": query, "orientation": "portrait", "per_page": 1}
-
+    params = {
+        "query": query,
+        "orientation": "portrait",
+        "per_page": 1,
+        "order_by": "relevant",
+    }
     result = get(url, headers=headers, params=params).json()
     img_url = result["results"][0]["urls"]["raw"]
     img_url_resized = img_url + "&w=400&h=600&fit=crop&crop=top,bottom,left,right"
@@ -363,6 +346,7 @@ def results_tequila():
         data["returnDate"],
         data["outboundDateEndRange"],
         data["returnDateEndRange"],
+        data["price"],
     )
     return jsonify(tequila_result)
 
