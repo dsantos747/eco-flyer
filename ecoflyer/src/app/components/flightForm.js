@@ -278,7 +278,7 @@ export function FlightForm() {
         </div>
         <div className="flex flex-col items-center md:flex-row justify-between gap-2">
           <p>
-            What's your budget?<span className="text-red-500">*</span>
+            What&apos;s your budget?<span className="text-red-500">*</span>
           </p>
           <div className="flex gap-3">
             <input
