@@ -12,9 +12,9 @@ function getFirstTripEmissions(destination) {
   }
 }
 
-// function normaliseDate(uglyDate) {
-//   return `${uglyDate.slice(8)}-${uglyDate.slice(5, 7)}-${uglyDate.slice(0, 4)}`;
-// }
+function normaliseDate(uglyDate) {
+  return `${uglyDate.slice(8)}/${uglyDate.slice(5, 7)}/${uglyDate.slice(0, 4)}`;
+}
 
 export const emissionsFetch = async (latLong, outboundDate, outboundDateEndRange, returnDate, returnDateEndRange, tripLength, price) => {
   const baseUrl = process.env.API_URL;
@@ -50,6 +50,10 @@ export const emissionsFetch = async (latLong, outboundDate, outboundDateEndRange
 
   query_url = `${baseUrl}/api/results/tequila`;
   let rawDestinations;
+  outboundDate = normaliseDate(outboundDate);
+  outboundDateEndRange = normaliseDate(outboundDateEndRange);
+  returnDate = normaliseDate(returnDate);
+  returnDateEndRange = normaliseDate(returnDateEndRange);
   try {
     const response = await fetch(query_url, {
       method: 'POST',

@@ -42,9 +42,9 @@ async function page() {
       <div className="pt-4">
         <FlightForm></FlightForm>
       </div>
-      <Link href="/results" className="p-2 bg-lime-500">
+      {/* <Link href="/results" className="p-2 bg-lime-500">
         Test Link to Results
-      </Link>
+      </Link> */}
     </div>
   );
 }

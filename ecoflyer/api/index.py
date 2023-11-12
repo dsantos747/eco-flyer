@@ -7,10 +7,12 @@ import json
 from geopy.distance import geodesic
 from datetime import datetime
 import copy
+import cProfile
+import pstats
 
 
-def normalise_date(ugly_date):
-    return datetime.strptime(ugly_date, "%Y-%m-%d").strftime("%d/%m/%Y")
+# def normalise_date(ugly_date):
+#     return datetime.strptime(ugly_date, "%Y-%m-%d").strftime("%d/%m/%Y")
 
 
 def get_airport_list(latitude, longitude, max_radius, min_radius=0):
@@ -30,13 +32,13 @@ def tequila_query(
     flight_destination,
     outbound_date,
     return_date,
-    outbound_date_end_range=None,
-    return_date_end_range=None,
+    outbound_date_end_range="",
+    return_date_end_range="",
     price_limit=None,
 ):
-    if outbound_date_end_range == None:
+    if outbound_date_end_range == "":
         outbound_date_end_range = outbound_date
-    if return_date_end_range == None:
+    if return_date_end_range == "":
         return_date_end_range = return_date
 
     url = f"https://api.tequila.kiwi.com/v2/search"
@@ -45,7 +47,7 @@ def tequila_query(
         "fly_from": flight_origin,
         "fly_to": flight_destination,
         "date_from": outbound_date,
-        "date_to": outbound_date_end_range,
+        "date_to": outbound_date_end_range,  # Due to some idiot at Tequila, this cannot be == outbound_date
         "return_from": return_date,
         "return_to": return_date_end_range,
         # "max_fly_duration": "DUMMY",
@@ -176,20 +178,23 @@ def emissions_fetch(flights_object, flight_class="economy"):
 
 
 def emissions_parse(flights_dict, emissions_results):
-    noEmissions = 0
-    removedDestinations = 0
-    new_flights_dict = copy.deepcopy(flights_dict)
+    no_emissions = 0
+    removed_destinations = 0
+    emissions_index = 0
+    new_flights_dict = copy.deepcopy(flights_dict)  # THIS IS BAD
     for destination in flights_dict:
         for option in flights_dict[destination]:
             outbound_emissions = 0
             remove_option = False
             for outbound_flight in flights_dict[destination][option]["flights"][0]:
-                emissions = emissions_results.pop(0)
+                # emissions = emissions_results.pop(0) # Consider using an index variable for better performance, rather than mutating this
+                emissions = emissions_results[emissions_index]
+                emissions += 1
                 if emissions == 0:
                     # print(
                     #     f"no emissions data for flight to {flights_dict[destination][option]['flights'][0][outbound_flight]['flyTo']}"
                     # )
-                    noEmissions += 1
+                    no_emissions += 1
                     remove_option = True
                     break
                 else:
@@ -205,12 +210,13 @@ def emissions_parse(flights_dict, emissions_results):
 
             return_emissions = 0
             for return_flight in flights_dict[destination][option]["flights"][1]:
-                emissions = emissions_results.pop(0)
+                emissions = emissions_results[emissions_index]
+                emissions += 1
                 if emissions == 0:
                     # print(
                     #     f"no emissions data for flight to {flights_dict[destination][option]['flights'][1][return_flight]['flyTo']}"
                     # )
-                    noEmissions += 1
+                    no_emissions += 1
                     remove_option = True
                     break
                 else:
@@ -231,11 +237,71 @@ def emissions_parse(flights_dict, emissions_results):
         if not new_flights_dict[destination]:
             # print(f"removed {destination} as a destination")
             del new_flights_dict[destination]
-            removedDestinations += 1
+            removed_destinations += 1
 
-    print(f"Flights with no emissions: {noEmissions}")
-    print(f"Destinations removed: {removedDestinations}")
+    print(f"Flights with no emissions: {no_emissions}")
+    print(f"Destinations removed: {removed_destinations}")
     return reset_option_numbers(new_flights_dict)
+
+
+############ NEW AND IMPROVED EMISSIONS PARSE ###############
+def new_emissions_parse(flights_dict, emissions_results):  # rename to emissions_parse
+    new_flights_dict = {}
+    emissions_index = 0
+    no_emissions = 0
+    removed_destinations = 0
+
+    for destination, options in flights_dict.items():
+        new_options = {}
+        option_count = 0
+        for option_key, option_value in options.items():
+            outbound_emissions = 0
+            return_emissions = 0
+            remove_option = False
+
+            new_option_value = {"flights": [{}, {}], "trip_emissions": None}
+
+            for outbound_flight in option_value["flights"][0]:
+                emissions = emissions_results[emissions_index]
+                emissions += 1
+                if emissions == 0:
+                    no_emissions += 1
+                    remove_option = True
+                    break
+                else:
+                    new_option_value["flights"][0][outbound_flight] = {
+                        "flight_emissions": emissions
+                    }
+                outbound_emissions += emissions
+
+            if not remove_option:
+                for return_flight in option_value["flights"][1]:
+                    emissions = emissions_results[emissions_index]
+                    emissions += 1
+                    if emissions == 0:
+                        no_emissions += 1
+                        remove_option = True
+                        break
+                    else:
+                        new_option_value["flights"][1][return_flight] = {
+                            "flight_emissions": emissions
+                        }
+                    return_emissions += emissions
+
+            if not remove_option:
+                total_emissions = outbound_emissions + return_emissions
+                new_option_value["trip_emissions"] = total_emissions
+                option_count += 1
+                new_options[f"option_{option_count}"] = new_option_value
+
+        if new_options:
+            new_flights_dict[destination] = new_options
+        else:
+            removed_destinations += 1
+
+    print(f"Flights with no emissions: {no_emissions}")
+    print(f"Destinations removed: {removed_destinations}")
+    return new_flights_dict
 
 
 # Can refactor this for sure, probably incorporate this methodology into emissions_parse
@@ -307,6 +373,9 @@ with open(os.path.join(current_dir, "data", "airports.json"), "r") as json_file:
 app = Flask(__name__)
 CORS(app)
 
+# Profiling instance
+profile = cProfile.Profile()
+
 
 # Server wakeup
 @app.route("/api/ping", methods=["GET"])
@@ -372,9 +441,22 @@ def results_emissions():
 @app.route("/api/results/sort", methods=["POST"])
 def results_sort():
     data = request.json
+    # PROFILING
+    # profile.enable()
     processed_data_with_emissions = emissions_parse(
         data["sortedDestinations"], data["rawEmissions"]
     )
+    # profile.disable()
+    # profile.dump_stats("profile_results_emissions_parse")
+    # stats = pstats.Stats("profile_results_emissions_parse")
+    # stats.strip_dirs()
+    # stats.sort_stats("cumulative")
+    # stats.print_stats()
+    # with open(
+    #     os.path.join(current_dir, "data", "emissions_parse.json"), "w"
+    # ) as file:
+    #     json.dump(processed_data_with_emissions, file, indent=2)
+    # END PROFILING
     sorted_result = destinations_sort(processed_data_with_emissions)
     return jsonify(sorted_result)
 

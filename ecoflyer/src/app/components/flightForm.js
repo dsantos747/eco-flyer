@@ -24,9 +24,9 @@ export function FlightForm() {
     location: '',
     latLong: '',
     outboundDate: formatDate(new Date()),
-    outboundDateEndRange: '', //formatDate(new Date(), 2),
+    outboundDateEndRange: formatDate(new Date(), 1), // ''
     returnDate: formatDate(new Date(), 5),
-    returnDateEndRange: '', //formatDate(new Date(), 7),
+    returnDateEndRange: formatDate(new Date(), 6), // ''
     tripLength: 'trip-medium',
     price: 300,
   });
@@ -98,6 +98,9 @@ export function FlightForm() {
   };
 
   const handleSubmit = async (form) => {
+    // submitData = formData;
+    // if (submitData.outboundDateEndRange === '') submitData.outboundDateEndRange = formatDate(submitData.outboundDate, 1);
+    // if (submitData.returnDateEndRange === '') submitData.returnDateEndRange = formatDate(submitData.returnDate, 1);
     form.preventDefault();
     createRequestCookies(formData);
     router.push('/results');
@@ -136,7 +139,7 @@ export function FlightForm() {
           <p className="md:flex-none">
             Departure Location<span className="text-red-500">*</span>
           </p>
-          <div className="w-full flex-auto max-w-md">
+          <div className="w-full flex-auto max-w-sm">
             <input
               className="w-full text-center md:text-start bg-rose-50 rounded-sm"
               type="text"

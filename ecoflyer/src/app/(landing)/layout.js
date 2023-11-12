@@ -1,5 +1,5 @@
 import { Header } from '../components/header';
-import { Footer } from '../components/footer';
+import { MainFooter } from '../components/footer';
 import { VapourTrails } from '../components/vapourTrails';
 
 export default function LandingLayout({ children }) {
@@ -11,7 +11,7 @@ export default function LandingLayout({ children }) {
         <div className="flex flex-1 flex-col place-content-center pt-16 pb-2">{children}</div>
       </div>
       <div className="relative z-[5]">
-        <Footer></Footer>
+        <MainFooter></MainFooter>
       </div>
     </section>
   );
