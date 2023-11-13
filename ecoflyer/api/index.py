@@ -259,7 +259,15 @@ def new_emissions_parse(flights_dict, emissions_results):  # rename to emissions
             return_emissions = 0
             remove_option = False
 
-            new_option_value = {"flights": [{}, {}], "trip_emissions": None}
+            # FININSH THIS!!!!!
+            # ALSO PRE-ADD RELEVANT DATA TO EACH FLIGHT
+            new_option_value = {
+                "cityFrom": option_value["cityFrom"],
+                "cityTo": option_value["cityTo"],
+                "deep_link": option_value["deep_link"],
+                "flights": [{}, {}],
+                "trip_emissions": None,
+            }
 
             for outbound_flight in option_value["flights"][0]:
                 emissions = emissions_results[emissions_index]
@@ -452,9 +460,7 @@ def results_sort():
     # stats.strip_dirs()
     # stats.sort_stats("cumulative")
     # stats.print_stats()
-    # with open(
-    #     os.path.join(current_dir, "data", "emissions_parse.json"), "w"
-    # ) as file:
+    # with open(os.path.join(current_dir, "data", "emissions_parse.json"), "w") as file:
     #     json.dump(processed_data_with_emissions, file, indent=2)
     # END PROFILING
     sorted_result = destinations_sort(processed_data_with_emissions)
