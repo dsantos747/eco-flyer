@@ -1,6 +1,7 @@
+'use server';
+
 import { revalidateTag } from 'next/cache';
 import { emissionsError } from '@/app/components/exceptions.js';
-import { TripCard } from '../components/tripCard.js';
 import { cookies } from 'next/headers';
 import { Suspense } from 'react';
 
@@ -158,24 +159,3 @@ export const emissionsFetch = async (latLong, outboundDate, outboundDateEndRange
   // Test error throw to stop action
   // throw new emissionsError();
 };
-
-export async function ResultsFetch() {
-  const response = JSON.parse(cookies().get('request')?.value);
-  const { location, outboundDate, outboundDateEndRange, returnDate, returnDateEndRange, tripLength, latLong, price } = response;
-  const route_results = await emissionsFetch(
-    latLong,
-    outboundDate,
-    outboundDateEndRange,
-    returnDate,
-    returnDateEndRange,
-    tripLength,
-    price
-  );
-  // const route_results = emissionsFetch(latLong, outboundDate, outboundDateEndRange, returnDate, returnDateEndRange, tripLength);
-  const sorted_result = Object.fromEntries(
-    Object.entries(route_results).sort((a, b) => getFirstTripEmissions(a[1]) - getFirstTripEmissions(b[1]))
-  );
-  const destinations = Object.keys(sorted_result); // Array used for referring to for sort order
-
-  return <TripCard emissions={route_results} destinations={destinations} option={1}></TripCard>;
-}

@@ -1,7 +1,7 @@
-import { Header } from "../components/header";
-import { VapourTrails } from "../components/vapourTrails";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlane } from "@fortawesome/free-solid-svg-icons";
+import { Header } from '../../components/header';
+import { VapourTrails } from '../../components/vapourTrails';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPlane } from '@fortawesome/free-solid-svg-icons';
 
 const loading = () => {
   return (

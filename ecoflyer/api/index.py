@@ -189,7 +189,7 @@ def emissions_parse(flights_dict, emissions_results):
             for outbound_flight in flights_dict[destination][option]["flights"][0]:
                 # emissions = emissions_results.pop(0) # Consider using an index variable for better performance, rather than mutating this
                 emissions = emissions_results[emissions_index]
-                emissions += 1
+                emissions_index += 1
                 if emissions == 0:
                     # print(
                     #     f"no emissions data for flight to {flights_dict[destination][option]['flights'][0][outbound_flight]['flyTo']}"
@@ -211,7 +211,7 @@ def emissions_parse(flights_dict, emissions_results):
             return_emissions = 0
             for return_flight in flights_dict[destination][option]["flights"][1]:
                 emissions = emissions_results[emissions_index]
-                emissions += 1
+                emissions_index += 1
                 if emissions == 0:
                     # print(
                     #     f"no emissions data for flight to {flights_dict[destination][option]['flights'][1][return_flight]['flyTo']}"
@@ -259,40 +259,68 @@ def new_emissions_parse(flights_dict, emissions_results):  # rename to emissions
             return_emissions = 0
             remove_option = False
 
-            # FININSH THIS!!!!!
-            # ALSO PRE-ADD RELEVANT DATA TO EACH FLIGHT
             new_option_value = {
                 "cityFrom": option_value["cityFrom"],
                 "cityTo": option_value["cityTo"],
                 "deep_link": option_value["deep_link"],
                 "flights": [{}, {}],
+                "flyFrom": option_value["flyFrom"],
+                "flyTo": option_value["flyTo"],
+                "img_url": option_value["img_url"],
+                "local_departure": option_value["local_departure"],
+                "out_legs": option_value["out_legs"],
+                "price": option_value["price"],
+                "return_legs": option_value["return_legs"],
+                "total_legs": option_value["total_legs"],
                 "trip_emissions": None,
             }
 
             for outbound_flight in option_value["flights"][0]:
                 emissions = emissions_results[emissions_index]
-                emissions += 1
+                emissions_index += 1
                 if emissions == 0:
                     no_emissions += 1
                     remove_option = True
                     break
                 else:
+                    curr_flight = option_value["flights"][0][outbound_flight]
                     new_option_value["flights"][0][outbound_flight] = {
-                        "flight_emissions": emissions
+                        "airline": curr_flight["airline"],
+                        "cityFrom": curr_flight["cityFrom"],
+                        "cityTo": curr_flight["cityTo"],
+                        "flight_no": curr_flight["flight_no"],
+                        "flyFrom": curr_flight["flyFrom"],
+                        "flyTo": curr_flight["flyTo"],
+                        "local_departure": curr_flight["local_departure"],
+                        "operating_carrier": curr_flight["operating_carrier"],
+                        "operating_flight_no": curr_flight["operating_flight_no"],
+                        "return": 0,
+                        "flight_emissions": emissions,
                     }
                 outbound_emissions += emissions
 
             if not remove_option:
                 for return_flight in option_value["flights"][1]:
                     emissions = emissions_results[emissions_index]
-                    emissions += 1
+                    emissions_index += 1
                     if emissions == 0:
                         no_emissions += 1
                         remove_option = True
                         break
                     else:
+                        curr_flight = option_value["flights"][1][return_flight]
                         new_option_value["flights"][1][return_flight] = {
-                            "flight_emissions": emissions
+                            "airline": curr_flight["airline"],
+                            "cityFrom": curr_flight["cityFrom"],
+                            "cityTo": curr_flight["cityTo"],
+                            "flight_no": curr_flight["flight_no"],
+                            "flyFrom": curr_flight["flyFrom"],
+                            "flyTo": curr_flight["flyTo"],
+                            "local_departure": curr_flight["local_departure"],
+                            "operating_carrier": curr_flight["operating_carrier"],
+                            "operating_flight_no": curr_flight["operating_flight_no"],
+                            "return": 1,
+                            "flight_emissions": emissions,
                         }
                     return_emissions += emissions
 
@@ -451,7 +479,7 @@ def results_sort():
     data = request.json
     # PROFILING
     # profile.enable()
-    processed_data_with_emissions = emissions_parse(
+    processed_data_with_emissions = new_emissions_parse(
         data["sortedDestinations"], data["rawEmissions"]
     )
     # profile.disable()
@@ -460,7 +488,9 @@ def results_sort():
     # stats.strip_dirs()
     # stats.sort_stats("cumulative")
     # stats.print_stats()
-    # with open(os.path.join(current_dir, "data", "emissions_parse.json"), "w") as file:
+    # with open(
+    #     os.path.join(current_dir, "data", "new_emissions_parse.json"), "w"
+    # ) as file:
     #     json.dump(processed_data_with_emissions, file, indent=2)
     # END PROFILING
     sorted_result = destinations_sort(processed_data_with_emissions)

@@ -102,8 +102,8 @@ export function FlightForm() {
     // if (submitData.outboundDateEndRange === '') submitData.outboundDateEndRange = formatDate(submitData.outboundDate, 1);
     // if (submitData.returnDateEndRange === '') submitData.returnDateEndRange = formatDate(submitData.returnDate, 1);
     form.preventDefault();
-    createRequestCookies(formData);
-    router.push('/results');
+    createRequestCookies('formResults', formData);
+    router.push('/progress');
   };
 
   const getUserLocation = () => {
@@ -145,6 +145,7 @@ export function FlightForm() {
               type="text"
               name="location"
               placeholder="Enter your departure location or airport"
+              autoComplete="off"
               value={formData.location}
               onFocus={handleFocus}
               onBlur={handleBlur}
@@ -318,6 +319,7 @@ export function FlightForm() {
         </div>
         <button
           type="submit"
+          disabled={true} // TEMPORARY ADDITION UNTIL RESULTS PAGE ROUTE IS SORTED
           className="h-10 px-2 text-center rounded-md font-semibold bg-blue-400 text-black hover:bg-blue-500 active:scale-95"
         >
           Let&apos;s Fly!
