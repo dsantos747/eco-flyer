@@ -1,9 +1,13 @@
-'use server';
+// 'use client';
 
 import { revalidateTag } from 'next/cache';
 import { emissionsError } from '@/app/components/exceptions.js';
-import { cookies } from 'next/headers';
-import { Suspense } from 'react';
+// import { cookies } from 'next/headers';
+import { redirect } from 'next/navigation';
+import { createRequestCookies, getCookies } from '../../../components/cookieBaker';
+// import { emissionsFetch } from '@/app/components/resultsFetch';
+import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 
 function getFirstTripEmissions(destination) {
   for (const option in destination) {
@@ -17,7 +21,16 @@ function normaliseDate(uglyDate) {
   return `${uglyDate.slice(8)}/${uglyDate.slice(5, 7)}/${uglyDate.slice(0, 4)}`;
 }
 
-export const emissionsFetch = async (latLong, outboundDate, outboundDateEndRange, returnDate, returnDateEndRange, tripLength, price) => {
+export const emissionsFetch = async (
+  id,
+  latLong,
+  outboundDate,
+  outboundDateEndRange,
+  returnDate,
+  returnDateEndRange,
+  tripLength,
+  price
+) => {
   const baseUrl = process.env.NEXT_PUBLIC_API_URL;
 
   revalidateTag('emissions'); // This is used to trigger a re-fetching of data. Should trigger this only if request body has changed
@@ -138,7 +151,7 @@ export const emissionsFetch = async (latLong, outboundDate, outboundDateEndRange
   try {
     const response = await fetch(query_url, {
       method: 'POST',
-      body: JSON.stringify({ sortedDestinations, rawEmissions }),
+      body: JSON.stringify({ id, sortedDestinations, rawEmissions }),
       headers: { 'Content-Type': 'application/json' },
       next: { tags: ['emissions'] },
     });
@@ -159,3 +172,65 @@ export const emissionsFetch = async (latLong, outboundDate, outboundDateEndRange
   // Test error throw to stop action
   // throw new emissionsError();
 };
+
+// async function OLDfetchResults() {
+//   // Consider launching this whole process as a server action?
+
+//   // const router = useRouter();
+
+//   // const formResults = await JSON.parse(cookies().get('formResults')?.value);
+//   const formResults = getCookies('formResults');
+//   const { location, outboundDate, outboundDateEndRange, returnDate, returnDateEndRange, tripLength, latLong, price } = await formResults;
+//   const routeResults = await emissionsFetch(latLong, outboundDate, outboundDateEndRange, returnDate, returnDateEndRange, tripLength, price);
+//   const sortedResults = Object.fromEntries(
+//     Object.entries(routeResults).sort((a, b) => getFirstTripEmissions(a[1]) - getFirstTripEmissions(b[1]))
+//   );
+
+//   //   const destinations = Object.keys(sortedResults); // Array used for referring to for sort order - Is this needed?
+//   // Create cookies here, to be accessed by results page
+
+//   createRequestCookies('tripResults', sortedResults);
+//   console.log('cookies created');
+//   // router.push('/results');
+//   // redirect('/results');
+// }
+
+async function fetchResults(id) {
+  // const router = useRouter();
+
+  // const formResults = await JSON.parse(cookies().get('formResults')?.value);
+  const formResults = getCookies('formResults');
+  const { location, outboundDate, outboundDateEndRange, returnDate, returnDateEndRange, tripLength, latLong, price } = await formResults;
+  const routeResults = await emissionsFetch(
+    id,
+    latLong,
+    outboundDate,
+    outboundDateEndRange,
+    returnDate,
+    returnDateEndRange,
+    tripLength,
+    price
+  );
+  // const sortedResults = Object.fromEntries(
+  //   Object.entries(routeResults).sort((a, b) => getFirstTripEmissions(a[1]) - getFirstTripEmissions(b[1]))
+  // );
+
+  //   const destinations = Object.keys(sortedResults); // Array used for referring to for sort order - Is this needed?
+  // Create cookies here, to be accessed by results page
+
+  // router.push(`/results/${id}`);
+  redirect(`/results/${id}`);
+}
+
+async function page({ params }) {
+  fetchResults(params.id);
+
+  return (
+    <div>
+      <div>This is a middle-ground page, which will do all the fetching in the background, but render a static page</div>
+      <Link href={`/results/${params.id}`}>See Results</Link>
+    </div>
+  );
+}
+
+export default page;

@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { createRequestCookies } from './cookieBaker';
 import { useRouter } from 'next/navigation';
 import { ToolTip } from './tooltip';
+import { v4 } from 'uuid';
 
 const formatDate = (date, offset = 0) => {
   date = new Date(date.setDate(date.getDate() + offset));
@@ -20,6 +21,7 @@ const formatDate = (date, offset = 0) => {
 
 export function FlightForm() {
   const router = useRouter();
+  const baseUrl = process.env.NEXT_PUBLIC_API_URL;
   const [formData, setFormData] = useState({
     location: '',
     latLong: '',
@@ -98,12 +100,35 @@ export function FlightForm() {
   };
 
   const handleSubmit = async (form) => {
+    form.preventDefault();
+    const id = v4();
+    const request = await fetch(`${baseUrl}/saveRequest/${id}`, {
+      method: 'POST',
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Credentials': 'true',
+      },
+      body: JSON.stringify(formData),
+    });
+    // const response = fetch(`${baseUrl}/processRequest/${id}`, {
+    //   method: 'POST',
+    //   credentials: 'include',
+    //   headers: {
+    //     'Content-Type': 'application/json',
+    //     'Access-Control-Allow-Credentials': 'true',
+    //   },
+    // });
+    createRequestCookies('formResults', formData);
+
+    router.push(`/progress/${id}`);
+
     // submitData = formData;
     // if (submitData.outboundDateEndRange === '') submitData.outboundDateEndRange = formatDate(submitData.outboundDate, 1);
     // if (submitData.returnDateEndRange === '') submitData.returnDateEndRange = formatDate(submitData.returnDate, 1);
-    form.preventDefault();
-    createRequestCookies('formResults', formData);
-    router.push('/progress');
+
+    // createRequestCookies('formResults', formData);
+    // router.push('/progress');
   };
 
   const getUserLocation = () => {
@@ -319,7 +344,7 @@ export function FlightForm() {
         </div>
         <button
           type="submit"
-          disabled={true} // TEMPORARY ADDITION UNTIL RESULTS PAGE ROUTE IS SORTED
+          // disabled={true} // TEMPORARY ADDITION UNTIL RESULTS PAGE ROUTE IS SORTED
           className="h-10 px-2 text-center rounded-md font-semibold bg-blue-400 text-black hover:bg-blue-500 active:scale-95"
         >
           Let&apos;s Fly!

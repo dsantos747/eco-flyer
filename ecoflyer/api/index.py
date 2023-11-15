@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, request, redirect
+from flask import Flask, jsonify, request, redirect, make_response
 from flask_cors import CORS
 from dotenv import load_dotenv
 import os
@@ -10,7 +10,6 @@ import copy
 import cProfile
 import pstats
 import redis
-import uuid
 
 # def normalise_date(ugly_date):
 #     return datetime.strptime(ugly_date, "%Y-%m-%d").strftime("%d/%m/%Y")
@@ -408,8 +407,15 @@ with open(os.path.join(current_dir, "data", "airports.json"), "r") as json_file:
 
 # App instance
 app = Flask(__name__)
-CORS(app)
-redis_client = redis.StrictRedis(host="localhost", port=6379, db=0)
+CORS(app, supports_credentials=True)
+redis_client = redis.Redis(
+    host="redis-13815.c304.europe-west1-2.gce.cloud.redislabs.com",
+    port=13815,
+    db=0,
+    password=os.getenv("DB_PASS"),
+)
+
+
 profile = cProfile.Profile()
 
 
@@ -427,13 +433,22 @@ def save_request(id):
     return jsonify({"Message": "Request added to Redis successfully"})
 
 
+@app.route("/getRequest/<string:id>", methods=["GET"])
+def get_request(id):
+    data = redis_client.get(f"response_{id}")
+    if data is not None:
+        return jsonify({"data": data.decode("utf-8")})
+    else:
+        return jsonify({"error": "Response ID not found"}), 404
+
+
 #
-@app.route("/processRequest/<string:id", methods=["POST"])
+@app.route("/processRequest/<string:id>", methods=["POST"])
 def process_request(id):
     request_id = f"request_{id}"
     data = json.loads(redis_client.get(request_id))
-    user_location = [float(data["lat"]), float(data["long"])]
-    trip_length = data["len"]
+    user_location = [float(data["latLong"]["lat"]), float(data["latLong"]["long"])]
+    trip_length = data["tripLength"]
     radius_range = (
         [1500, 0]
         if trip_length == "trip-short"
@@ -465,7 +480,13 @@ def process_request(id):
 
     redis_client.set(f"response_{id}", json.dumps(sorted_result))
 
-    callback_url = f"/results/{id}"
+    # callback_url = f"/results/{id}" # This needs to have the main page base url
+    callback_url = f"http://localhost:3000/results"
+    # response = make_response(redirect(callback_url, code=307))
+    # response.headers.add("Access-Control-Allow-Origin", "http://localhost:3000")
+    # response.headers.add("Access-Control-Allow-Credentials", "true")
+
+    # return response
     return redirect(callback_url, code=307)
 
 
@@ -556,6 +577,7 @@ def results_emissions():
 @app.route("/api/results/sort", methods=["POST"])
 def results_sort():
     data = request.json
+    id = data["id"]
     # PROFILING
     # profile.enable()
     processed_data_with_emissions = new_emissions_parse(
@@ -573,7 +595,9 @@ def results_sort():
     #     json.dump(processed_data_with_emissions, file, indent=2)
     # END PROFILING
     sorted_result = destinations_sort(processed_data_with_emissions)
-    return jsonify(sorted_result)
+    redis_client.set(f"response_{id}", json.dumps(sorted_result))
+    print("backend complete")
+    return jsonify({"Message": "Response added to Redis successfully"})
 
 
 # Initialise app
