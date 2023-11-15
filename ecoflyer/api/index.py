@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, redirect
 from flask_cors import CORS
 from dotenv import load_dotenv
 import os
@@ -9,7 +9,8 @@ from datetime import datetime
 import copy
 import cProfile
 import pstats
-
+import redis
+import uuid
 
 # def normalise_date(ugly_date):
 #     return datetime.strptime(ugly_date, "%Y-%m-%d").strftime("%d/%m/%Y")
@@ -408,8 +409,7 @@ with open(os.path.join(current_dir, "data", "airports.json"), "r") as json_file:
 # App instance
 app = Flask(__name__)
 CORS(app)
-
-# Profiling instance
+redis_client = redis.StrictRedis(host="localhost", port=6379, db=0)
 profile = cProfile.Profile()
 
 
@@ -417,6 +417,85 @@ profile = cProfile.Profile()
 @app.route("/api/ping", methods=["GET"])
 def ping():
     return "<p>I am awake!<p>"
+
+
+# Receive request data, add to Redis, associated to requestID
+@app.route("/saveRequest/<string:id>", methods=["POST"])
+def save_request(id):
+    form_data = request.json
+    redis_client.set(f"request_{id}", json.dumps(form_data))
+    return jsonify({"Message": "Request added to Redis successfully"})
+
+
+#
+@app.route("/processRequest/<string:id", methods=["POST"])
+def process_request(id):
+    request_id = f"request_{id}"
+    data = json.loads(redis_client.get(request_id))
+    user_location = [float(data["lat"]), float(data["long"])]
+    trip_length = data["len"]
+    radius_range = (
+        [1500, 0]
+        if trip_length == "trip-short"
+        else [4000, 1500]
+        if trip_length == "trip-medium"
+        else [15000, 4000]
+    )
+    origin_airports = get_airport_list(*user_location, 100)
+    destination_airports = get_airport_list(*user_location, *radius_range)
+    # Tequila step
+    tequila_result = tequila_query(
+        origin_airports,
+        destination_airports,
+        data["outboundDate"],
+        data["returnDate"],
+        data["outboundDateEndRange"],
+        data["returnDateEndRange"],
+        data["price"],
+    )
+    # Tequila sort step
+    processed_data = tequila_parse(tequila_result)
+    # Emissions step
+    tim_processed_data = emissions_flights_list(processed_data)
+    emissions_results = emissions_fetch(tim_processed_data)
+    processed_data_with_emissions = new_emissions_parse(
+        processed_data, emissions_results
+    )
+    sorted_result = destinations_sort(processed_data_with_emissions)
+
+    redis_client.set(f"response_{id}", json.dumps(sorted_result))
+
+    callback_url = f"/results/{id}"
+    return redirect(callback_url, code=307)
+
+
+# # Form submission endpoint
+# @app.route("/api/submitForm", methods=["POST"])
+# def submit_form():
+#     form_data = request.json
+#     request_id = str(uuid.uuid4())
+#     redis_key = f"request:{request_id}"
+#     redis_client.set(
+#         redis_key, json.dumps(form_data)
+#     )  # This line should update redis entry with request
+
+#     #### INITIATE ALL FETCHING PROCESS HERE
+
+#     # return jsonify({"id": request_id})  # This returns the request ID to the next js app
+
+#     callback_url = form_data["callbackUrl"]
+#     return redirect(callback_url, code=307)
+
+
+# #
+# @app.route("/backend-complete/<string:unique_id>", methods=["POST"])
+# def backend_complete(unique_id):
+#     response_data = request.json
+#     redis_key = f"request:{unique_id}"
+#     redis_client.set(
+#         redis_key, json.dumps(response_data)
+#     )  # This line should update redis entry with response
+#     return jsonify({"message": "Backend process complete"})
 
 
 # Get origin and destination airport lists
