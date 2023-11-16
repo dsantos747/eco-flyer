@@ -54,7 +54,7 @@ export const emissionsFetch = async (
       const data = await response.json();
       originAirports = data.origin_airports;
       destinationAirports = data.destination_airports;
-      console.log('airports fetched');
+      // console.log('airports fetched');
     } else {
       console.error('Error: response not Ok', response.status, response.statusText);
       throw new emissionsError();
@@ -92,7 +92,7 @@ export const emissionsFetch = async (
         throw new emissionsError();
       } else {
         rawDestinations = data;
-        console.log('raw tequila fetched');
+        // console.log('raw tequila fetched');
       }
     } else {
       console.error('Error: response not Ok', response.status, response.statusText);
@@ -116,7 +116,7 @@ export const emissionsFetch = async (
     if (response.ok) {
       const data = await response.json();
       sortedDestinations = data;
-      console.log('sorted tequila fetched');
+      // console.log('sorted tequila fetched');
     } else {
       console.error('Error: response not Ok', response.status, response.statusText);
       throw new emissionsError();
@@ -138,7 +138,7 @@ export const emissionsFetch = async (
     if (response.ok) {
       const data = await response.json();
       rawEmissions = data;
-      console.log('emissions fetched');
+      // console.log('emissions fetched');
     } else {
       console.error('Error: response not Ok', response.status, response.statusText);
       throw new emissionsError();
@@ -160,7 +160,7 @@ export const emissionsFetch = async (
     if (response.ok) {
       const data = await response.json();
       parsedResults = data;
-      console.log('sorted results fetched');
+      // console.log('sorted results fetched');
     } else {
       console.error('Error: response not Ok', response.status, response.statusText);
       throw new emissionsError();
@@ -217,6 +217,7 @@ async function fetchResults(id) {
     data['tripLength'],
     data['price']
   );
+  console.log(routeResults.Message);
 
   // const sortedResults = Object.fromEntries(
   //   Object.entries(routeResults).sort((a, b) => getFirstTripEmissions(a[1]) - getFirstTripEmissions(b[1]))
