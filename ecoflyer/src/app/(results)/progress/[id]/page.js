@@ -8,6 +8,8 @@ import { createRequestCookies, getCookies } from '../../../components/cookieBake
 // import { emissionsFetch } from '@/app/components/resultsFetch';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { getRedis } from '@/app/actions/redisActions';
+// import { redisClient } from '@/lib/db';
 
 function getFirstTripEmissions(destination) {
   for (const option in destination) {
@@ -196,30 +198,36 @@ export const emissionsFetch = async (
 // }
 
 async function fetchResults(id) {
-  // const router = useRouter();
+  console.log(id);
+  const request = await getRedis('request', id);
+  // console.log(request === null ? 'Key not found' : request);
+  const data = await JSON.parse(request);
+  // console.log(data['latLong']['lat']);
 
   // const formResults = await JSON.parse(cookies().get('formResults')?.value);
-  const formResults = getCookies('formResults');
-  const { location, outboundDate, outboundDateEndRange, returnDate, returnDateEndRange, tripLength, latLong, price } = await formResults;
+  // const formResults = getCookies('formResults');
+  // const { location, outboundDate, outboundDateEndRange, returnDate, returnDateEndRange, tripLength, latLong, price } = await request;
   const routeResults = await emissionsFetch(
     id,
-    latLong,
-    outboundDate,
-    outboundDateEndRange,
-    returnDate,
-    returnDateEndRange,
-    tripLength,
-    price
+    data['latLong'],
+    data['outboundDate'],
+    data['outboundDateEndRange'],
+    data['returnDate'],
+    data['returnDateEndRange'],
+    data['tripLength'],
+    data['price']
   );
+
   // const sortedResults = Object.fromEntries(
   //   Object.entries(routeResults).sort((a, b) => getFirstTripEmissions(a[1]) - getFirstTripEmissions(b[1]))
   // );
 
   //   const destinations = Object.keys(sortedResults); // Array used for referring to for sort order - Is this needed?
-  // Create cookies here, to be accessed by results page
+
+  // const router = useRouter();
 
   // router.push(`/results/${id}`);
-  redirect(`/results/${id}`);
+  // redirect(`/results/${id}`);
 }
 
 async function page({ params }) {
@@ -229,6 +237,7 @@ async function page({ params }) {
     <div>
       <div>This is a middle-ground page, which will do all the fetching in the background, but render a static page</div>
       <Link href={`/results/${params.id}`}>See Results</Link>
+      {/* <div>{request}</div> */}
     </div>
   );
 }

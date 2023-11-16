@@ -4,6 +4,7 @@ import { TripCard } from '../../../components/tripCard.js';
 import { cookies } from 'next/headers';
 import { Suspense } from 'react';
 import { ResultsFetch } from '../../../components/resultsFetch.js';
+import { getRedis } from '@/app/actions/redisActions.js';
 
 function getFirstTripEmissions(destination) {
   for (const option in destination) {
@@ -174,23 +175,28 @@ async function fetchTrips() {
 async function page({ params }) {
   // const response = await JSON.parse(cookies().get('tripResults')?.value);
   // console.log(response);
-  const baseUrl = process.env.NEXT_PUBLIC_API_URL;
-  const data = await fetch(`${baseUrl}/getRequest/${params.id}`, {
-    method: 'GET',
-    // credentials: 'include',
-    headers: {
-      'Content-Type': 'application/json',
-      'Access-Control-Allow-Credentials': 'true',
-    },
-  });
-  const route_object = await data.json();
-  const route_results = JSON.parse(route_object.data);
+
+  // const baseUrl = process.env.NEXT_PUBLIC_API_URL;
+  // const data = await fetch(`${baseUrl}/getResults/${params.id}`, {
+  //   method: 'GET',
+  //   // credentials: 'include',
+  //   headers: {
+  //     'Content-Type': 'application/json',
+  //     'Access-Control-Allow-Credentials': 'true',
+  //   },
+  // });
+
+  const results = await getRedis('response', params.id);
+  const route_results = JSON.parse(results);
+
+  // const route_object = await data.json();
+  // const route_results = JSON.parse(route_object.data);
 
   const sorted_result = Object.fromEntries(
     Object.entries(route_results).sort((a, b) => getFirstTripEmissions(a[1]) - getFirstTripEmissions(b[1]))
   );
   const destinations = Object.keys(sorted_result); // Array used for referring to for sort order
-  // console.log(route_results);
+
   return (
     <div>
       {/* <h1 className="text-4xl">This is some test text, to verify if Vercel issues are caused by await on emissionsFetch</h1> */}

@@ -2,9 +2,10 @@
 
 import { useState, useEffect } from 'react';
 import { createRequestCookies } from './cookieBaker';
-import { useRouter } from 'next/navigation';
+import { redirect, useRouter } from 'next/navigation';
 import { ToolTip } from './tooltip';
 import { v4 } from 'uuid';
+import { createRedis } from '../actions/redisActions';
 
 const formatDate = (date, offset = 0) => {
   date = new Date(date.setDate(date.getDate() + offset));
@@ -101,16 +102,21 @@ export function FlightForm() {
 
   const handleSubmit = async (form) => {
     form.preventDefault();
-    const id = v4();
-    const request = await fetch(`${baseUrl}/saveRequest/${id}`, {
-      method: 'POST',
-      credentials: 'include',
-      headers: {
-        'Content-Type': 'application/json',
-        'Access-Control-Allow-Credentials': 'true',
-      },
-      body: JSON.stringify(formData),
-    });
+    // const id = v4();
+    // const requestData = JSON.stringify(formData);
+    createRedis(formData);
+    // const result = await createRedis(formData);
+    // const id = '9';
+
+    // const request = await fetch(`${baseUrl}/saveRequest/${id}`, {
+    //   method: 'POST',
+    //   credentials: 'include',
+    //   headers: {
+    //     'Content-Type': 'application/json',
+    //     'Access-Control-Allow-Credentials': 'true',
+    //   },
+    //   body: JSON.stringify(formData),
+    // });
     // const response = fetch(`${baseUrl}/processRequest/${id}`, {
     //   method: 'POST',
     //   credentials: 'include',
@@ -119,9 +125,10 @@ export function FlightForm() {
     //     'Access-Control-Allow-Credentials': 'true',
     //   },
     // });
-    createRequestCookies('formResults', formData);
+    // createRequestCookies('formResults', formData);
 
-    router.push(`/progress/${id}`);
+    // redirect(`/progress/${id}`);
+    // router.push(`/progress/${id}`);
 
     // submitData = formData;
     // if (submitData.outboundDateEndRange === '') submitData.outboundDateEndRange = formatDate(submitData.outboundDate, 1);

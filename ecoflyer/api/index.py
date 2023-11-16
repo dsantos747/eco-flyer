@@ -409,10 +409,10 @@ with open(os.path.join(current_dir, "data", "airports.json"), "r") as json_file:
 app = Flask(__name__)
 CORS(app, supports_credentials=True)
 redis_client = redis.Redis(
-    host="redis-13815.c304.europe-west1-2.gce.cloud.redislabs.com",
-    port=13815,
+    host=os.getenv("REDIS_HOST"),
+    port=os.getenv("REDIS_PORT"),
     db=0,
-    password=os.getenv("DB_PASS"),
+    password=os.getenv("REDIS_PASS"),
 )
 
 
@@ -435,6 +435,15 @@ def save_request(id):
 
 @app.route("/getRequest/<string:id>", methods=["GET"])
 def get_request(id):
+    data = redis_client.get(f"request_{id}")
+    if data is not None:
+        return jsonify({"data": data.decode("utf-8")})
+    else:
+        return jsonify({"error": "Request ID not found"}), 404
+
+
+@app.route("/getResults/<string:id>", methods=["GET"])
+def get_results(id):
     data = redis_client.get(f"response_{id}")
     if data is not None:
         return jsonify({"data": data.decode("utf-8")})
