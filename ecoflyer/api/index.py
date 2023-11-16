@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, redirect, make_response
 from flask_cors import CORS
 from dotenv import load_dotenv
 import os
@@ -9,7 +9,8 @@ from datetime import datetime
 import copy
 import cProfile
 import pstats
-
+import redis
+import threading
 
 # def normalise_date(ugly_date):
 #     return datetime.strptime(ugly_date, "%Y-%m-%d").strftime("%d/%m/%Y")
@@ -191,9 +192,6 @@ def emissions_parse(flights_dict, emissions_results):
                 emissions = emissions_results[emissions_index]
                 emissions_index += 1
                 if emissions == 0:
-                    # print(
-                    #     f"no emissions data for flight to {flights_dict[destination][option]['flights'][0][outbound_flight]['flyTo']}"
-                    # )
                     no_emissions += 1
                     remove_option = True
                     break
@@ -205,7 +203,6 @@ def emissions_parse(flights_dict, emissions_results):
 
             if remove_option:
                 del new_flights_dict[destination][option]
-                # print(f"removed trip to {destination}")
                 continue
 
             return_emissions = 0
@@ -213,9 +210,6 @@ def emissions_parse(flights_dict, emissions_results):
                 emissions = emissions_results[emissions_index]
                 emissions_index += 1
                 if emissions == 0:
-                    # print(
-                    #     f"no emissions data for flight to {flights_dict[destination][option]['flights'][1][return_flight]['flyTo']}"
-                    # )
                     no_emissions += 1
                     remove_option = True
                     break
@@ -227,7 +221,6 @@ def emissions_parse(flights_dict, emissions_results):
 
             if remove_option:
                 del new_flights_dict[destination][option]
-                # print(f"removed trip to {destination}")
                 continue
 
             total_emissions = outbound_emissions + return_emissions
@@ -235,7 +228,6 @@ def emissions_parse(flights_dict, emissions_results):
 
         # If destination array is now empty, delete it too (sad)
         if not new_flights_dict[destination]:
-            # print(f"removed {destination} as a destination")
             del new_flights_dict[destination]
             removed_destinations += 1
 
@@ -390,6 +382,45 @@ def unsplash_fetch(query):
     return img_url_resized
 
 
+def generate_results(id, data):
+    print(f"started task {id}")
+    # request_id = f"request_{id}"
+    # data = json.loads(redis_client.get(request_id))
+    user_location = [float(data["latLong"]["lat"]), float(data["latLong"]["long"])]
+    trip_length = data["tripLength"]
+    radius_range = (
+        [1500, 0]
+        if trip_length == "trip-short"
+        else [4000, 1500]
+        if trip_length == "trip-medium"
+        else [15000, 4000]
+    )
+    origin_airports = get_airport_list(*user_location, 100)
+    destination_airports = get_airport_list(*user_location, *radius_range)
+    # Tequila step
+    tequila_result = tequila_query(
+        origin_airports,
+        destination_airports,
+        data["outboundDate"],
+        data["returnDate"],
+        data["outboundDateEndRange"],
+        data["returnDateEndRange"],
+        data["price"],
+    )
+    # Tequila sort step
+    processed_data = tequila_parse(tequila_result)
+    # Emissions step
+    tim_processed_data = emissions_flights_list(processed_data)
+    emissions_results = emissions_fetch(tim_processed_data)
+    processed_data_with_emissions = new_emissions_parse(
+        processed_data, emissions_results
+    )
+    sorted_result = destinations_sort(processed_data_with_emissions)
+    print("backend completed")
+    redis_client.set(f"response_{id}", json.dumps(sorted_result))
+    print("redis updated")
+
+
 # Get API key from environment variables
 env_path = os.path.join(os.path.dirname(__file__), "..", ".env.local")
 load_dotenv(dotenv_path=env_path)
@@ -407,9 +438,15 @@ with open(os.path.join(current_dir, "data", "airports.json"), "r") as json_file:
 
 # App instance
 app = Flask(__name__)
-CORS(app)
+CORS(app, supports_credentials=True)
+redis_client = redis.Redis(
+    host=os.getenv("REDIS_HOST"),
+    port=os.getenv("REDIS_PORT"),
+    db=0,
+    password=os.getenv("REDIS_PASS"),
+)
 
-# Profiling instance
+
 profile = cProfile.Profile()
 
 
@@ -417,6 +454,122 @@ profile = cProfile.Profile()
 @app.route("/api/ping", methods=["GET"])
 def ping():
     return "<p>I am awake!<p>"
+
+
+# Receive request data, add to Redis, associated to requestID
+@app.route("/saveRequest/<string:id>", methods=["POST"])
+def save_request(id):
+    form_data = request.json
+    redis_client.set(f"request_{id}", json.dumps(form_data))
+    return jsonify({"Message": "Request added to Redis successfully"})
+
+
+@app.route("/getRequest/<string:id>", methods=["GET"])
+def get_request(id):
+    data = redis_client.get(f"request_{id}")
+    if data is not None:
+        return jsonify({"data": data.decode("utf-8")})
+    else:
+        return jsonify({"error": "Request ID not found"}), 404
+
+
+@app.route("/getResults/<string:id>", methods=["GET"])
+def get_results(id):
+    data = redis_client.get(f"response_{id}")
+    if data is not None:
+        return jsonify({"data": data.decode("utf-8")})
+    else:
+        return jsonify({"error": "Response ID not found"}), 404
+
+
+@app.route("/startProcess/<string:id>", methods=["GET"])
+def start_process(id):
+    data = redis_client.get(f"request_{id}")
+    # json.loads(data)
+    if data is not None:
+        thread = threading.Thread(target=generate_results, args=(id, json.loads(data)))
+        thread.start()
+
+        return jsonify("Request received")
+    else:
+        return jsonify({"error": "Request ID not found"}), 404
+
+
+#
+@app.route("/processRequest/<string:id>", methods=["POST"])
+def process_request(id):
+    request_id = f"request_{id}"
+    data = json.loads(redis_client.get(request_id))
+    user_location = [float(data["latLong"]["lat"]), float(data["latLong"]["long"])]
+    trip_length = data["tripLength"]
+    radius_range = (
+        [1500, 0]
+        if trip_length == "trip-short"
+        else [4000, 1500]
+        if trip_length == "trip-medium"
+        else [15000, 4000]
+    )
+    origin_airports = get_airport_list(*user_location, 100)
+    destination_airports = get_airport_list(*user_location, *radius_range)
+    # Tequila step
+    tequila_result = tequila_query(
+        origin_airports,
+        destination_airports,
+        data["outboundDate"],
+        data["returnDate"],
+        data["outboundDateEndRange"],
+        data["returnDateEndRange"],
+        data["price"],
+    )
+    # Tequila sort step
+    processed_data = tequila_parse(tequila_result)
+    # Emissions step
+    tim_processed_data = emissions_flights_list(processed_data)
+    emissions_results = emissions_fetch(tim_processed_data)
+    processed_data_with_emissions = new_emissions_parse(
+        processed_data, emissions_results
+    )
+    sorted_result = destinations_sort(processed_data_with_emissions)
+
+    redis_client.set(f"response_{id}", json.dumps(sorted_result))
+
+    # callback_url = f"/results/{id}" # This needs to have the main page base url
+    callback_url = f"http://localhost:3000/results"
+    # response = make_response(redirect(callback_url, code=307))
+    # response.headers.add("Access-Control-Allow-Origin", "http://localhost:3000")
+    # response.headers.add("Access-Control-Allow-Credentials", "true")
+
+    # return response
+    return redirect(callback_url, code=307)
+
+
+# # Form submission endpoint
+# @app.route("/api/submitForm", methods=["POST"])
+# def submit_form():
+#     form_data = request.json
+#     request_id = str(uuid.uuid4())
+#     redis_key = f"request:{request_id}"
+#     redis_client.set(
+#         redis_key, json.dumps(form_data)
+#     )  # This line should update redis entry with request
+
+#     #### INITIATE ALL FETCHING PROCESS HERE
+
+#     # return jsonify({"id": request_id})  # This returns the request ID to the next js app
+
+#     callback_url = form_data["callbackUrl"]
+#     return redirect(callback_url, code=307)
+
+
+# #
+# @app.route("/backend-complete/<string:unique_id>", methods=["POST"])
+# def backend_complete(unique_id):
+#     response_data = request.json
+#     redis_key = f"request:{unique_id}"
+#     redis_client.set(
+#         redis_key, json.dumps(response_data)
+#     )  # This line should update redis entry with response
+#     return jsonify({"message": "Backend process complete"})
 
 
 # Get origin and destination airport lists
@@ -477,10 +630,11 @@ def results_emissions():
 @app.route("/api/results/sort", methods=["POST"])
 def results_sort():
     data = request.json
+    id = data["id"]
     # PROFILING
     # profile.enable()
     processed_data_with_emissions = new_emissions_parse(
-        data["sortedDestinations"], data["rawEmissions"]
+        data["sortedDestinations"], data["tripEmissions"]
     )
     # profile.disable()
     # profile.dump_stats("profile_results_emissions_parse")
@@ -494,7 +648,9 @@ def results_sort():
     #     json.dump(processed_data_with_emissions, file, indent=2)
     # END PROFILING
     sorted_result = destinations_sort(processed_data_with_emissions)
-    return jsonify(sorted_result)
+    redis_client.set(f"response_{id}", json.dumps(sorted_result))
+    print("backend complete")
+    return jsonify({"Message": "Response added to Redis successfully"})
 
 
 # Initialise app

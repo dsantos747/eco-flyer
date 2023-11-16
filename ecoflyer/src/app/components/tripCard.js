@@ -1,10 +1,10 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { ActionButton } from "./actionButton.js";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faChevronRight } from "@fortawesome/free-solid-svg-icons";
-import Image from "next/image";
+import { useState } from 'react';
+import { ActionButton } from './actionButton.js';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faChevronRight } from '@fortawesome/free-solid-svg-icons';
+import Image from 'next/image';
 
 const formatDate = (date) => {
   const year = date.slice(0, 4);
@@ -35,8 +35,8 @@ export function TripCard({ emissions, destinations, option }) {
   };
 
   const currentTrip = emissions[destinations[tripDestination]][`option_${tripOption}`];
-  const firstOutbound = currentTrip.flights[0]["step_1"];
-  const firstReturn = currentTrip.flights[currentTrip.flights.length - 1]["step_1"];
+  const firstOutbound = currentTrip.flights[0]['step_1'];
+  const firstReturn = currentTrip.flights[currentTrip.flights.length - 1]['step_1'];
   return (
     <div className="">
       {/* flex justify-center items-center gap-3 */}
@@ -57,7 +57,7 @@ export function TripCard({ emissions, destinations, option }) {
               onChange={handleDestinationChange}
               direction={-1}
               className={
-                "left-2 top-1/2 absolute md:-left-20 lg:-left-28 bg-opacity-70 md:bg-opacity-100 h-16 w-16 lg:h-20 lg:w-20 flex items-center justify-center rounded-full active:scale-95 bg-white text-blue-900 hover:text-sky-500"
+                'left-2 top-1/2 absolute md:-left-20 lg:-left-28 bg-opacity-70 md:bg-opacity-100 h-16 w-16 lg:h-20 lg:w-20 flex items-center justify-center rounded-full active:scale-95 bg-white text-blue-900 hover:text-sky-500'
               }
             >
               <FontAwesomeIcon icon={faChevronRight} className="text-xl md:text-xl lg:text-2xl  rotate-180 " />
@@ -66,7 +66,7 @@ export function TripCard({ emissions, destinations, option }) {
               onChange={handleDestinationChange}
               direction={1}
               className={
-                "right-2 top-1/2 absolute md:-right-20 lg:-right-28 bg-opacity-70 md:bg-opacity-100 h-16 w-16 lg:h-20 lg:w-20 flex items-center justify-center rounded-full active:scale-95 bg-white text-blue-900 hover:text-sky-500"
+                'right-2 top-1/2 absolute md:-right-20 lg:-right-28 bg-opacity-70 md:bg-opacity-100 h-16 w-16 lg:h-20 lg:w-20 flex items-center justify-center rounded-full active:scale-95 bg-white text-blue-900 hover:text-sky-500'
               }
             >
               <FontAwesomeIcon icon={faChevronRight} className="text-xl md:text-xl lg:text-2xl" />
@@ -88,7 +88,7 @@ export function TripCard({ emissions, destinations, option }) {
           <ActionButton
             onChange={handleOptionChange}
             direction={1}
-            className={"h-10 w-36 md:w-48 text-center rounded-md bg-white hover:bg-slate-300 active:scale-95"}
+            className={'h-10 w-36 md:w-48 text-center rounded-md bg-white hover:bg-slate-300 active:scale-95'}
           >
             Shuffle Flights
           </ActionButton>

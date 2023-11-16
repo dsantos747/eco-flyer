@@ -18,7 +18,7 @@ function normaliseDate(uglyDate) {
 }
 
 export const emissionsFetch = async (latLong, outboundDate, outboundDateEndRange, returnDate, returnDateEndRange, tripLength, price) => {
-  const baseUrl = process.env.API_URL;
+  const baseUrl = process.env.NEXT_PUBLIC_API_URL;
 
   revalidateTag('emissions'); // This is used to trigger a re-fetching of data. Should trigger this only if request body has changed
   // Maybe see if there's a way of checking a cookie's age?
