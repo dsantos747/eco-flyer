@@ -197,6 +197,86 @@ export const emissionsFetch = async (
 //   // redirect('/results');
 // }
 
+const airportsFetch = async (latLong, tripLength) => {
+  const baseUrl = process.env.NEXT_PUBLIC_API_URL;
+  let params = { lat: latLong.lat, long: latLong.long, len: tripLength };
+  let paramsURL = new URLSearchParams(params);
+  const query_url = `${baseUrl}/api/results/airports?${paramsURL.toString()}`;
+  const response = await fetch(query_url, {
+    next: { tags: ['emissions'] },
+  });
+  const data = await response.json();
+  return { 'origin': data.origin_airports, 'destination': data.destination_airports };
+};
+
+const tequilaFetch = async (
+  originAirports,
+  destinationAirports,
+  outboundDate,
+  outboundDateEndRange,
+  returnDate,
+  returnDateEndRange,
+  price
+) => {
+  const baseUrl = process.env.NEXT_PUBLIC_API_URL;
+  const query_url = `${baseUrl}/api/results/tequila`;
+  outboundDate = normaliseDate(outboundDate);
+  outboundDateEndRange = normaliseDate(outboundDateEndRange);
+  returnDate = normaliseDate(returnDate);
+  returnDateEndRange = normaliseDate(returnDateEndRange);
+  const response = await fetch(query_url, {
+    method: 'POST',
+    body: JSON.stringify({
+      originAirports,
+      destinationAirports,
+      outboundDate,
+      returnDate,
+      outboundDateEndRange,
+      returnDateEndRange,
+      price,
+    }),
+    headers: { 'Content-Type': 'application/json' },
+    next: { tags: ['emissions'] },
+  });
+  return await response.json();
+};
+
+const sortedTequilaFetch = async (rawTrips) => {
+  const baseUrl = process.env.NEXT_PUBLIC_API_URL;
+  const query_url = `${baseUrl}/api/results/tequilaSort`;
+  const response = await fetch(query_url, {
+    method: 'POST',
+    body: JSON.stringify(rawTrips),
+    headers: { 'Content-Type': 'application/json' },
+    next: { tags: ['emissions'] },
+  });
+  return await response.json();
+};
+
+const tripEmissionsFetch = async (sortedDestinations) => {
+  const baseUrl = process.env.NEXT_PUBLIC_API_URL;
+  const query_url = `${baseUrl}/api/results/emissions`;
+  const response = await fetch(query_url, {
+    method: 'POST',
+    body: JSON.stringify(sortedDestinations),
+    headers: { 'Content-Type': 'application/json' },
+    next: { tags: ['emissions'] },
+  });
+  return await response.json();
+};
+
+const sortedEmissionsFetch = async (id, sortedDestinations, tripEmissions) => {
+  const baseUrl = process.env.NEXT_PUBLIC_API_URL;
+  const query_url = `${baseUrl}/api/results/sort`;
+  const response = await fetch(query_url, {
+    method: 'POST',
+    body: JSON.stringify({ id, sortedDestinations, tripEmissions }),
+    headers: { 'Content-Type': 'application/json' },
+    next: { tags: ['emissions'] },
+  });
+  return await response.json();
+};
+
 async function fetchResults(id) {
   console.log(id);
   const request = await getRedis('request', id);
@@ -207,16 +287,43 @@ async function fetchResults(id) {
   // const formResults = await JSON.parse(cookies().get('formResults')?.value);
   // const formResults = getCookies('formResults');
   // const { location, outboundDate, outboundDateEndRange, returnDate, returnDateEndRange, tripLength, latLong, price } = await request;
-  const routeResults = await emissionsFetch(
-    id,
-    data['latLong'],
+
+  //////////////////////
+
+  // const routeResults = await emissionsFetch(
+  //   id,
+  //   data['latLong'],
+  //   data['outboundDate'],
+  //   data['outboundDateEndRange'],
+  //   data['returnDate'],
+  //   data['returnDateEndRange'],
+  //   data['tripLength'],
+  //   data['price']
+  // );
+
+  /////////////////////////////////
+
+  revalidateTag('emissions');
+
+  const airports = await airportsFetch(data['latLong'], data['tripLength']);
+  console.log('airports done');
+  const rawTrips = await tequilaFetch(
+    airports.origin,
+    airports.destination,
     data['outboundDate'],
     data['outboundDateEndRange'],
     data['returnDate'],
     data['returnDateEndRange'],
-    data['tripLength'],
     data['price']
   );
+  console.log('tequila done');
+  const sortedTequila = await sortedTequilaFetch(rawTrips);
+  console.log('sorting done');
+  const tripEmissions = await tripEmissionsFetch(sortedTequila);
+  console.log('emissions done');
+  const routeResults = await sortedEmissionsFetch(id, sortedTequila, tripEmissions);
+  ////////////////////////////
+
   console.log(routeResults.Message);
 
   // const sortedResults = Object.fromEntries(

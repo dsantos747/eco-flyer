@@ -191,9 +191,6 @@ def emissions_parse(flights_dict, emissions_results):
                 emissions = emissions_results[emissions_index]
                 emissions_index += 1
                 if emissions == 0:
-                    # print(
-                    #     f"no emissions data for flight to {flights_dict[destination][option]['flights'][0][outbound_flight]['flyTo']}"
-                    # )
                     no_emissions += 1
                     remove_option = True
                     break
@@ -205,7 +202,6 @@ def emissions_parse(flights_dict, emissions_results):
 
             if remove_option:
                 del new_flights_dict[destination][option]
-                # print(f"removed trip to {destination}")
                 continue
 
             return_emissions = 0
@@ -213,9 +209,6 @@ def emissions_parse(flights_dict, emissions_results):
                 emissions = emissions_results[emissions_index]
                 emissions_index += 1
                 if emissions == 0:
-                    # print(
-                    #     f"no emissions data for flight to {flights_dict[destination][option]['flights'][1][return_flight]['flyTo']}"
-                    # )
                     no_emissions += 1
                     remove_option = True
                     break
@@ -227,7 +220,6 @@ def emissions_parse(flights_dict, emissions_results):
 
             if remove_option:
                 del new_flights_dict[destination][option]
-                # print(f"removed trip to {destination}")
                 continue
 
             total_emissions = outbound_emissions + return_emissions
@@ -235,7 +227,6 @@ def emissions_parse(flights_dict, emissions_results):
 
         # If destination array is now empty, delete it too (sad)
         if not new_flights_dict[destination]:
-            # print(f"removed {destination} as a destination")
             del new_flights_dict[destination]
             removed_destinations += 1
 
@@ -590,7 +581,7 @@ def results_sort():
     # PROFILING
     # profile.enable()
     processed_data_with_emissions = new_emissions_parse(
-        data["sortedDestinations"], data["rawEmissions"]
+        data["sortedDestinations"], data["tripEmissions"]
     )
     # profile.disable()
     # profile.dump_stats("profile_results_emissions_parse")
