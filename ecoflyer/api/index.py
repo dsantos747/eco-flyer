@@ -10,6 +10,7 @@ import copy
 import cProfile
 import pstats
 import redis
+import threading
 
 # def normalise_date(ugly_date):
 #     return datetime.strptime(ugly_date, "%Y-%m-%d").strftime("%d/%m/%Y")
@@ -381,6 +382,45 @@ def unsplash_fetch(query):
     return img_url_resized
 
 
+def generate_results(id, data):
+    print(f"started task {id}")
+    # request_id = f"request_{id}"
+    # data = json.loads(redis_client.get(request_id))
+    user_location = [float(data["latLong"]["lat"]), float(data["latLong"]["long"])]
+    trip_length = data["tripLength"]
+    radius_range = (
+        [1500, 0]
+        if trip_length == "trip-short"
+        else [4000, 1500]
+        if trip_length == "trip-medium"
+        else [15000, 4000]
+    )
+    origin_airports = get_airport_list(*user_location, 100)
+    destination_airports = get_airport_list(*user_location, *radius_range)
+    # Tequila step
+    tequila_result = tequila_query(
+        origin_airports,
+        destination_airports,
+        data["outboundDate"],
+        data["returnDate"],
+        data["outboundDateEndRange"],
+        data["returnDateEndRange"],
+        data["price"],
+    )
+    # Tequila sort step
+    processed_data = tequila_parse(tequila_result)
+    # Emissions step
+    tim_processed_data = emissions_flights_list(processed_data)
+    emissions_results = emissions_fetch(tim_processed_data)
+    processed_data_with_emissions = new_emissions_parse(
+        processed_data, emissions_results
+    )
+    sorted_result = destinations_sort(processed_data_with_emissions)
+    print("backend completed")
+    redis_client.set(f"response_{id}", json.dumps(sorted_result))
+    print("redis updated")
+
+
 # Get API key from environment variables
 env_path = os.path.join(os.path.dirname(__file__), "..", ".env.local")
 load_dotenv(dotenv_path=env_path)
@@ -440,6 +480,19 @@ def get_results(id):
         return jsonify({"data": data.decode("utf-8")})
     else:
         return jsonify({"error": "Response ID not found"}), 404
+
+
+@app.route("/startProcess/<string:id>", methods=["GET"])
+def start_process(id):
+    data = redis_client.get(f"request_{id}")
+    # json.loads(data)
+    if data is not None:
+        thread = threading.Thread(target=generate_results, args=(id, json.loads(data)))
+        thread.start()
+
+        return jsonify("Request received")
+    else:
+        return jsonify({"error": "Request ID not found"}), 404
 
 
 #

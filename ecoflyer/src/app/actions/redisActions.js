@@ -26,7 +26,6 @@ export async function getRedis(type, id) {
 export async function checkRedis(type, id) {
   try {
     const data = await redisClient.exists(`${type}_${id}`);
-    console.log(data);
     return data;
   } catch (error) {
     console.log('error checking for key');

@@ -1,10 +1,12 @@
 'use client';
 import { useState, useEffect } from 'react';
 import { checkRedis } from '../actions/redisActions';
+import { useRouter } from 'next/navigation';
 
 export function StatusPoll({ taskID }) {
   //   const [taskID, setTaskId] = useState(taskID);
   const [taskStatus, setTaskStatus] = useState('Not ready');
+  const router = useRouter();
 
   useEffect(() => {
     const pollTaskStatus = async (taskID) => {
@@ -16,6 +18,7 @@ export function StatusPoll({ taskID }) {
             // console.log('response exists');
             clearInterval(intervalId);
             setTaskStatus('Task is now ready');
+            router.push(`/results/${taskID}`);
           }
           //   else {
           //     console.log(responseReady);
