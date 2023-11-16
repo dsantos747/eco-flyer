@@ -18,7 +18,18 @@ export async function getRedis(type, id) {
     const data = await redisClient.get(`${type}_${id}`);
     return data;
   } catch (error) {
-    console.log('error here');
+    console.log('error getting value');
+    return new Response('Requested data not found');
+  }
+}
+
+export async function checkRedis(type, id) {
+  try {
+    const data = await redisClient.exists(`${type}_${id}`);
+    console.log(data);
+    return data;
+  } catch (error) {
+    console.log('error checking for key');
     return new Response('Requested data not found');
   }
 }

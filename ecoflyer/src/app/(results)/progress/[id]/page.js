@@ -9,6 +9,7 @@ import { createRequestCookies, getCookies } from '../../../components/cookieBake
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { getRedis } from '@/app/actions/redisActions';
+import { StatusPoll } from '@/app/components/statusPolling';
 // import { redisClient } from '@/lib/db';
 
 function getFirstTripEmissions(destination) {
@@ -345,7 +346,7 @@ async function page({ params }) {
     <div>
       <div>This is a middle-ground page, which will do all the fetching in the background, but render a static page</div>
       <Link href={`/results/${params.id}`}>See Results</Link>
-      {/* <div>{request}</div> */}
+      <StatusPoll taskID={params.id}></StatusPoll>
     </div>
   );
 }
