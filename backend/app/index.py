@@ -430,10 +430,20 @@ TEQUILA_KEY = os.getenv("TEQUILA_API_KEY")
 UNSPLASH_ACCESS = os.getenv("UNSPLASH_ACCESS_KEY")
 UNSPLASH_SECRET_KEY = os.getenv("UNSPLASH_SECRET_KEY")
 
-current_dir = os.path.dirname(os.path.realpath(__file__))
+# current_dir = os.path.dirname(os.path.realpath(__file__))
+
+# # Load all airports
+# with open(os.path.join(current_dir, "data", "airports.json"), "r") as json_file:
+#     full_airports_list = json.load(json_file)
+
+if FLASK_ENV == "production":
+    data_path = os.path.join("./app", "data", "airports.json")
+else:
+    current_dir = os.path.dirname(os.path.realpath(__file__))
+    data_path = os.path.join(current_dir, "data", "airports.json")
 
 # Load all airports
-with open(os.path.join(current_dir, "data", "airports.json"), "r") as json_file:
+with open(data_path, "r") as json_file:
     full_airports_list = json.load(json_file)
 
 # App instance
