@@ -11,6 +11,8 @@ import Link from 'next/link';
 import { getRedis } from '@/app/actions/redisActions';
 import { StatusPoll } from '@/app/components/statusPolling';
 import { taskCreate } from '@/app/actions/taskCreate';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPlane } from '@fortawesome/free-solid-svg-icons';
 // import { redisClient } from '@/lib/db';
 
 function getFirstTripEmissions(destination) {
@@ -355,9 +357,20 @@ async function page({ params }) {
   fetchResults(params.id);
 
   return (
-    <div>
-      <div>This is a middle-ground page, which will do all the fetching in the background, but render a static page</div>
-      <Link href={`/results/${params.id}`}>See Results</Link>
+    <div className="flex flex-col gap-3 text-center mx-auto px-6">
+      <div>
+        <h3 className="text-lg">Please wait while we prepare your personalised travel suggestions.</h3>
+      </div>
+      <div className="flex flex-col gap-6 items-center animate-spin-slow">
+        <FontAwesomeIcon icon={faPlane} className="text-xl text-rose-200" />
+        <FontAwesomeIcon icon={faPlane} className="rotate-180 text-xl text-rose-200" />
+      </div>
+      <div>
+        <h3 className="text-md italic text-slate-600 pt-6">
+          Fact: Aviation accounts for 2.5% of global annual CO<sub>2</sub> emissions.
+        </h3>
+      </div>
+
       <StatusPoll taskID={params.id}></StatusPoll>
     </div>
   );
