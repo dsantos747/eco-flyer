@@ -463,6 +463,7 @@ profile = cProfile.Profile()
 # Server wakeup
 @app.route("/api/ping", methods=["GET"])
 def ping():
+    print("I am awake")
     return "<p>I am awake!<p>"
 
 
@@ -506,7 +507,7 @@ def start_process(id):
 
 
 #
-@app.route("/processRequest/<string:id>", methods=["POST"])
+@app.route("/processRequest/<string:id>", methods=["GET"])
 def process_request(id):
     request_id = f"request_{id}"
     data = json.loads(redis_client.get(request_id))
@@ -544,13 +545,13 @@ def process_request(id):
     redis_client.set(f"response_{id}", json.dumps(sorted_result))
 
     # callback_url = f"/results/{id}" # This needs to have the main page base url
-    callback_url = f"http://localhost:3000/results"
+    # callback_url = f"http://localhost:3000/results"
     # response = make_response(redirect(callback_url, code=307))
     # response.headers.add("Access-Control-Allow-Origin", "http://localhost:3000")
     # response.headers.add("Access-Control-Allow-Credentials", "true")
 
     # return response
-    return redirect(callback_url, code=307)
+    return jsonify("Processing complete")
 
 
 # # Form submission endpoint
@@ -666,6 +667,6 @@ def results_sort():
 # Initialise app
 if __name__ == "__main__":
     if FLASK_ENV == "production":
-        app.run()
+        app.run(host="0.0.0.0", port=int(os.environ.get("FLASK_RUN_PORT", 5000)))
     else:
         app.run(debug=True, port=8080)
