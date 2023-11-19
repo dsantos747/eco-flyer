@@ -21,5 +21,5 @@ airports = airports[["iata_code", "latitude_deg", "longitude_deg"]]
 
 airports_list = airports.values.tolist()
 
-with open("airports.json", "w") as json_file:
+with open("../app/data/airports.json", "w") as json_file:
     json.dump(airports_list, json_file)
