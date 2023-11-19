@@ -1,0 +1,14 @@
+# .dockerignore
+
+# Python virtual environment
+**/venv/
+
+# Editor-specific files
+.vscode/
+.idea/
+
+# Compiled Python files
+*.pyc
+
+# Temporary files
+__pycache__/
