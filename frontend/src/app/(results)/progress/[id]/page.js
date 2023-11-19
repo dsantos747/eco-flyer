@@ -10,6 +10,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { getRedis } from '@/app/actions/redisActions';
 import { StatusPoll } from '@/app/components/statusPolling';
+import { taskCreate } from '@/app/actions/taskCreate';
 // import { redisClient } from '@/lib/db';
 
 function getFirstTripEmissions(destination) {
@@ -326,13 +327,17 @@ async function fetchResults(id) {
   // const routeResults = await sortedEmissionsFetch(id, sortedTequila, tripEmissions);
   ////////////////////////////
 
-  const baseUrl = process.env.NEXT_PUBLIC_API_URL;
-  const query_url = `${baseUrl}/startProcess/${id.toString()}`;
-  const response = await fetch(query_url);
-  const responseMessage = await response.json();
-  console.log(responseMessage);
+  // const baseUrl = process.env.NEXT_PUBLIC_API_URL;
+  // const query_url = `${baseUrl}/processRequest/${id.toString()}`;
+  // const response = await fetch(query_url);
+  // const responseMessage = await response.json();
+  // console.log(responseMessage);
 
   /////////////////////
+
+  taskCreate(id);
+
+  ////////////////////
 
   // const sortedResults = Object.fromEntries(
   //   Object.entries(routeResults).sort((a, b) => getFirstTripEmissions(a[1]) - getFirstTripEmissions(b[1]))
