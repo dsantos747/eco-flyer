@@ -544,43 +544,50 @@ def process_request(id):
 
     redis_client.set(f"response_{id}", json.dumps(sorted_result))
 
-    # callback_url = f"/results/{id}" # This needs to have the main page base url
-    # callback_url = f"http://localhost:3000/results"
-    # response = make_response(redirect(callback_url, code=307))
-    # response.headers.add("Access-Control-Allow-Origin", "http://localhost:3000")
-    # response.headers.add("Access-Control-Allow-Credentials", "true")
-
-    # return response
     return jsonify("Processing complete")
 
 
-# # Form submission endpoint
-# @app.route("/api/submitForm", methods=["POST"])
-# def submit_form():
-#     form_data = request.json
-#     request_id = str(uuid.uuid4())
-#     redis_key = f"request:{request_id}"
-#     redis_client.set(
-#         redis_key, json.dumps(form_data)
-#     )  # This line should update redis entry with request
+#
+@app.route("/processPostRequest/<string:id>", methods=["POST"])
+def process_request(id):
+    request_data = request.json
 
-#     #### INITIATE ALL FETCHING PROCESS HERE
+    request_id = f"request_{id}"
+    data = json.loads(redis_client.get(request_id))
+    user_location = [float(data["latLong"]["lat"]), float(data["latLong"]["long"])]
+    trip_length = data["tripLength"]
+    radius_range = (
+        [1500, 0]
+        if trip_length == "trip-short"
+        else [4000, 1500]
+        if trip_length == "trip-medium"
+        else [15000, 4000]
+    )
+    origin_airports = get_airport_list(*user_location, 100)
+    destination_airports = get_airport_list(*user_location, *radius_range)
+    # Tequila step
+    tequila_result = tequila_query(
+        origin_airports,
+        destination_airports,
+        data["outboundDate"],
+        data["returnDate"],
+        data["outboundDateEndRange"],
+        data["returnDateEndRange"],
+        data["price"],
+    )
+    # Tequila sort step
+    processed_data = tequila_parse(tequila_result)
+    # Emissions step
+    tim_processed_data = emissions_flights_list(processed_data)
+    emissions_results = emissions_fetch(tim_processed_data)
+    processed_data_with_emissions = new_emissions_parse(
+        processed_data, emissions_results
+    )
+    sorted_result = destinations_sort(processed_data_with_emissions)
 
-#     # return jsonify({"id": request_id})  # This returns the request ID to the next js app
+    redis_client.set(f"response_{id}", json.dumps(sorted_result))
 
-#     callback_url = form_data["callbackUrl"]
-#     return redirect(callback_url, code=307)
-
-
-# #
-# @app.route("/backend-complete/<string:unique_id>", methods=["POST"])
-# def backend_complete(unique_id):
-#     response_data = request.json
-#     redis_key = f"request:{unique_id}"
-#     redis_client.set(
-#         redis_key, json.dumps(response_data)
-#     )  # This line should update redis entry with response
-#     return jsonify({"message": "Backend process complete"})
+    return jsonify("Processing complete")
 
 
 # Get origin and destination airport lists
