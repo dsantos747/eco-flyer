@@ -18,7 +18,9 @@
     "next": "^14.0.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-tooltip": "^5.22.0"
+    "react-tooltip": "^5.22.0",
+    "redis": "^4.6.10",
+    "uuid": "^9.0.1"
   },
   "devDependencies": {
     "autoprefixer": "^10.4.16",

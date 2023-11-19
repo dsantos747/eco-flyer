@@ -1,9 +1,10 @@
 import { revalidateTag } from 'next/cache';
 import { emissionsError } from '@/app/components/exceptions.js';
-import { TripCard } from '../../components/tripCard.js';
+import { TripCard } from '../../../components/tripCard.js';
 import { cookies } from 'next/headers';
 import { Suspense } from 'react';
-import { ResultsFetch } from '../../components/resultsFetch.js';
+import { ResultsFetch } from '../../../components/resultsFetch.js';
+import { getRedis } from '@/app/actions/redisActions.js';
 
 function getFirstTripEmissions(destination) {
   for (const option in destination) {
@@ -18,7 +19,7 @@ function normaliseDate(uglyDate) {
 }
 
 // export const emissionsFetch = async (latLong, outboundDate, outboundDateEndRange, returnDate, returnDateEndRange, tripLength, price) => {
-//   const baseUrl = process.env.API_URL;
+//   const baseUrl = process.env.NEXT_PUBLIC_API_URL;
 
 //   revalidateTag('emissions'); // This is used to trigger a re-fetching of data. Should trigger this only if request body has changed
 //   // Maybe see if there's a way of checking a cookie's age?
@@ -171,16 +172,37 @@ async function fetchTrips() {
   // const destinations = Object.keys(sorted_result); // Array used for referring to for sort order
 }
 
-async function page() {
-  const response = await JSON.parse(cookies().get('tripResults')?.value);
-  console.log(response);
+async function page({ params }) {
+  // const response = await JSON.parse(cookies().get('tripResults')?.value);
+  // console.log(response);
+
+  // const baseUrl = process.env.NEXT_PUBLIC_API_URL;
+  // const data = await fetch(`${baseUrl}/getResults/${params.id}`, {
+  //   method: 'GET',
+  //   // credentials: 'include',
+  //   headers: {
+  //     'Content-Type': 'application/json',
+  //     'Access-Control-Allow-Credentials': 'true',
+  //   },
+  // });
+
+  const results = await getRedis('response', params.id);
+  const route_results = JSON.parse(results);
+
+  // const route_object = await data.json();
+  // const route_results = JSON.parse(route_object.data);
+
+  const sorted_result = Object.fromEntries(
+    Object.entries(route_results).sort((a, b) => getFirstTripEmissions(a[1]) - getFirstTripEmissions(b[1]))
+  );
+  const destinations = Object.keys(sorted_result); // Array used for referring to for sort order
 
   return (
     <div>
       {/* <h1 className="text-4xl">This is some test text, to verify if Vercel issues are caused by await on emissionsFetch</h1> */}
       {/* <Suspense fallback={<p className="text-2xl">Loading results...</p>}> */}
-      {/* <TripCard emissions={route_results} destinations={destinations} option={1}></TripCard> */}
-      <div>Testing testing</div>
+      <TripCard emissions={route_results} destinations={destinations} option={1}></TripCard>
+      {/* <div>Testing testing</div> */}
       {/* </Suspense> */}
     </div>
   );
