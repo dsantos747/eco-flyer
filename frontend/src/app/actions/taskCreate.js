@@ -1,6 +1,6 @@
 'use server';
 
-const { CloudTasksClient } = require('@google-cloud/tasks');
+const { CloudTasksClient } = require('@google-cloud/tasks').v2;
 
 export const taskCreate = async (id) => {
   const keyfile = {
@@ -32,11 +32,7 @@ export const taskCreate = async (id) => {
   const task = {
     httpRequest: {
       httpMethod: 'GET',
-      url: `${baseUrl}/processRequest/${id.toString()}`, // Adjust the URL accordingly. ///////////////////////////////////
-      //   oidcToken: {
-      //     gcEmail,
-      //   },
-      //   url: `https://${location}-${project}.run.app/${baseUrl}/processRequest/${id.toString()}`, // Adjust the URL accordingly. ///////////////////////////////////
+      url: `${baseUrl}/processRequest/${id.toString()}`,
     },
   };
 
@@ -45,5 +41,5 @@ export const taskCreate = async (id) => {
   const [response] = await taskClient.createTask(request);
 
   console.log(`Created task ${response.name}`);
-  console.log(`Response: ${response}`);
+  console.log(`Response: ${JSON.stringify(response, null, 2)}`);
 };

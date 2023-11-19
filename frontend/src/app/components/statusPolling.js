@@ -42,8 +42,8 @@ export function StatusPoll({ taskID }) {
 
   return (
     <div>
-      <p>Task ID: {taskID}</p>
-      <p>Task Status: {taskStatus}</p>
+      {/* <p>Task ID: {taskID}</p>
+      <p>Task Status: {taskStatus}</p> */}
     </div>
   );
 }
