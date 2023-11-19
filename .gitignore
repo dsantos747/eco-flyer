@@ -198,3 +198,4 @@ next-env.d.ts
 
 # MY ADDITIONAL IGNORES
 .vscode
+Dockerfile
