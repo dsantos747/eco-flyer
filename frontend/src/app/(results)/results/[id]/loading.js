@@ -1,8 +1,3 @@
-<<<<<<<< HEAD:ecoflyer/src/app/(results)/results/[id]/loading.js
-import { HeaderSmall } from '../../../components/header';
-import { VapourTrails } from '../../../components/vapourTrails';
-========
->>>>>>>> dev:frontend/src/app/(results)/results/[id]/loading.js
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlane } from '@fortawesome/free-solid-svg-icons';
 
