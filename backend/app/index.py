@@ -509,7 +509,7 @@ def start_process(id):
 
 #
 @app.route("/processRequest/<string:id>", methods=["GET"])
-def process_request(id):
+def process_request_post(id):
     request_id = f"request_{id}"
     data = json.loads(redis_client.get(request_id))
     user_location = [float(data["latLong"]["lat"]), float(data["latLong"]["long"])]
