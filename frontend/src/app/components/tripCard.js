@@ -92,12 +92,13 @@ export function TripCard({ emissions, destinations, option }) {
           >
             Shuffle Flights
           </ActionButton>
-          <button
+          <a
             href={currentTrip.deep_link}
-            className="h-10 w-36 md:w-48 text-center rounded-md font-semibold bg-teal-600 hover:bg-teal-700 active:scale-95 text-white"
+            target="_blank"
+            className="h-10 w-36 md:w-48 flex items-center justify-center rounded-md font-semibold bg-teal-600 hover:bg-teal-700 active:scale-95 text-white"
           >
             {currentTrip.price}€ on Kiwi.com
-          </button>
+          </a>
           {/*Add multi-currency support*/}
         </div>
       </div>

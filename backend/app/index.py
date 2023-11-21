@@ -52,6 +52,7 @@ def tequila_query(
         "date_to": outbound_date_end_range,  # Due to some idiot at Tequila, this cannot be == outbound_date
         "return_from": return_date,
         "return_to": return_date_end_range,
+        "ret_from_diff_city": "false",
         # "max_fly_duration": "DUMMY",
         "price_to": price_limit,
         "curr": "EUR",
@@ -146,9 +147,10 @@ def tim_params_builder(flight_object):
     return {
         "origin": flight_object["flyFrom"],
         "destination": flight_object["flyTo"],
-        "operatingCarrierCode": flight_object["operating_carrier"]
-        if flight_object["operating_carrier"] != ""
-        else flight_object["airline"],
+        # "operatingCarrierCode": flight_object["operating_carrier"]
+        # if flight_object["operating_carrier"] != ""
+        # else flight_object["airline"],
+        "operatingCarrierCode": flight_object["airline"],
         "flightNumber": int(flight_object["operating_flight_no"])
         if flight_object["operating_flight_no"] != ""
         else int(flight_object["flight_no"]),
@@ -167,9 +169,15 @@ def emissions_fetch(flights_object, flight_class="economy"):
 
     result = post(url, headers=headers, data=params_json)
     result_json = result.json()
+    # print(result_json)
 
     emissions_results = []
     for flight in result_json["flightEmissions"]:
+        # print(flight)
+        # if flight.get("emissionsGramsPerPax") == None:
+        #     emissions_results.append(0)
+        # else:
+        #     emissions_results.append(flight["emissionsGramsPerPax"][flight_class])
         emissions_results.append(
             0
             if flight.get("emissionsGramsPerPax") == None
@@ -423,7 +431,7 @@ def generate_results(id, data):
 
 
 # Get API key from environment variables
-env_path = os.path.join(os.path.dirname(__file__), "..", ".env.local")
+env_path = os.path.join(os.path.dirname(__file__), "..", "..", "frontend", ".env.local")
 load_dotenv(dotenv_path=env_path)
 FLASK_ENV = os.getenv("FLASK_ENV")
 TIM_KEY = os.getenv("TIM_API_KEY")
@@ -456,7 +464,6 @@ redis_client = redis.Redis(
     db=0,
     password=os.getenv("REDIS_PASS"),
 )
-
 
 profile = cProfile.Profile()
 
@@ -509,7 +516,7 @@ def start_process(id):
 
 #
 @app.route("/processRequest/<string:id>", methods=["GET"])
-def process_request_post(id):
+def process_request(id):
     request_id = f"request_{id}"
     data = json.loads(redis_client.get(request_id))
     user_location = [float(data["latLong"]["lat"]), float(data["latLong"]["long"])]
@@ -543,6 +550,23 @@ def process_request_post(id):
     )
     sorted_result = destinations_sort(processed_data_with_emissions)
 
+    # ############################
+    # current_dir = os.path.dirname(os.path.realpath(__file__))
+    # print(current_dir)
+    # with open(os.path.join(current_dir, "data", "tequila_data.json"), "w") as json_file:
+    #     json.dump(tequila_result, json_file, indent=4)
+    # with open(os.path.join(current_dir, "data", "parsed_data.json"), "w") as json_file:
+    #     json.dump(processed_data, json_file, indent=4)
+    # with open(
+    #     os.path.join(current_dir, "data", "emissions_request.json"), "w"
+    # ) as json_file:
+    #     json.dump(tim_processed_data, json_file, indent=4)
+    # with open(
+    #     os.path.join(current_dir, "data", "parsed_with_emissions.json"), "w"
+    # ) as json_file:
+    #     json.dump(processed_data_with_emissions, json_file, indent=4)
+    # #######################################
+
     redis_client.set(f"response_{id}", json.dumps(sorted_result))
 
     return jsonify("Processing complete")
@@ -550,7 +574,7 @@ def process_request_post(id):
 
 #
 @app.route("/processPostRequest/<string:id>", methods=["POST"])
-def process_request(id):
+def process_request_post(id):
     request_data = request.json
 
     request_id = f"request_{id}"
