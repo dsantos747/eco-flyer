@@ -6,6 +6,8 @@ import { redirect, useRouter } from 'next/navigation';
 import { ToolTip } from './tooltip';
 import { v4 } from 'uuid';
 import { createRedis } from '../actions/redisActions';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faLocationCrosshairs } from '@fortawesome/free-solid-svg-icons';
 
 const formatDate = (date, offset = 0) => {
   date = new Date(date.setDate(date.getDate() + offset));
@@ -171,47 +173,51 @@ export function FlightForm() {
           <p className="md:flex-none">
             Departure Location<span className="text-red-500">*</span>
           </p>
-          <div className="w-full flex-auto max-w-sm">
-            <input
-              className="w-full text-center md:text-start bg-rose-50 rounded-sm"
-              type="text"
-              name="location"
-              placeholder="Enter your departure location or airport"
-              autoComplete="off"
-              value={formData.location}
-              onFocus={handleFocus}
-              onBlur={handleBlur}
-              onChange={handleLocationInputChange}
-              required
-            ></input>
-            <ul className="z-10 text-start fixed bg-rose-50">
-              {suggestions.map((location) => (
-                <li key={location.place_id} className="cursor-pointer" onClick={() => handleSuggestionClick(location)}>
-                  {location.display_name}
-                </li>
-              ))}
-            </ul>
+          <div className="flex flex-auto gap-2">
+            <div className="w-full flex-auto max-w-sm">
+              <input
+                className="w-full text-center md:text-start bg-rose-50 rounded-sm"
+                type="text"
+                name="location"
+                placeholder="Enter your departure location or airport"
+                autoComplete="off"
+                value={formData.location}
+                onFocus={handleFocus}
+                onBlur={handleBlur}
+                onChange={handleLocationInputChange}
+                required
+              ></input>
+              <ul className="z-10 text-start fixed bg-rose-50">
+                {suggestions.map((location) => (
+                  <li key={location.place_id} className="cursor-pointer" onClick={() => handleSuggestionClick(location)}>
+                    {location.display_name}
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <button
+              type="button"
+              onClick={getUserLocation}
+              disabled={locationButtonDisabled}
+              aria-disabled={locationButtonDisabled}
+              className={`flex-none px-2 text-center rounded-md text-slate-800 bg-rose-50 ${
+                locationButtonDisabled ? 'cursor-not-allowed bg-slate-400 text-rose-200' : 'hover:bg-gray-400 active:scale-95'
+              }`}
+            >
+              <FontAwesomeIcon icon={faLocationCrosshairs}></FontAwesomeIcon>
+              {/* {locationButtonDisabled ? 'Processing...' : 'Use My Location'} */}
+            </button>
           </div>
-          <button
-            type="button"
-            onClick={getUserLocation}
-            disabled={locationButtonDisabled}
-            aria-disabled={locationButtonDisabled}
-            className={`flex-none px-2 text-center rounded-md bg-rose-50 ${
-              locationButtonDisabled ? 'cursor-not-allowed' : 'hover:bg-gray-400 active:scale-95'
-            }`}
-          >
-            {locationButtonDisabled ? 'Processing...' : 'Use My Location'}
-          </button>
         </div>
+        <div>Outbound Dates (Range):</div>
         <div className="flex justify-evenly gap-2 w-full">
-          <div className="flex gap-1 flex-wrap w-1/2 justify-end">
-            <label htmlFor="outboundDate" className="w-36 text-right">
-              Outbound Date<span className="text-red-500">*</span>
+          <div className="flex gap-1 w-1/2 justify-end">
+            <label htmlFor="outboundDate" className="text-right text-slate-600 italic">
+              From:<span className="text-red-500">*</span>
             </label>
             <input
               id="outboundDate"
-              className="bg-rose-50 h-6 rounded-sm"
+              className="bg-rose-50 h-6 rounded-sm w-28"
               type="date"
               name="outboundDate"
               value={formData.outboundDate}
@@ -219,24 +225,25 @@ export function FlightForm() {
               required
             ></input>
           </div>
-          <div className="flex gap-1 flex-wrap-reverse w-1/2">
+          <div className="flex gap-1 w-1/2">
+            <label htmlFor="outboundDateEndRange" className="text-right">
+              To:<span className="text-red-500">*</span>
+            </label>
             <input
               id="outboundDateEndRange"
-              className={`bg-rose-50 h-6 rounded-sm ${formData.outboundDateEndRange == '' ? 'text-gray-400' : 'text-black'}`}
+              className={`bg-rose-50 h-6 rounded-sm w-28 ${formData.outboundDateEndRange == '' ? 'text-gray-400' : 'text-black'}`}
               type="date"
               name="outboundDateEndRange"
               value={formData.outboundDateEndRange}
               onChange={handleInputChange}
             ></input>
-            <label htmlFor="outboundDateEndRange" className="w-36 text-left">
-              Outbound - Range
-            </label>
           </div>
         </div>
+        <div>Return Dates (Range):</div>
         <div className="flex justify-evenly gap-2 w-full">
           <div className="flex gap-1 flex-wrap w-1/2 justify-end">
             <label htmlFor="returnDate" className="w-36 text-right">
-              Return Date<span className="text-red-500">*</span>
+              From:<span className="text-red-500">*</span>
             </label>
             <input
               id="returnDate"
@@ -248,7 +255,10 @@ export function FlightForm() {
               required
             ></input>
           </div>
-          <div className="flex gap-1 flex-wrap-reverse w-1/2">
+          <div className="flex gap-1 flex-wrap w-1/2">
+            <label htmlFor="returnDateEndRange" className="w-36 text-left">
+              To:<span className="text-red-500">*</span>
+            </label>
             <input
               id="returnDateEndRange"
               className={`bg-rose-50 h-6 rounded-sm ${formData.returnDateEndRange == '' ? 'text-gray-400' : 'text-black'}`}
@@ -258,9 +268,6 @@ export function FlightForm() {
               value={formData.returnDateEndRange}
               onChange={handleInputChange}
             ></input>
-            <label htmlFor="returnDateEndRange" className="w-36 text-left">
-              Return - Range
-            </label>
           </div>
         </div>
 
