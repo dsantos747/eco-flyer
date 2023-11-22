@@ -6,7 +6,6 @@ from requests import get, post
 import json
 from geopy.distance import geodesic
 from datetime import datetime
-import copy
 import cProfile
 import pstats
 import redis
@@ -23,10 +22,15 @@ def get_airport_list(latitude, longitude, max_radius, min_radius=0):
         distance = geodesic((latitude, longitude), (item[1], item[2])).kilometers
         return item[0] if min_radius <= distance <= max_radius else None
 
-    result = ",".join(filter(None, map(distance_calculator, full_airports_list)))
-    # FIX: the tequila API has a "URI limit". So maybe stop adding destinations to the list after a certain point (we don't need ALL the medium-sized airports)
+    result = []
+    for item in full_airports_list:
+        if len(result) >= 600:
+            break
+        airport_code = distance_calculator(item)
+        if airport_code is not None:
+            result.append(airport_code)
 
-    return result
+    return ",".join(result)
 
 
 def tequila_query(
@@ -188,65 +192,6 @@ def emissions_fetch(flights_object, flight_class="economy"):
 
 
 def emissions_parse(flights_dict, emissions_results):
-    no_emissions = 0
-    removed_destinations = 0
-    emissions_index = 0
-    new_flights_dict = copy.deepcopy(flights_dict)  # THIS IS BAD
-    for destination in flights_dict:
-        for option in flights_dict[destination]:
-            outbound_emissions = 0
-            remove_option = False
-            for outbound_flight in flights_dict[destination][option]["flights"][0]:
-                # emissions = emissions_results.pop(0) # Consider using an index variable for better performance, rather than mutating this
-                emissions = emissions_results[emissions_index]
-                emissions_index += 1
-                if emissions == 0:
-                    no_emissions += 1
-                    remove_option = True
-                    break
-                else:
-                    new_flights_dict[destination][option]["flights"][0][
-                        outbound_flight
-                    ]["flight_emissions"] = emissions
-                outbound_emissions += emissions
-
-            if remove_option:
-                del new_flights_dict[destination][option]
-                continue
-
-            return_emissions = 0
-            for return_flight in flights_dict[destination][option]["flights"][1]:
-                emissions = emissions_results[emissions_index]
-                emissions_index += 1
-                if emissions == 0:
-                    no_emissions += 1
-                    remove_option = True
-                    break
-                else:
-                    new_flights_dict[destination][option]["flights"][1][return_flight][
-                        "flight_emissions"
-                    ] = emissions
-                return_emissions += emissions
-
-            if remove_option:
-                del new_flights_dict[destination][option]
-                continue
-
-            total_emissions = outbound_emissions + return_emissions
-            new_flights_dict[destination][option]["trip_emissions"] = total_emissions
-
-        # If destination array is now empty, delete it too (sad)
-        if not new_flights_dict[destination]:
-            del new_flights_dict[destination]
-            removed_destinations += 1
-
-    print(f"Flights with no emissions: {no_emissions}")
-    print(f"Destinations removed: {removed_destinations}")
-    return reset_option_numbers(new_flights_dict)
-
-
-############ NEW AND IMPROVED EMISSIONS PARSE ###############
-def new_emissions_parse(flights_dict, emissions_results):  # rename to emissions_parse
     new_flights_dict = {}
     emissions_index = 0
     no_emissions = 0
@@ -421,9 +366,7 @@ def generate_results(id, data):
     # Emissions step
     tim_processed_data = emissions_flights_list(processed_data)
     emissions_results = emissions_fetch(tim_processed_data)
-    processed_data_with_emissions = new_emissions_parse(
-        processed_data, emissions_results
-    )
+    processed_data_with_emissions = emissions_parse(processed_data, emissions_results)
     sorted_result = destinations_sort(processed_data_with_emissions)
     print("backend completed")
     redis_client.set(f"response_{id}", json.dumps(sorted_result))
@@ -545,9 +488,7 @@ def process_request(id):
     # Emissions step
     tim_processed_data = emissions_flights_list(processed_data)
     emissions_results = emissions_fetch(tim_processed_data)
-    processed_data_with_emissions = new_emissions_parse(
-        processed_data, emissions_results
-    )
+    processed_data_with_emissions = emissions_parse(processed_data, emissions_results)
     sorted_result = destinations_sort(processed_data_with_emissions)
 
     # ############################
@@ -605,9 +546,7 @@ def process_request_post(id):
     # Emissions step
     tim_processed_data = emissions_flights_list(processed_data)
     emissions_results = emissions_fetch(tim_processed_data)
-    processed_data_with_emissions = new_emissions_parse(
-        processed_data, emissions_results
-    )
+    processed_data_with_emissions = emissions_parse(processed_data, emissions_results)
     sorted_result = destinations_sort(processed_data_with_emissions)
 
     redis_client.set(f"response_{id}", json.dumps(sorted_result))
@@ -676,7 +615,7 @@ def results_sort():
     id = data["id"]
     # PROFILING
     # profile.enable()
-    processed_data_with_emissions = new_emissions_parse(
+    processed_data_with_emissions = emissions_parse(
         data["sortedDestinations"], data["tripEmissions"]
     )
     # profile.disable()
@@ -686,7 +625,7 @@ def results_sort():
     # stats.sort_stats("cumulative")
     # stats.print_stats()
     # with open(
-    #     os.path.join(current_dir, "data", "new_emissions_parse.json"), "w"
+    #     os.path.join(current_dir, "data", "emissions_parse.json"), "w"
     # ) as file:
     #     json.dump(processed_data_with_emissions, file, indent=2)
     # END PROFILING

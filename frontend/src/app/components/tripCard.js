@@ -36,6 +36,8 @@ export function TripCard({ emissions, destinations, option }) {
 
   const currentTrip = emissions[destinations[tripDestination]][`option_${tripOption}`];
   const firstOutbound = currentTrip.flights[0]['step_1'];
+  const outboundLegs = Object.keys(currentTrip.flights[0]);
+  const lastOutbound = currentTrip.flights[0][outboundLegs[outboundLegs.length - 1]];
   const firstReturn = currentTrip.flights[currentTrip.flights.length - 1]['step_1'];
   return (
     <div className="">
@@ -73,7 +75,7 @@ export function TripCard({ emissions, destinations, option }) {
             </ActionButton>
             <div className="bg-gradient-destination pb-2 pt-28 px-2 rounded-bl-xl">
               <h2 className="text-2xl text-blue-900 font-bold">
-                {currentTrip.cityTo} (<span className="font-semibold text-blue-900">{firstOutbound.flyTo}</span>)
+                {currentTrip.cityTo} (<span className="font-semibold text-blue-900">{lastOutbound.flyTo}</span>)
               </h2>
               <div>Fly out: {formatDate(firstOutbound.local_departure)}</div>
               <div>Return: {formatDate(firstReturn.local_departure)}</div>

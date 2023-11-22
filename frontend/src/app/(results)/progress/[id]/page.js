@@ -328,20 +328,15 @@ async function fetchResults(id) {
   // console.log('emissions done');
   // const routeResults = await sortedEmissionsFetch(id, sortedTequila, tripEmissions);
 
-  ////////////////////////////////////////////////////////////
-  /* This section bypasses cloud tasks/run. Use locally */
-
-  // const baseUrl = process.env.NEXT_PUBLIC_API_URL;
-  // const query_url = `${baseUrl}/processRequest/${id.toString()}`;
-  // const response = await fetch(query_url);
-  // const responseMessage = await response.json();
-  // console.log(responseMessage);
-  ////////////////////////////////////////////////////////////
-
-  ////////////////////////////////////////////////////////////
-  /* This section triggers API call through cloud tasks */
-  taskCreate(id);
-  ////////////////////////////////////////////////////////////
+  if (process.env.NODE_ENV == 'development') {
+    const baseUrl = process.env.NEXT_PUBLIC_API_URL;
+    const query_url = `${baseUrl}/processRequest/${id.toString()}`;
+    const response = await fetch(query_url);
+    const responseMessage = await response.json();
+    console.log(responseMessage);
+  } else {
+    taskCreate(id);
+  }
 
   // const sortedResults = Object.fromEntries(
   //   Object.entries(routeResults).sort((a, b) => getFirstTripEmissions(a[1]) - getFirstTripEmissions(b[1]))
