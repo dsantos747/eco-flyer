@@ -5,11 +5,9 @@ const redisClient = createClient({
   socket: {
     host: process.env.REDIS_HOST,
     port: process.env.REDIS_PORT,
+    connectTimeout: 10000,
   },
-  //   database: 0,
 });
-//   .on()
-//   .connect();
 
 redisClient.on('error', (err) => console.log(err));
 
