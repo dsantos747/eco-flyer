@@ -5,20 +5,30 @@ import { redirect } from 'next/navigation';
 import { v4 } from 'uuid';
 
 export async function createRedis(formData) {
-  // return "test"
   const id = v4();
   const requestData = JSON.stringify(formData);
 
-  await redisClient.set(`request_${id}`, requestData);
-  redirect(`/progress/${id}`);
+  // await redisClient.set(`request_${id}`, requestData);
+  // redirect(`/progress/${id}`);
+
+  try {
+    await redisClient.set(`request_${id}`, requestData);
+  } catch (error) {
+    console.error('Error setting value in Redis:', error);
+    return new Response('Failed to set value');
+  } finally {
+    // redisClient.quit(); // Added this to try to limit number of clients
+    redirect(`/progress/${id}`);
+  }
 }
 
 export async function getRedis(type, id) {
   try {
     const data = await redisClient.get(`${type}_${id}`);
+    // redisClient.quit(); // Added this to try to limit number of clients
     return data;
   } catch (error) {
-    console.log('error getting value');
+    console.error('Error getting value from Redis:', error);
     return new Response('Requested data not found');
   }
 }
@@ -26,9 +36,10 @@ export async function getRedis(type, id) {
 export async function checkRedis(type, id) {
   try {
     const data = await redisClient.exists(`${type}_${id}`);
+    // redisClient.quit(); // Added this to try to limit number of clients
     return data;
   } catch (error) {
-    console.log('error checking for key');
-    return new Response('Requested data not found');
+    console.error('Error checking for key in Redis:', error);
+    return new Response('Requested key not found');
   }
 }

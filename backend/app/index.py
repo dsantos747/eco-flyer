@@ -1,5 +1,6 @@
-from flask import Flask, jsonify, request, redirect, make_response
+from flask import Flask, jsonify, request, redirect, make_response, abort
 from flask_cors import CORS
+from werkzeug.exceptions import HTTPException
 from dotenv import load_dotenv
 import os
 from requests import get, post
@@ -406,6 +407,7 @@ redis_client = redis.Redis(
     port=os.getenv("REDIS_PORT"),
     db=0,
     password=os.getenv("REDIS_PASS"),
+    socket_timeout=60,
 )
 
 profile = cProfile.Profile()
@@ -418,61 +420,41 @@ def ping():
     return "<p>I am awake!<p>"
 
 
-# Receive request data, add to Redis, associated to requestID
-@app.route("/saveRequest/<string:id>", methods=["POST"])
-def save_request(id):
-    form_data = request.json
-    redis_client.set(f"request_{id}", json.dumps(form_data))
-    return jsonify({"Message": "Request added to Redis successfully"})
-
-
-@app.route("/getRequest/<string:id>", methods=["GET"])
-def get_request(id):
-    data = redis_client.get(f"request_{id}")
-    if data is not None:
-        return jsonify({"data": data.decode("utf-8")})
-    else:
-        return jsonify({"error": "Request ID not found"}), 404
-
-
-@app.route("/getResults/<string:id>", methods=["GET"])
-def get_results(id):
-    data = redis_client.get(f"response_{id}")
-    if data is not None:
-        return jsonify({"data": data.decode("utf-8")})
-    else:
-        return jsonify({"error": "Response ID not found"}), 404
-
-
-@app.route("/startProcess/<string:id>", methods=["GET"])
-def start_process(id):
-    data = redis_client.get(f"request_{id}")
-    # json.loads(data)
-    if data is not None:
-        thread = threading.Thread(target=generate_results, args=(id, json.loads(data)))
-        thread.start()
-
-        return jsonify("Request received")
-    else:
-        return jsonify({"error": "Request ID not found"}), 404
-
-
 #
 @app.route("/processRequest/<string:id>", methods=["GET"])
 def process_request(id):
     request_id = f"request_{id}"
-    data = json.loads(redis_client.get(request_id))
-    user_location = [float(data["latLong"]["lat"]), float(data["latLong"]["long"])]
-    trip_length = data["tripLength"]
-    radius_range = (
-        [1500, 0]
-        if trip_length == "trip-short"
-        else [4000, 1500]
-        if trip_length == "trip-medium"
-        else [15000, 4000]
-    )
-    origin_airports = get_airport_list(*user_location, 100)
-    destination_airports = get_airport_list(*user_location, *radius_range)
+    try:
+        data = json.loads(redis_client.get(request_id))
+    except Exception:
+        error_code = "failedGetTask"
+        redis_client.set(f"error_{id}", json.dumps(error_code))
+        return jsonify(error_code)
+
+    try:
+        user_location = [float(data["latLong"]["lat"]), float(data["latLong"]["long"])]
+        trip_length = data["tripLength"]
+        radius_range = (
+            [1500, 0]
+            if trip_length == "trip-short"
+            else [4000, 1500]
+            if trip_length == "trip-medium"
+            else [15000, 4000]
+        )
+    except Exception:
+        error_code = "invalidInput"
+        redis_client.set(f"error_{id}", json.dumps(error_code))
+        return jsonify(error_code)
+
+    try:
+        origin_airports = get_airport_list(*user_location, 100)
+        destination_airports = get_airport_list(*user_location, *radius_range)
+    except Exception:
+        error_code = "airports"
+        redis_client.set(f"error_{id}", json.dumps(error_code))
+        # abort(400)
+        return jsonify(error_code)
+
     # Tequila step
     tequila_result = tequila_query(
         origin_airports,
@@ -509,130 +491,59 @@ def process_request(id):
     # #######################################
 
     redis_client.set(f"response_{id}", json.dumps(sorted_result))
+    redis_client.connection_pool.disconnect()  # Added this to attempt to control number of redis connections
 
     return jsonify("Processing complete")
 
 
-#
-@app.route("/processPostRequest/<string:id>", methods=["POST"])
-def process_request_post(id):
-    request_data = request.json
+# @app.route("/processPostRequest/<string:id>", methods=["POST"])
+# def process_request_post(id):
+#     request_data = request.json
 
-    request_id = f"request_{id}"
-    data = json.loads(redis_client.get(request_id))
-    user_location = [float(data["latLong"]["lat"]), float(data["latLong"]["long"])]
-    trip_length = data["tripLength"]
-    radius_range = (
-        [1500, 0]
-        if trip_length == "trip-short"
-        else [4000, 1500]
-        if trip_length == "trip-medium"
-        else [15000, 4000]
-    )
-    origin_airports = get_airport_list(*user_location, 100)
-    destination_airports = get_airport_list(*user_location, *radius_range)
-    # Tequila step
-    tequila_result = tequila_query(
-        origin_airports,
-        destination_airports,
-        data["outboundDate"],
-        data["returnDate"],
-        data["outboundDateEndRange"],
-        data["returnDateEndRange"],
-        data["price"],
-    )
-    # Tequila sort step
-    processed_data = tequila_parse(tequila_result)
-    # Emissions step
-    tim_processed_data = emissions_flights_list(processed_data)
-    emissions_results = emissions_fetch(tim_processed_data)
-    processed_data_with_emissions = emissions_parse(processed_data, emissions_results)
-    sorted_result = destinations_sort(processed_data_with_emissions)
+#     request_id = f"request_{id}"
+#     data = json.loads(redis_client.get(request_id))
+#     user_location = [float(data["latLong"]["lat"]), float(data["latLong"]["long"])]
+#     trip_length = data["tripLength"]
+#     radius_range = (
+#         [1500, 0]
+#         if trip_length == "trip-short"
+#         else [4000, 1500]
+#         if trip_length == "trip-medium"
+#         else [15000, 4000]
+#     )
+#     origin_airports = get_airport_list(*user_location, 100)
+#     destination_airports = get_airport_list(*user_location, *radius_range)
+#     # Tequila step
+#     tequila_result = tequila_query(
+#         origin_airports,
+#         destination_airports,
+#         data["outboundDate"],
+#         data["returnDate"],
+#         data["outboundDateEndRange"],
+#         data["returnDateEndRange"],
+#         data["price"],
+#     )
+#     # Tequila sort step
+#     processed_data = tequila_parse(tequila_result)
+#     # Emissions step
+#     tim_processed_data = emissions_flights_list(processed_data)
+#     emissions_results = emissions_fetch(tim_processed_data)
+#     processed_data_with_emissions = emissions_parse(processed_data, emissions_results)
+#     sorted_result = destinations_sort(processed_data_with_emissions)
 
-    redis_client.set(f"response_{id}", json.dumps(sorted_result))
+#     redis_client.set(f"response_{id}", json.dumps(sorted_result))
 
-    return jsonify("Processing complete")
-
-
-# Get origin and destination airport lists
-@app.route("/api/results/airports", methods=["GET"])
-def results_airports():
-    user_location = [float(request.args.get("lat")), float(request.args.get("long"))]
-    trip_length = request.args.get("len")
-    radius_range = (
-        [1500, 0]
-        if trip_length == "trip-short"
-        else [4000, 1500]
-        if trip_length == "trip-medium"
-        else [15000, 4000]
-    )
-    origin_airports = get_airport_list(*user_location, 100)
-    destination_airports = get_airport_list(*user_location, *radius_range)
-    response = {
-        "origin_airports": origin_airports,
-        "destination_airports": destination_airports,
-    }
-    return jsonify(response)
+#     return jsonify("Processing complete")
 
 
-# Get potential route options
-@app.route("/api/results/tequila", methods=["POST"])
-def results_tequila():
-    data = request.json
-    tequila_result = tequila_query(
-        data["originAirports"],
-        data["destinationAirports"],
-        data["outboundDate"],
-        data["returnDate"],
-        data["outboundDateEndRange"],
-        data["returnDateEndRange"],
-        data["price"],
-    )
-    return jsonify(tequila_result)
-
-
-# Sort potential route options
-@app.route("/api/results/tequilaSort", methods=["POST"])
-def results_tequilaSort():
-    data = request.json
-    processed_data = tequila_parse(data)
-    return jsonify(processed_data)
-
-
-# Get emissions for route options
-@app.route("/api/results/emissions", methods=["POST"])
-def results_emissions():
-    data = request.json
-    tim_processed_data = emissions_flights_list(data)
-    emissions_results = emissions_fetch(tim_processed_data)
-    return jsonify(emissions_results)
-
-
-# Append emissions to destinations and parse
-@app.route("/api/results/sort", methods=["POST"])
-def results_sort():
-    data = request.json
-    id = data["id"]
-    # PROFILING
-    # profile.enable()
-    processed_data_with_emissions = emissions_parse(
-        data["sortedDestinations"], data["tripEmissions"]
-    )
-    # profile.disable()
-    # profile.dump_stats("profile_results_emissions_parse")
-    # stats = pstats.Stats("profile_results_emissions_parse")
-    # stats.strip_dirs()
-    # stats.sort_stats("cumulative")
-    # stats.print_stats()
-    # with open(
-    #     os.path.join(current_dir, "data", "emissions_parse.json"), "w"
-    # ) as file:
-    #     json.dump(processed_data_with_emissions, file, indent=2)
-    # END PROFILING
-    sorted_result = destinations_sort(processed_data_with_emissions)
-    redis_client.set(f"response_{id}", json.dumps(sorted_result))
-    print("backend complete")
-    return jsonify({"Message": "Response added to Redis successfully"})
+### Errors ###
+@app.errorhandler(HTTPException)
+def handle_bad_request(e):
+    # print(HTTPException.code)
+    # print(e.code)
+    # redis_client.set(f"error_{id}", json.dumps(e.code))
+    return jsonify(f"Error {e.code}")
+    # return "bad request!", 400
 
 
 # Initialise app
