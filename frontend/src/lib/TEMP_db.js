@@ -3,6 +3,9 @@
  * redis up again with proper connect/disconnecting
  */
 
+/**
+ * 
+
 import { createClient } from 'redis';
 
 let redisClient = global.redis;
@@ -30,7 +33,9 @@ export const redisDisconnect = async () => {
   }
 };
 
-export { redisConnect, redisDisconnect };
+ */
+
+// export { redisConnect, redisDisconnect };
 
 // const redisClient = createClient({
 //   password: process.env.REDIS_PASS,
