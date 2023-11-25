@@ -61,6 +61,7 @@ export function TripCard({ emissions, destinations, option }) {
               className={
                 'left-2 top-1/2 absolute md:-left-20 lg:-left-28 bg-opacity-70 md:bg-opacity-100 h-16 w-16 lg:h-20 lg:w-20 flex items-center justify-center rounded-full active:scale-95 bg-white text-blue-900 hover:text-sky-500'
               }
+              ariaLabel={'Previous Destination'}
             >
               <FontAwesomeIcon icon={faChevronRight} className="text-xl md:text-xl lg:text-2xl  rotate-180 " />
             </ActionButton>
@@ -70,6 +71,7 @@ export function TripCard({ emissions, destinations, option }) {
               className={
                 'right-2 top-1/2 absolute md:-right-20 lg:-right-28 bg-opacity-70 md:bg-opacity-100 h-16 w-16 lg:h-20 lg:w-20 flex items-center justify-center rounded-full active:scale-95 bg-white text-blue-900 hover:text-sky-500'
               }
+              ariaLabel={'Next Destination'}
             >
               <FontAwesomeIcon icon={faChevronRight} className="text-xl md:text-xl lg:text-2xl" />
             </ActionButton>
@@ -91,6 +93,7 @@ export function TripCard({ emissions, destinations, option }) {
             onChange={handleOptionChange}
             direction={1}
             className={'h-10 w-36 md:w-48 text-center rounded-md bg-white hover:bg-slate-300 active:scale-95'}
+            ariaLabel={'Shuffle Flights'}
           >
             Shuffle Flights
           </ActionButton>

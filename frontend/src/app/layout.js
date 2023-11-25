@@ -5,7 +5,7 @@ import { config } from '@fortawesome/fontawesome-svg-core';
 config.autoAddCss = false;
 
 export const metadata = {
-  title: 'Eco-Flyer',
+  title: 'Eco-Flyer | The eco-friendly holiday planner',
   description: 'Book your next holiday with the planet in mind',
   generator: 'Next.js',
   applicationName: 'Eco-Flyer',
