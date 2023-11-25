@@ -15,7 +15,6 @@ async function page() {
           lowest emissions.
         </h2>
       </div>
-
       <div className="pt-4">
         <FlightForm></FlightForm>
       </div>

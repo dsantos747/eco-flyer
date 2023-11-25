@@ -1,5 +1,3 @@
-import { revalidateTag } from 'next/cache';
-import { emissionsError } from '@/app/components/exceptions.js';
 import { getRedis } from '@/app/actions/redisActions';
 import { StatusPoll } from '@/app/components/statusPolling';
 import { taskCreate } from '@/app/actions/taskCreate';
@@ -7,45 +5,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlane } from '@fortawesome/free-solid-svg-icons';
 // import { redisClient } from '@/lib/db';
 
-function normaliseDate(uglyDate) {
-  return `${uglyDate.slice(8)}/${uglyDate.slice(5, 7)}/${uglyDate.slice(0, 4)}`;
-}
-
 async function fetchResults(id) {
-  ///////////////////
   const request = await getRedis('request', id);
   const data = await JSON.parse(request);
-  //////////////////////
-
-  // console.log(data['latLong']['lat']);
-
-  // const formResults = await JSON.parse(cookies().get('formResults')?.value);
-  // const formResults = getCookies('formResults');
-  // const { location, outboundDate, outboundDateEndRange, returnDate, returnDateEndRange, tripLength, latLong, price } = await request;
-
-  //////////////////////
-
-  /////////////////////////////////
-
-  // revalidateTag('emissions');
-
-  // const airports = await airportsFetch(data['latLong'], data['tripLength']);
-  // console.log('airports done');
-  // const rawTrips = await tequilaFetch(
-  //   airports.origin,
-  //   airports.destination,
-  //   data['outboundDate'],
-  //   data['outboundDateEndRange'],
-  //   data['returnDate'],
-  //   data['returnDateEndRange'],
-  //   data['price']
-  // );
-  // console.log('tequila done');
-  // const sortedTequila = await sortedTequilaFetch(rawTrips);
-  // console.log('sorting done');
-  // const tripEmissions = await tripEmissionsFetch(sortedTequila);
-  // console.log('emissions done');
-  // const routeResults = await sortedEmissionsFetch(id, sortedTequila, tripEmissions);
 
   if (process.env.NODE_ENV == 'development') {
     const baseUrl = process.env.NEXT_PUBLIC_API_URL;
@@ -57,17 +19,6 @@ async function fetchResults(id) {
   } else {
     taskCreate(id);
   }
-
-  // const sortedResults = Object.fromEntries(
-  //   Object.entries(routeResults).sort((a, b) => getFirstTripEmissions(a[1]) - getFirstTripEmissions(b[1]))
-  // );
-
-  //   const destinations = Object.keys(sortedResults); // Array used for referring to for sort order - Is this needed?
-
-  // const router = useRouter();
-
-  // router.push(`/results/${id}`);
-  // redirect(`/results/${id}`);
 }
 
 async function page({ params }) {
@@ -87,7 +38,6 @@ async function page({ params }) {
           Fact: Aviation accounts for 2.5% of global annual CO<sub>2</sub> emissions.
         </h3>
       </div>
-
       <StatusPoll taskID={params.id}></StatusPoll>
     </div>
   );

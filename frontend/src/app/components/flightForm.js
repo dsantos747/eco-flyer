@@ -167,12 +167,12 @@ export function FlightForm() {
               onClick={getUserLocation}
               disabled={locationButtonDisabled}
               aria-disabled={locationButtonDisabled}
+              aria-label="Use my location"
               className={`flex-none px-2 text-center rounded-md text-slate-800 bg-rose-50 ${
                 locationButtonDisabled ? 'cursor-not-allowed bg-slate-400 text-rose-200 scale-95' : 'hover:bg-gray-400 active:scale-95'
               }`}
             >
               <FontAwesomeIcon icon={faLocationCrosshairs}></FontAwesomeIcon>
-              {/* {locationButtonDisabled ? 'Processing...' : 'Use My Location'} */}
             </button>
           </div>
         </div>
@@ -289,7 +289,7 @@ export function FlightForm() {
           </div>
         </div>
         <div className="flex flex-col items-center md:flex-row justify-between gap-2">
-          <p>What&apos;s your budget?</p>
+          <label htmlFor="price">What&apos;s your budget?</label>
           <div className="flex gap-3">
             <input
               type="range"
@@ -304,6 +304,7 @@ export function FlightForm() {
             ></input>
             <div className="flex">
               <input
+                id="priceNum"
                 type="number"
                 name="price"
                 min="100"
@@ -313,7 +314,7 @@ export function FlightForm() {
                 onChange={handleInputChange}
                 className="w-14 bg-rose-50 h-6 rounded-sm"
               ></input>
-              <p>&euro;</p>
+              <label htmlFor="priceNum">&euro;</label>
             </div>
 
             <ToolTip
@@ -326,9 +327,8 @@ export function FlightForm() {
         </div>
         <button
           type="submit"
-          // disabled={true} // TEMPORARY ADDITION UNTIL RESULTS PAGE ROUTE IS SORTED
-          className={`h-10 px-2 text-center rounded-md font-semibold text-black hover:bg-blue-500 ${
-            buttonClicked ? ' bg-blue-700 scale-95 animate-pulse' : 'bg-blue-400'
+          className={`h-10 px-2 text-center rounded-md font-semibold bg-blue-400 text-black hover:bg-blue-500 ${
+            buttonClicked ? 'scale-95 animate-pulse' : ''
           }`}
         >
           {buttonClicked ? 'Taking off...' : `Let's Fly!`}
