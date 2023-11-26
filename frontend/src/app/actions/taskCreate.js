@@ -16,7 +16,7 @@ export const taskCreate = async (id) => {
     'client_x509_cert_url': process.env.GC_CLIENT_CERT_URL,
     'universe_domain': process.env.GC_UNIVERSE,
   };
-  const baseUrl = process.env.NEXT_PUBLIC_API_URL;
+  const baseUrl = process.env.API_URL;
   const gcProjectId = process.env.GC_PROJECT_ID;
   const gcEmail = process.env.GC_CLIENT_EMAIL;
   const gcKey = process.env.GC_PRIVATE_KEY.replace(/\\n/g, '\n');

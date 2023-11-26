@@ -3,7 +3,8 @@
 const error = ({ error, reset }) => {
   return (
     <div className="text-center items-center flex flex-col gap-3">
-      <div>Oops - an error occured 😕. Please try again.</div>
+      <div className="text-2xl">Oh No! You found an error!</div>
+      <div>Please try again, or go back and redefine your search parameters.</div>
 
       <div>
         <button

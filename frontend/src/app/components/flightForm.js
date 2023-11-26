@@ -1,10 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { createRequestCookies } from './cookieBaker';
-import { redirect, useRouter } from 'next/navigation';
 import { ToolTip } from './tooltip';
-import { v4 } from 'uuid';
 import { createRedis } from '../actions/redisActions';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faLocationCrosshairs } from '@fortawesome/free-solid-svg-icons';
@@ -23,8 +20,6 @@ const formatDate = (date, offset = 0) => {
 };
 
 export function FlightForm() {
-  const router = useRouter();
-  const baseUrl = process.env.NEXT_PUBLIC_API_URL;
   const [formData, setFormData] = useState({
     location: '',
     latLong: '',
@@ -97,6 +92,14 @@ export function FlightForm() {
 
   const handleInputChange = (input) => {
     const { name, value } = input.target;
+    if (name === 'tripLength' && value == 'trip-long' && formData.price < 600) {
+      setFormData((prevData) => ({
+        ...prevData,
+        price: 600,
+        [name]: value,
+      }));
+    } else {
+    }
     setFormData((prevData) => ({
       ...prevData,
       [name]: value,
@@ -295,7 +298,8 @@ export function FlightForm() {
               type="range"
               id="price"
               name="price"
-              min="100"
+              // min="100"
+              min={formData.tripLength === 'trip-long' ? '600' : '100'}
               max="1500"
               step="50"
               className="w-24"
@@ -307,7 +311,8 @@ export function FlightForm() {
                 id="priceNum"
                 type="number"
                 name="price"
-                min="100"
+                // min="100"
+                min={formData.tripLength === 'trip-long' ? '600' : '100'}
                 max="1500"
                 step="50"
                 value={formData.price}
