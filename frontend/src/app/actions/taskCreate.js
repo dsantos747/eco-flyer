@@ -40,6 +40,6 @@ export const taskCreate = async (id) => {
 
   const [response] = await taskClient.createTask(request);
 
-  console.log(`Created task ${response.name}`);
-  console.log(`Response: ${JSON.stringify(response, null, 2)}`);
+  // console.log(`Created task ${response.name}`);
+  // console.log(`Response: ${JSON.stringify(response, null, 2)}`);
 };

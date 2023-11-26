@@ -1,10 +1,9 @@
 'use client';
 
 import { useState } from 'react';
-import { ActionButton } from './actionButton.js';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronRight } from '@fortawesome/free-solid-svg-icons';
-import Image from 'next/image';
+// import Image from 'next/image';
 
 const formatDate = (date) => {
   const year = date.slice(0, 4);
@@ -39,10 +38,9 @@ export function TripCard({ emissions, destinations, option }) {
   const outboundLegs = Object.keys(currentTrip.flights[0]);
   const lastOutbound = currentTrip.flights[0][outboundLegs[outboundLegs.length - 1]];
   const firstReturn = currentTrip.flights[currentTrip.flights.length - 1]['step_1'];
+  const currentOptions = Object.keys(emissions[destinations[tripDestination]]).length;
   return (
     <div className="">
-      {/* flex justify-center items-center gap-3 */}
-      {/* <div className="sm:max-md:relative sm:max-md:left-44 z-20"></div> */}
       <div className="flex flex-col items-center">
         <div className="relative">
           <img
@@ -54,27 +52,28 @@ export function TripCard({ emissions, destinations, option }) {
             <div className="bg-white bg-opacity-60 rounded-t-xl rounded-b-md py-2 px-2">
               From {currentTrip.cityFrom} (<span className="font-semibold text-blue-900">{firstOutbound.flyFrom}</span>), how about:
             </div>
-            {/* sm:max-md:absolute sm:max-md:left-44 */}
-            <ActionButton
-              onChange={handleDestinationChange}
-              direction={-1}
-              className={
-                'left-2 top-1/2 absolute md:-left-20 lg:-left-28 bg-opacity-70 md:bg-opacity-100 h-16 w-16 lg:h-20 lg:w-20 flex items-center justify-center rounded-full active:scale-95 bg-white text-blue-900 hover:text-sky-500'
-              }
-              ariaLabel={'Previous Destination'}
+            <button
+              className="left-2 top-1/2 absolute md:-left-20 lg:-left-28 bg-opacity-70 md:bg-opacity-100 h-16 w-16 lg:h-20 lg:w-20 flex items-center justify-center rounded-full enabled:active:scale-95 bg-white text-blue-900 hover:text-sky-500 disabled:bg-gray-300 disabled:opacity-50 disabled:md:opacity-80 disabled:text-gray-400"
+              disabled={tripDestination === 0 ? true : false}
+              aria-label="Previous Destination"
+              onClick={() => {
+                handleDestinationChange(-1);
+              }}
+              type="button"
             >
               <FontAwesomeIcon icon={faChevronRight} className="text-xl md:text-xl lg:text-2xl  rotate-180 " />
-            </ActionButton>
-            <ActionButton
-              onChange={handleDestinationChange}
-              direction={1}
-              className={
-                'right-2 top-1/2 absolute md:-right-20 lg:-right-28 bg-opacity-70 md:bg-opacity-100 h-16 w-16 lg:h-20 lg:w-20 flex items-center justify-center rounded-full active:scale-95 bg-white text-blue-900 hover:text-sky-500'
-              }
-              ariaLabel={'Next Destination'}
+            </button>
+            <button
+              className="right-2 top-1/2 absolute md:-right-20 lg:-right-28 bg-opacity-70 md:bg-opacity-100 h-16 w-16 lg:h-20 lg:w-20 flex items-center justify-center rounded-full enabled:active:scale-95 bg-white text-blue-900 hover:text-sky-500 disabled:bg-gray-300 disabled:opacity-80 disabled:text-gray-400"
+              disabled={tripDestination === destinations.length - 1 ? true : false}
+              aria-label="Next Destination"
+              onClick={() => {
+                handleDestinationChange(1);
+              }}
+              type="button"
             >
               <FontAwesomeIcon icon={faChevronRight} className="text-xl md:text-xl lg:text-2xl" />
-            </ActionButton>
+            </button>
             <div className="bg-gradient-destination pb-2 pt-28 px-2 rounded-bl-xl">
               <h2 className="text-2xl text-blue-900 font-bold">
                 {currentTrip.cityTo} (<span className="font-semibold text-blue-900">{lastOutbound.flyTo}</span>)
@@ -89,14 +88,17 @@ export function TripCard({ emissions, destinations, option }) {
         </div>
 
         <div className="flex justify-between py-2 gap-2">
-          <ActionButton
-            onChange={handleOptionChange}
-            direction={1}
-            className={'h-10 w-36 md:w-48 text-center rounded-md bg-white hover:bg-slate-300 active:scale-95'}
-            ariaLabel={'Shuffle Flights'}
+          <button
+            className="h-10 w-36 md:w-48 text-center rounded-md bg-white hover:bg-slate-300 enabled:active:scale-95 disabled:bg-gray-300 disabled:opacity-80 disabled:text-gray-400"
+            aria-label="Shuffle Flights"
+            disabled={currentOptions === 1 ? true : false}
+            onClick={() => {
+              handleOptionChange(1);
+            }}
+            type="button"
           >
             Shuffle Flights
-          </ActionButton>
+          </button>
           <a
             href={currentTrip.deep_link}
             target="_blank"
