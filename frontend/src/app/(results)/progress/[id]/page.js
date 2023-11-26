@@ -10,7 +10,7 @@ async function fetchResults(id) {
   const data = await JSON.parse(request);
 
   if (process.env.NODE_ENV == 'development') {
-    const baseUrl = process.env.NEXT_PUBLIC_API_URL;
+    const baseUrl = process.env.API_URL;
     const query_url = `${baseUrl}/processRequest/${id.toString()}`;
     const response = await fetch(query_url);
     const responseMessage = await response.json();

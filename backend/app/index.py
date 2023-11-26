@@ -357,6 +357,11 @@ redis_client = redis.Redis(
 # profile = cProfile.Profile()
 
 
+# Errors
+class NoFlightsError(Exception):
+    pass
+
+
 # Server wakeup
 @app.route("/api/ping", methods=["GET"])
 def ping():
@@ -411,7 +416,17 @@ def process_request(id):
             data["returnDateEndRange"],
             data["price"],
         )
+        if not tequila_result["data"]:
+            raise NoFlightsError("No flights found for given search parameters")
+
         processed_data = tequila_parse(tequila_result)
+
+    except NoFlightsError as e:
+        error_message = str(e)
+        redis_client.set(f"error_{id}", json.dumps(error_message))
+        # redis_client.close()
+        return jsonify(error_message)
+
     except Exception:
         error_message = "Error fetching route options"
         redis_client.set(f"error_{id}", json.dumps(error_message))

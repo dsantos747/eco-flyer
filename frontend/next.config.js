@@ -6,11 +6,11 @@ const nextConfig = {
   async headers() {
     return [
       {
-        source: "/",
+        source: '/',
         headers: [
           {
-            key: "X-Content-Type-Options",
-            value: "nosniff",
+            key: 'X-Content-Type-Options',
+            value: 'nosniff',
           },
         ],
       },
@@ -19,10 +19,18 @@ const nextConfig = {
   rewrites: async () => {
     return [
       {
-        source: "/api/:path*",
-        destination: process.env.NODE_ENV === "development" ? "http://localhost:8080/api/:path*" : "/api/",
+        source: '/api/:path*',
+        destination: process.env.NODE_ENV === 'development' ? 'http://localhost:8080/api/:path*' : '/api/',
       },
     ];
+  },
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https', //https://images.unsplash.com/photo-1565012975094-cad0b63d3646?
+        hostname: 'images.unsplash.com',
+      },
+    ],
   },
 };
 
