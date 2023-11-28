@@ -5,7 +5,7 @@ import { config } from '@fortawesome/fontawesome-svg-core';
 config.autoAddCss = false;
 
 export const metadata = {
-  title: 'Eco-Flyer',
+  title: 'Eco-Flyer | The eco-friendly holiday planner',
   description: 'Book your next holiday with the planet in mind',
   generator: 'Next.js',
   applicationName: 'Eco-Flyer',
@@ -14,22 +14,7 @@ export const metadata = {
   creator: 'Daniel Santos',
 };
 
-// async function wakeUpServer() {
-//   try {
-//     const baseUrl = process.env.NEXT_PUBLIC_API_URL;
-//     const response = await fetch(`${baseUrl}/api/ping`);
-//     if (response.ok) {
-//       console.log("Flask Server Awake");
-//     } else {
-//       console.error("Flask server response NOK");
-//     }
-//   } catch (error) {
-//     console.error("Error contacting Flask Server: ", error);
-//   }
-// }
-
 export default function RootLayout({ children }) {
-  // wakeUpServer();
   return (
     <html lang="en">
       <body className={DM_sans.className}>{children}</body>

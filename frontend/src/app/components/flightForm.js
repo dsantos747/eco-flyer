@@ -1,11 +1,10 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { createRequestCookies } from './cookieBaker';
-import { redirect, useRouter } from 'next/navigation';
 import { ToolTip } from './tooltip';
-import { v4 } from 'uuid';
 import { createRedis } from '../actions/redisActions';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faLocationCrosshairs } from '@fortawesome/free-solid-svg-icons';
 
 const formatDate = (date, offset = 0) => {
   date = new Date(date.setDate(date.getDate() + offset));
@@ -21,8 +20,6 @@ const formatDate = (date, offset = 0) => {
 };
 
 export function FlightForm() {
-  const router = useRouter();
-  const baseUrl = process.env.NEXT_PUBLIC_API_URL;
   const [formData, setFormData] = useState({
     location: '',
     latLong: '',
@@ -37,6 +34,7 @@ export function FlightForm() {
   const [debouncedSuggestions, setDebouncedSuggestions] = useState([]);
   const [inputFocus, setInputFocus] = useState(false);
   const [locationButtonDisabled, setLocationButton] = useState(false);
+  const [buttonClicked, setButtonClicked] = useState(false);
 
   const handleFocus = () => {
     setInputFocus(true);
@@ -94,6 +92,14 @@ export function FlightForm() {
 
   const handleInputChange = (input) => {
     const { name, value } = input.target;
+    if (name === 'tripLength' && value == 'trip-long' && formData.price < 600) {
+      setFormData((prevData) => ({
+        ...prevData,
+        price: 600,
+        [name]: value,
+      }));
+    } else {
+    }
     setFormData((prevData) => ({
       ...prevData,
       [name]: value,
@@ -102,40 +108,8 @@ export function FlightForm() {
 
   const handleSubmit = async (form) => {
     form.preventDefault();
-    // const id = v4();
-    // const requestData = JSON.stringify(formData);
+    setButtonClicked(true);
     createRedis(formData);
-    // const result = await createRedis(formData);
-    // const id = '9';
-
-    // const request = await fetch(`${baseUrl}/saveRequest/${id}`, {
-    //   method: 'POST',
-    //   credentials: 'include',
-    //   headers: {
-    //     'Content-Type': 'application/json',
-    //     'Access-Control-Allow-Credentials': 'true',
-    //   },
-    //   body: JSON.stringify(formData),
-    // });
-    // const response = fetch(`${baseUrl}/processRequest/${id}`, {
-    //   method: 'POST',
-    //   credentials: 'include',
-    //   headers: {
-    //     'Content-Type': 'application/json',
-    //     'Access-Control-Allow-Credentials': 'true',
-    //   },
-    // });
-    // createRequestCookies('formResults', formData);
-
-    // redirect(`/progress/${id}`);
-    // router.push(`/progress/${id}`);
-
-    // submitData = formData;
-    // if (submitData.outboundDateEndRange === '') submitData.outboundDateEndRange = formatDate(submitData.outboundDate, 1);
-    // if (submitData.returnDateEndRange === '') submitData.returnDateEndRange = formatDate(submitData.returnDate, 1);
-
-    // createRequestCookies('formResults', formData);
-    // router.push('/progress');
   };
 
   const getUserLocation = () => {
@@ -167,108 +141,113 @@ export function FlightForm() {
   return (
     <div className="w-full">
       <form id="flightForm" onSubmit={handleSubmit} className="flex justify-center items-center flex-col gap-4">
-        <div className="flex flex-col md:flex-row gap-1 w-full px-10 md:px-20 items-center">
-          <p className="md:flex-none">
-            Departure Location<span className="text-red-500">*</span>
-          </p>
-          <div className="w-full flex-auto max-w-sm">
-            <input
-              className="w-full text-center md:text-start bg-rose-50 rounded-sm"
-              type="text"
-              name="location"
-              placeholder="Enter your departure location or airport"
-              autoComplete="off"
-              value={formData.location}
-              onFocus={handleFocus}
-              onBlur={handleBlur}
-              onChange={handleLocationInputChange}
-              required
-            ></input>
-            <ul className="z-10 text-start fixed bg-rose-50">
-              {suggestions.map((location) => (
-                <li key={location.place_id} className="cursor-pointer" onClick={() => handleSuggestionClick(location)}>
-                  {location.display_name}
-                </li>
-              ))}
-            </ul>
-          </div>
-          <button
-            type="button"
-            onClick={getUserLocation}
-            disabled={locationButtonDisabled}
-            aria-disabled={locationButtonDisabled}
-            className={`flex-none px-2 text-center rounded-md bg-rose-50 ${
-              locationButtonDisabled ? 'cursor-not-allowed' : 'hover:bg-gray-400 active:scale-95'
-            }`}
-          >
-            {locationButtonDisabled ? 'Processing...' : 'Use My Location'}
-          </button>
-        </div>
-        <div className="flex justify-evenly gap-2 w-full">
-          <div className="flex gap-1 flex-wrap w-1/2 justify-end">
-            <label htmlFor="outboundDate" className="w-36 text-right">
-              Outbound Date<span className="text-red-500">*</span>
-            </label>
-            <input
-              id="outboundDate"
-              className="bg-rose-50 h-6 rounded-sm"
-              type="date"
-              name="outboundDate"
-              value={formData.outboundDate}
-              onChange={handleInputChange}
-              required
-            ></input>
-          </div>
-          <div className="flex gap-1 flex-wrap-reverse w-1/2">
-            <input
-              id="outboundDateEndRange"
-              className={`bg-rose-50 h-6 rounded-sm ${formData.outboundDateEndRange == '' ? 'text-gray-400' : 'text-black'}`}
-              type="date"
-              name="outboundDateEndRange"
-              value={formData.outboundDateEndRange}
-              onChange={handleInputChange}
-            ></input>
-            <label htmlFor="outboundDateEndRange" className="w-36 text-left">
-              Outbound - Range
-            </label>
+        <div className="flex flex-row flex-wrap justify-center gap-1 w-full px-10 items-center max-w-lg md:px-0 ">
+          <p className="md:flex-none">Departure Location</p>
+          <div className="flex flex-auto gap-2">
+            <div className="w-full flex-auto max-w-xs">
+              <input
+                className="w-full text-center md:text-start lg:pl-2 bg-rose-50 rounded-sm placeholder:italic"
+                type="text"
+                name="location"
+                placeholder="City or Airport"
+                autoComplete="off"
+                value={formData.location}
+                onFocus={handleFocus}
+                onBlur={handleBlur}
+                onChange={handleLocationInputChange}
+                required
+              ></input>
+              <ul className="z-10 text-start fixed bg-rose-50">
+                {suggestions.map((location) => (
+                  <li key={location.place_id} className="cursor-pointer" onClick={() => handleSuggestionClick(location)}>
+                    {location.display_name}
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <button
+              type="button"
+              onClick={getUserLocation}
+              disabled={locationButtonDisabled}
+              aria-disabled={locationButtonDisabled}
+              aria-label="Use my location"
+              className={`flex-none px-2 text-center rounded-md text-slate-800 bg-rose-50 ${
+                locationButtonDisabled ? 'cursor-not-allowed bg-slate-400 text-rose-200 scale-95' : 'hover:bg-gray-400 active:scale-95'
+              }`}
+            >
+              <FontAwesomeIcon icon={faLocationCrosshairs}></FontAwesomeIcon>
+            </button>
           </div>
         </div>
-        <div className="flex justify-evenly gap-2 w-full">
-          <div className="flex gap-1 flex-wrap w-1/2 justify-end">
-            <label htmlFor="returnDate" className="w-36 text-right">
-              Return Date<span className="text-red-500">*</span>
-            </label>
-            <input
-              id="returnDate"
-              className="bg-rose-50 h-6 rounded-sm"
-              type="date"
-              name="returnDate"
-              value={formData.returnDate}
-              onChange={handleInputChange}
-              required
-            ></input>
+        <div className="gap-1 flex flex-wrap justify-center">
+          <div className="flex w-32 mx-2 justify-end">Outbound Dates:</div>
+          <div className="flex justify-evenly gap-1 flex-wrap">
+            <div className="flex gap-1">
+              <label htmlFor="outboundDate" className="text-right w-12">
+                From:
+              </label>
+              <input
+                id="outboundDate"
+                className="bg-rose-50 h-6 rounded-sm w-28"
+                type="date"
+                name="outboundDate"
+                value={formData.outboundDate}
+                onChange={handleInputChange}
+                required
+              ></input>
+            </div>
+            <div className="flex gap-1">
+              <label htmlFor="outboundDateEndRange" className="text-right w-12">
+                To:
+              </label>
+              <input
+                id="outboundDateEndRange"
+                className={`bg-rose-50 h-6 rounded-sm w-28 ${formData.outboundDateEndRange == '' ? 'text-gray-400' : 'text-black'}`}
+                type="date"
+                name="outboundDateEndRange"
+                value={formData.outboundDateEndRange}
+                onChange={handleInputChange}
+              ></input>
+            </div>
           </div>
-          <div className="flex gap-1 flex-wrap-reverse w-1/2">
-            <input
-              id="returnDateEndRange"
-              className={`bg-rose-50 h-6 rounded-sm ${formData.returnDateEndRange == '' ? 'text-gray-400' : 'text-black'}`}
-              type="date"
-              name="returnDateEndRange"
-              placeholder="Return Date End Range"
-              value={formData.returnDateEndRange}
-              onChange={handleInputChange}
-            ></input>
-            <label htmlFor="returnDateEndRange" className="w-36 text-left">
-              Return - Range
-            </label>
+        </div>
+        <div className="gap-1 flex flex-wrap justify-center">
+          <div className="flex w-32 mx-2 justify-end">Return Dates:</div>
+          <div className="flex justify-evenly gap-1 flex-wrap">
+            <div className="flex gap-1">
+              <label htmlFor="returnDate" className="text-right w-12">
+                From:
+              </label>
+              <input
+                id="returnDate"
+                className="bg-rose-50 h-6 rounded-sm w-28"
+                type="date"
+                name="returnDate"
+                value={formData.returnDate}
+                onChange={handleInputChange}
+                required
+              ></input>
+            </div>
+            <div className="flex gap-1">
+              <label htmlFor="returnDateEndRange" className="text-right w-12">
+                To:
+              </label>
+              <input
+                id="returnDateEndRange"
+                className={`bg-rose-50 h-6 rounded-sm w-28 ${formData.returnDateEndRange == '' ? 'text-gray-400' : 'text-black'}`}
+                type="date"
+                name="returnDateEndRange"
+                placeholder="Return Date End Range"
+                value={formData.returnDateEndRange}
+                onChange={handleInputChange}
+              ></input>
+            </div>
           </div>
         </div>
 
         <div className="flex flex-col items-center md:flex-row justify-between gap-2">
           <div>
-            <p>
-              How far would you like to travel?<span className="text-red-500">*</span>
-            </p>
+            <p>How far would you like to travel?</p>
           </div>
           <div className="flex flex-row gap-3">
             <div className="flex gap-1">
@@ -308,53 +287,56 @@ export function FlightForm() {
               html="Near: Destinations up to 1500km away<br />Far: Destinations 1500 to 4000km away<br />Really Far: Even Further!"
               place="bottom"
             >
-              <p className="text-gray-500">(huh?)</p>
+              <p className="text-gray-500">(?)</p>
             </ToolTip>
           </div>
         </div>
         <div className="flex flex-col items-center md:flex-row justify-between gap-2">
-          <p>
-            What&apos;s your budget?<span className="text-red-500">*</span>
-          </p>
+          <label htmlFor="price">What&apos;s your budget?</label>
           <div className="flex gap-3">
             <input
               type="range"
               id="price"
               name="price"
-              min="100"
+              // min="100"
+              min={formData.tripLength === 'trip-long' ? '600' : '100'}
               max="1500"
               step="50"
+              className="w-24"
               value={formData.price}
               onChange={handleInputChange}
             ></input>
             <div className="flex">
               <input
+                id="priceNum"
                 type="number"
                 name="price"
-                min="100"
+                // min="100"
+                min={formData.tripLength === 'trip-long' ? '600' : '100'}
                 max="1500"
                 step="50"
                 value={formData.price}
                 onChange={handleInputChange}
                 className="w-14 bg-rose-50 h-6 rounded-sm"
               ></input>
-              <p>&euro;</p>
+              <label htmlFor="priceNum">&euro;</label>
             </div>
 
             <ToolTip
               html="Set a price to keep results within your budget.<br />However, the following is recommended:<br />'Far' trips: at least 100€<br />'Really Far' trips: at least 600€"
               place="bottom"
             >
-              <p className="text-gray-500">(huh?)</p>
+              <p className="text-gray-500">(?)</p>
             </ToolTip>
           </div>
         </div>
         <button
           type="submit"
-          // disabled={true} // TEMPORARY ADDITION UNTIL RESULTS PAGE ROUTE IS SORTED
-          className="h-10 px-2 text-center rounded-md font-semibold bg-blue-400 text-black hover:bg-blue-500 active:scale-95"
+          className={`h-10 px-2 text-center rounded-md font-semibold bg-blue-400 text-black hover:bg-blue-500 ${
+            buttonClicked ? 'scale-95 animate-pulse' : ''
+          }`}
         >
-          Let&apos;s Fly!
+          {buttonClicked ? 'Taking off...' : `Let's Fly!`}
         </button>
       </form>
     </div>
