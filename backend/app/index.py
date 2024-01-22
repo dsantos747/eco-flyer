@@ -45,13 +45,13 @@ def tequila_query(
     if return_date_end_range == "":
         return_date_end_range = return_date
 
-    url = f"https://api.tequila.kiwi.com/v2/search"
+    url = "https://api.tequila.kiwi.com/v2/search"
     headers = {"Content-Type": "application/json", "apikey": TEQUILA_KEY}
     params = {
         "fly_from": flight_origin,
         "fly_to": flight_destination,
         "date_from": outbound_date,
-        "date_to": outbound_date_end_range,  # Due to some idiot at Tequila, this cannot be == outbound_date
+        "date_to": outbound_date_end_range,
         "return_from": return_date,
         "return_to": return_date_end_range,
         "ret_from_diff_city": "false",
@@ -113,7 +113,6 @@ def tequila_parse(tequila_dict):
                 "return_legs": count_ret,
                 "deep_link": route["deep_link"],
                 "img_url": unsplash_fetch(route["cityTo"])
-                # "img_url": unsplash_fetch(f"{route['cityTo']}, {route['countryTo']['name']}")
                 if parsed_dict[route["cityTo"]] == {}
                 else parsed_dict[route["cityTo"]]["option_1"]["img_url"],
             }
@@ -129,33 +128,26 @@ def emissions_flights_list(flights_dict):
     flights_list = []
     for destination in flights_dict:
         for option in flights_dict[destination]:
-            for flight in flights_dict[destination][option]["flights"][0]:
-                flights_list.append(
-                    tim_params_builder(
-                        flights_dict[destination][option]["flights"][0][flight]
+            for dir in range(0, 2):
+                for flight in flights_dict[destination][option]["flights"][dir]:
+                    flights_list.append(
+                        tim_params_builder(
+                            flights_dict[destination][option]["flights"][dir][flight]
+                        )
                     )
-                )
-            for flight in flights_dict[destination][option]["flights"][1]:
-                flights_list.append(
-                    tim_params_builder(
-                        flights_dict[destination][option]["flights"][1][flight]
-                    )
-                )
 
     return {"flights": flights_list}
 
 
 def tim_params_builder(flight_object):
+    flight_number = int(
+        flight_object["operating_flight_no"] or flight_object["flight_no"]
+    )
     return {
         "origin": flight_object["flyFrom"],
         "destination": flight_object["flyTo"],
-        # "operatingCarrierCode": flight_object["operating_carrier"]
-        # if flight_object["operating_carrier"] != ""
-        # else flight_object["airline"],
         "operatingCarrierCode": flight_object["airline"],
-        "flightNumber": int(flight_object["operating_flight_no"])
-        if flight_object["operating_flight_no"] != ""
-        else int(flight_object["flight_no"]),
+        "flightNumber": flight_number,
         "departureDate": {
             "year": flight_object["local_departure"][:4],
             "month": flight_object["local_departure"][5:7],
@@ -200,21 +192,7 @@ def emissions_parse(flights_dict, emissions_results):
             return_emissions = 0
             remove_option = False
 
-            new_option_value = {
-                "cityFrom": option_value["cityFrom"],
-                "cityTo": option_value["cityTo"],
-                "deep_link": option_value["deep_link"],
-                "flights": [{}, {}],
-                "flyFrom": option_value["flyFrom"],
-                "flyTo": option_value["flyTo"],
-                "img_url": option_value["img_url"],
-                "local_departure": option_value["local_departure"],
-                "out_legs": option_value["out_legs"],
-                "price": option_value["price"],
-                "return_legs": option_value["return_legs"],
-                "total_legs": option_value["total_legs"],
-                "trip_emissions": None,
-            }
+            new_option_value = create_trip_dict(option_value)
 
             for outbound_flight in option_value["flights"][0]:
                 emissions = emissions_results[emissions_index]
@@ -225,19 +203,9 @@ def emissions_parse(flights_dict, emissions_results):
                     break
                 else:
                     curr_flight = option_value["flights"][0][outbound_flight]
-                    new_option_value["flights"][0][outbound_flight] = {
-                        "airline": curr_flight["airline"],
-                        "cityFrom": curr_flight["cityFrom"],
-                        "cityTo": curr_flight["cityTo"],
-                        "flight_no": curr_flight["flight_no"],
-                        "flyFrom": curr_flight["flyFrom"],
-                        "flyTo": curr_flight["flyTo"],
-                        "local_departure": curr_flight["local_departure"],
-                        "operating_carrier": curr_flight["operating_carrier"],
-                        "operating_flight_no": curr_flight["operating_flight_no"],
-                        "return": 0,
-                        "flight_emissions": emissions,
-                    }
+                    new_option_value["flights"][0][
+                        outbound_flight
+                    ] = create_flight_dict(curr_flight, 0, emissions)
                 outbound_emissions += emissions
 
             if not remove_option:
@@ -250,19 +218,9 @@ def emissions_parse(flights_dict, emissions_results):
                         break
                     else:
                         curr_flight = option_value["flights"][1][return_flight]
-                        new_option_value["flights"][1][return_flight] = {
-                            "airline": curr_flight["airline"],
-                            "cityFrom": curr_flight["cityFrom"],
-                            "cityTo": curr_flight["cityTo"],
-                            "flight_no": curr_flight["flight_no"],
-                            "flyFrom": curr_flight["flyFrom"],
-                            "flyTo": curr_flight["flyTo"],
-                            "local_departure": curr_flight["local_departure"],
-                            "operating_carrier": curr_flight["operating_carrier"],
-                            "operating_flight_no": curr_flight["operating_flight_no"],
-                            "return": 1,
-                            "flight_emissions": emissions,
-                        }
+                        new_option_value["flights"][1][
+                            return_flight
+                        ] = create_flight_dict(curr_flight, 1, emissions)
                     return_emissions += emissions
 
             if not remove_option:
@@ -286,6 +244,40 @@ def emissions_parse(flights_dict, emissions_results):
     return new_flights_dict
 
 
+def create_trip_dict(trip):
+    return {
+        "cityFrom": trip["cityFrom"],
+        "cityTo": trip["cityTo"],
+        "deep_link": trip["deep_link"],
+        "flights": [{}, {}],
+        "flyFrom": trip["flyFrom"],
+        "flyTo": trip["flyTo"],
+        "img_url": trip["img_url"],
+        "local_departure": trip["local_departure"],
+        "out_legs": trip["out_legs"],
+        "price": trip["price"],
+        "return_legs": trip["return_legs"],
+        "total_legs": trip["total_legs"],
+        "trip_emissions": None,
+    }
+
+
+def create_flight_dict(flight, leg_bool, emissions):
+    return {
+        "airline": flight["airline"],
+        "cityFrom": flight["cityFrom"],
+        "cityTo": flight["cityTo"],
+        "flight_no": flight["flight_no"],
+        "flyFrom": flight["flyFrom"],
+        "flyTo": flight["flyTo"],
+        "local_departure": flight["local_departure"],
+        "operating_carrier": flight["operating_carrier"],
+        "operating_flight_no": flight["operating_flight_no"],
+        "return": leg_bool,
+        "flight_emissions": emissions,
+    }
+
+
 def destinations_sort(results):
     sorted_results = dict(
         sorted(
@@ -300,7 +292,7 @@ def destinations_sort(results):
 
 
 def unsplash_fetch(query):
-    url = f"https://api.unsplash.com/search/photos/"
+    url = "https://api.unsplash.com/search/photos/"
     headers = {
         "Content-Type": "application/json",
         "Accept-Version": "v1",
@@ -327,12 +319,6 @@ TEQUILA_KEY = os.getenv("TEQUILA_API_KEY")
 UNSPLASH_ACCESS = os.getenv("UNSPLASH_ACCESS_KEY")
 UNSPLASH_SECRET_KEY = os.getenv("UNSPLASH_SECRET_KEY")
 
-# current_dir = os.path.dirname(os.path.realpath(__file__))
-
-# # Load all airports
-# with open(os.path.join(current_dir, "data", "airports.json"), "r") as json_file:
-#     full_airports_list = json.load(json_file)
-
 if FLASK_ENV == "production":
     data_path = os.path.join("./app", "data", "airports.json")
 else:
@@ -346,13 +332,13 @@ with open(data_path, "r") as json_file:
 # App instance
 app = Flask(__name__)
 CORS(app, supports_credentials=True)
-redis_client = redis.Redis(
-    host=os.getenv("REDIS_HOST"),
-    port=os.getenv("REDIS_PORT"),
-    db=0,
-    password=os.getenv("REDIS_PASS"),
-    socket_keepalive=True,
-)
+
+redis_host = os.getenv("REDIS_HOST")
+redis_port = os.getenv("REDIS_PORT")
+redis_user = os.getenv("REDIS_USER")
+redis_password = os.getenv("REDIS_PASS")
+redis_url = f"redis://{redis_user}:{redis_password}@{redis_host}:{redis_port}"
+
 
 # profile = cProfile.Profile()
 
@@ -373,108 +359,86 @@ def ping():
 @app.route("/processRequest/<string:id>", methods=["GET"])
 def process_request(id):
     request_id = f"request_{id}"
-    try:
-        data = json.loads(redis_client.get(request_id))
-    except Exception:
-        error_message = "Server failed to retrieve request information"
-        redis_client.set(f"error_{id}", json.dumps(error_message))
-        # redis_client.close()
-        return jsonify(error_message)
+    with redis.from_url(redis_url) as redis_client:
+        try:
+            data = json.loads(redis_client.get(request_id))
+        except Exception:
+            error_message = "Server failed to retrieve request information"
+            redis_client.set(f"error_{id}", json.dumps(error_message))
+            return jsonify(error_message)
 
-    try:
-        user_location = [float(data["latLong"]["lat"]), float(data["latLong"]["long"])]
-        trip_length = data["tripLength"]  # should be tripLength
-        radius_range = (
-            [1500, 0]
-            if trip_length == "trip-short"
-            else [4000, 1500]
-            if trip_length == "trip-medium"
-            else [15000, 4000]
-        )
-    except Exception:
-        error_message = "The input is invalid"
-        redis_client.set(f"error_{id}", json.dumps(error_message))
-        # redis_client.close()
-        return jsonify(error_message)
+        try:
+            user_location = [
+                float(data["latLong"]["lat"]),
+                float(data["latLong"]["long"]),
+            ]
+            trip_length = data["tripLength"]  # should be tripLength
+            radius_range = (
+                [1500, 0]
+                if trip_length == "trip-short"
+                else [4000, 1500]
+                if trip_length == "trip-medium"
+                else [15000, 4000]
+            )
+        except Exception:
+            error_message = "The input is invalid"
+            redis_client.set(f"error_{id}", json.dumps(error_message))
+            return jsonify(error_message)
 
-    try:
-        origin_airports = get_airport_list(*user_location, 100)
-        destination_airports = get_airport_list(*user_location, *radius_range)
-    except Exception:
-        error_message = "Error fetching airports"
-        redis_client.set(f"error_{id}", json.dumps(error_message))
-        # redis_client.close()
-        return jsonify(error_message)
+        try:
+            origin_airports = get_airport_list(*user_location, 100)
+            destination_airports = get_airport_list(*user_location, *radius_range)
+        except Exception:
+            error_message = "Error fetching airports"
+            redis_client.set(f"error_{id}", json.dumps(error_message))
+            return jsonify(error_message)
 
-    try:
-        tequila_result = tequila_query(
-            origin_airports,
-            destination_airports,
-            data["outboundDate"],
-            data["returnDate"],
-            data["outboundDateEndRange"],
-            data["returnDateEndRange"],
-            data["price"],
-        )
-        if not tequila_result["data"]:
-            raise NoFlightsError("No flights found for given search parameters")
+        try:
+            tequila_result = tequila_query(
+                origin_airports,
+                destination_airports,
+                data["outboundDate"],
+                data["returnDate"],
+                data["outboundDateEndRange"],
+                data["returnDateEndRange"],
+                data["price"],
+            )
+            if not tequila_result["data"]:
+                raise NoFlightsError("No flights found for given search parameters")
 
-        processed_data = tequila_parse(tequila_result)
+            processed_data = tequila_parse(tequila_result)
 
-    except NoFlightsError as e:
-        error_message = str(e)
-        redis_client.set(f"error_{id}", json.dumps(error_message))
-        # redis_client.close()
-        return jsonify(error_message)
+        except NoFlightsError as e:
+            error_message = str(e)
+            redis_client.set(f"error_{id}", json.dumps(error_message))
+            return jsonify(error_message)
 
-    except Exception:
-        error_message = "Error fetching route options"
-        redis_client.set(f"error_{id}", json.dumps(error_message))
-        # redis_client.close()
-        return jsonify(error_message)
+        except Exception:
+            error_message = "Error fetching route options"
+            redis_client.set(f"error_{id}", json.dumps(error_message))
+            return jsonify(error_message)
 
-    try:
-        tim_processed_data = emissions_flights_list(processed_data)
-        emissions_results = emissions_fetch(tim_processed_data)
-    except Exception:
-        error_message = "Error fetching emissions for route options"
-        redis_client.set(f"error_{id}", json.dumps(error_message))
-        # redis_client.close()
-        return jsonify(error_message)
+        try:
+            tim_processed_data = emissions_flights_list(processed_data)
+            emissions_results = emissions_fetch(tim_processed_data)
+        except Exception:
+            error_message = "Error fetching emissions for route options"
+            redis_client.set(f"error_{id}", json.dumps(error_message))
+            return jsonify(error_message)
 
-    try:
-        processed_data_with_emissions = emissions_parse(
-            processed_data, emissions_results
-        )
-        sorted_result = destinations_sort(processed_data_with_emissions)
-    except Exception:
-        error_message = "Error interpreting emissons data"
-        redis_client.set(f"error_{id}", json.dumps(error_message))
-        # redis_client.close()
-        return jsonify(error_message)
+        try:
+            processed_data_with_emissions = emissions_parse(
+                processed_data, emissions_results
+            )
+            sorted_result = destinations_sort(processed_data_with_emissions)
+        except Exception:
+            error_message = "Error interpreting emissons data"
+            redis_client.set(f"error_{id}", json.dumps(error_message))
+            return jsonify(error_message)
 
-    ############################
-    # current_dir = os.path.dirname(os.path.realpath(__file__))
-    # with open(os.path.join(current_dir, "data", "tequila_data.json"), "w") as json_file:
-    #     json.dump(tequila_result, json_file, indent=4)
-    # with open(os.path.join(current_dir, "data", "parsed_data.json"), "w") as json_file:
-    #     json.dump(processed_data, json_file, indent=4)
-    # with open(
-    #     os.path.join(current_dir, "data", "emissions_request.json"), "w"
-    # ) as json_file:
-    #     json.dump(tim_processed_data, json_file, indent=4)
-    # with open(
-    #     os.path.join(current_dir, "data", "parsed_with_emissions.json"), "w"
-    # ) as json_file:
-    #     json.dump(processed_data_with_emissions, json_file, indent=4)
-    # with open(os.path.join(current_dir, "data", "sorted_2.json"), "w") as json_file:
-    #     json.dump(sorted_result, json_file, indent=4)
-    #######################################
-
-    redis_client.set(f"response_{id}", json.dumps(sorted_result))
-    # redis_client.connection_pool.disconnect()  # Added this to attempt to control number of redis connections - Not entirely sure if it's working
-    # redis_client.close()
-    return jsonify("Processing complete")
+        redis_client.set(f"response_{id}", json.dumps(sorted_result))
+        redis_client.close()
+        return jsonify("Processing complete")
 
 
 # Initialise app
