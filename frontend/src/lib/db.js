@@ -1,36 +1,25 @@
-import { createClient } from 'redis';
+import { Redis } from 'ioredis';
 
-// const globalForRedis = global;
-
-// export const redisClient = globalForRedis.redisClient ?? createClient({ url: process.env.REDIS_URL });
-// // createClient({
-// //   password: process.env.REDIS_PASS,
-// //   socket: {
-// //     host: process.env.REDIS_HOST,
-// //     port: process.env.REDIS_PORT,
-// //     connectTimeout: 10000,
-// //     idleTimeout: 60000,
-// //   },
-// // });
-
-// if (process.env.NODE_ENV !== 'production') {
-//   globalForRedis.redisClient = redisClient;
-// }
-
-const redisClient = createClient({
+const redisClient = new Redis({
   password: process.env.REDIS_PASS,
-  socket: {
-    host: process.env.REDIS_HOST,
-    port: process.env.REDIS_PORT,
-    connectTimeout: 10000,
-    idleTimeout: 60000,
-  },
+  host: process.env.REDIS_HOST,
+  port: process.env.REDIS_PORT,
+  connectTimeout: 10000,
+  idleTimeout: 90000,
+  enableAutoPipelining: true,
+  maxRetriesPerRequest: 2,
 });
 
-redisClient.on('error', (err) => console.log(err));
+redisClient.on('error', (err) => console.log(err.name));
 
-if (!redisClient.isOpen) {
+if (redisClient.status !== 'connecting' && redisClient.status !== 'reconnecting' && redisClient.status !== 'connect') {
   redisClient.connect();
 }
+
+const cleanupRedisConnection = async () => {
+  await redisClient.quit();
+};
+
+process.on('beforeExit', cleanupRedisConnection);
 
 export { redisClient };
