@@ -12,6 +12,7 @@ export const metadata = {
   authors: [{ name: 'Daniel Santos', url: 'https://github.com/dsantos747' }],
   keywords: ['flights', 'emissions', 'environment', 'travel', 'low emissions', 'climate'],
   creator: 'Daniel Santos',
+  metadataBase: new URL('https://eco-flyer.vercel.app/'),
   openGraph: {
     description: 'Book your next holiday with the planet in mind',
   },

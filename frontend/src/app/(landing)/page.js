@@ -6,9 +6,9 @@ async function page() {
     <div className='text-center z-0 max-w-3xl pt-6'>
       <h1 className={`text-2xl md:text-4xl ${major.className}`}>We cannot afford to ignore the climate emergency</h1>
       <p className='hidden' aria-hidden>
-        Eco-Flyer is a tool for choosing a holiday with the environment in mind. If you're flexible on your destination, and would like to
-        ensure your flight emissions are minimised, this is the tool for you. Using a flights emissions model, it evaluates several flight
-        options avaialable for your search parameters, and presents you with options sorted by their relative travel impact.
+        Eco-Flyer is a tool for choosing a holiday with the environment in mind. If you&apos;re flexible on your destination, and would like
+        to ensure your flight emissions are minimised, this is the tool for you. Using a flights emissions model, it evaluates several
+        flight options avaialable for your search parameters, and presents you with options sorted by their relative travel impact.
       </p>
       <div className='px-8 max-w-xl py-4 mx-auto'>
         <h2>
