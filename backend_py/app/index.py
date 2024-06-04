@@ -112,9 +112,11 @@ def tequila_parse(tequila_dict):
                 "out_legs": count_out,
                 "return_legs": count_ret,
                 "deep_link": route["deep_link"],
-                "img_url": unsplash_fetch(route["cityTo"])
-                if parsed_dict[route["cityTo"]] == {}
-                else parsed_dict[route["cityTo"]]["option_1"]["img_url"],
+                "img_url": (
+                    unsplash_fetch(route["cityTo"])
+                    if parsed_dict[route["cityTo"]] == {}
+                    else parsed_dict[route["cityTo"]]["option_1"]["img_url"]
+                ),
             }
 
             parsed_dict[route["cityTo"]][
@@ -203,9 +205,9 @@ def emissions_parse(flights_dict, emissions_results):
                     break
                 else:
                     curr_flight = option_value["flights"][0][outbound_flight]
-                    new_option_value["flights"][0][
-                        outbound_flight
-                    ] = create_flight_dict(curr_flight, 0, emissions)
+                    new_option_value["flights"][0][outbound_flight] = (
+                        create_flight_dict(curr_flight, 0, emissions)
+                    )
                 outbound_emissions += emissions
 
             if not remove_option:
@@ -218,9 +220,9 @@ def emissions_parse(flights_dict, emissions_results):
                         break
                     else:
                         curr_flight = option_value["flights"][1][return_flight]
-                        new_option_value["flights"][1][
-                            return_flight
-                        ] = create_flight_dict(curr_flight, 1, emissions)
+                        new_option_value["flights"][1][return_flight] = (
+                            create_flight_dict(curr_flight, 1, emissions)
+                        )
                     return_emissions += emissions
 
             if not remove_option:
@@ -376,9 +378,7 @@ def process_request(id):
             radius_range = (
                 [1500, 0]
                 if trip_length == "trip-short"
-                else [4000, 1500]
-                if trip_length == "trip-medium"
-                else [15000, 4000]
+                else [4000, 1500] if trip_length == "trip-medium" else [15000, 4000]
             )
         except Exception:
             error_message = "The input is invalid"

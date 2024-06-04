@@ -25,7 +25,6 @@ export async function getRedis(type, id) {
   } catch (error) {
     console.error('Error getting value from Redis:', error);
     return new Response('Requested data not found');
-  } finally {
   }
 }
 
@@ -36,6 +35,5 @@ export async function checkRedis(type, id) {
   } catch (error) {
     console.error('Error checking for key in Redis:', error);
     return new Response('Requested key not found');
-  } finally {
   }
 }
