@@ -1,11 +1,14 @@
-package ecoflyer
+package main
 
 import (
 	"fmt"
 	"io"
 	"net/http"
 	"net/url"
+	"os"
 	"time"
+
+	"github.com/joho/godotenv"
 )
 
 var HTTPclient = &http.Client{
@@ -45,4 +48,17 @@ func MakeHTTPRequest(method, endpoint string, body io.Reader, params, headers ma
 	}
 
 	return response, nil
+}
+
+// LoadEnv attempts to load an env var "ENVIRONMENT". If successful, no further action.
+// If not successful, load all envs with godotenv instead
+func LoadEnv() error {
+	if os.Getenv("ENVIRONMENT") == "" {
+		err := godotenv.Load("../frontend/.env.local")
+		if err != nil {
+			fmt.Printf("Could not load environment variables from .env file: %v\n", err)
+			return err
+		}
+	}
+	return nil
 }
