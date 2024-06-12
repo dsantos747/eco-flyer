@@ -62,3 +62,13 @@ func LoadEnv() error {
 	}
 	return nil
 }
+
+func SliceToString(slice []string) string {
+	stringSlice := ""
+
+	for _, s := range slice {
+		stringSlice += fmt.Sprintf("%s,", s)
+	}
+
+	return stringSlice[:len(stringSlice)-1]
+}

@@ -49,16 +49,6 @@ func getAirportsInRange(latitude, longitude float32, maxRadius, minRadius int) (
 	return &res, nil
 }
 
-func sliceToString(slice []string) string {
-	stringSlice := ""
-
-	for _, s := range slice {
-		stringSlice += fmt.Sprintf("%s,", s)
-	}
-
-	return stringSlice[:len(stringSlice)-1]
-}
-
 func getTequilaResults(origin, destination []string, outDateStart, returnDateStart string, outDateEnd, returnDateEnd *string, priceLimit int) (*[][]TequilaItinerary, error) {
 
 	if outDateEnd == nil {
@@ -71,8 +61,8 @@ func getTequilaResults(origin, destination []string, outDateStart, returnDateSta
 	url := "https://api.tequila.kiwi.com/v2/search"
 	headers := map[string]string{"Content-Type": "application/json", "apikey": os.Getenv("TEQUILA_API_KEY")}
 	params := map[string]string{
-		"fly_from":           sliceToString(origin),
-		"fly_to":             sliceToString(destination),
+		"fly_from":           SliceToString(origin),
+		"fly_to":             SliceToString(destination),
 		"date_from":          outDateStart,
 		"date_to":            *outDateEnd,
 		"return_from":        returnDateStart,
