@@ -54,7 +54,7 @@ func MakeHTTPRequest(method, endpoint string, body io.Reader, params, headers ma
 // If not successful, load all envs with godotenv instead
 func LoadEnv() error {
 	if os.Getenv("ENVIRONMENT") == "" {
-		err := godotenv.Load("../frontend/.env.local")
+		err := godotenv.Load("../.env.local")
 		if err != nil {
 			fmt.Printf("Could not load environment variables from .env file: %v\n", err)
 			return err

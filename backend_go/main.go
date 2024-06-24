@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"strconv"
 	"time"
 
 	geodesic "github.com/tidwall/geodesic"
@@ -50,7 +51,6 @@ func getAirportsInRange(latitude, longitude float32, maxRadius, minRadius int) (
 }
 
 func getTequilaResults(origin, destination []string, outDateStart, returnDateStart string, outDateEnd, returnDateEnd *string, priceLimit int) (*[][]TequilaItinerary, error) {
-
 	if outDateEnd == nil {
 		outDateEnd = &outDateStart
 	}
@@ -167,6 +167,18 @@ func parseTequilaResponse(raw RawTequilaResponse) [][]TequilaItinerary {
 	return parsedData
 }
 
+func buildTIMparams(routes [][]TequilaItinerary) TIMrequest {
+	makeTIMflight := func(flight Leg) (TIMflight, error) {
+		flightNum, err := strconv.Atoi(flight.OperatingFlightNo) // Is this enough to check if operating flight no is not empty?
+		if err != nil {
+			flightNum, err := strconv.Atoi(flight.FlightNo)
+			if err != nil {
+				return nil, fmt.Errorf("error converting flight number to int: %w", err)
+			}
+		}
+	}
+}
+
 func fetchUnsplash(query string) (*string, error) {
 	url := "https://api.unsplash.com/search/photos/"
 	headers := map[string]string{
@@ -205,7 +217,6 @@ func fetchUnsplash(query string) (*string, error) {
 }
 
 func main() {
-
 	start := time.Now()
 
 	err := LoadEnv()
@@ -243,5 +254,4 @@ func main() {
 	fmt.Println("Time to get depart airports:", t2)
 	fmt.Println("Time to get destination airports:", t3)
 	fmt.Println("Time to get tequila results:", t4)
-
 }

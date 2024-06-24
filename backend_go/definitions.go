@@ -45,7 +45,7 @@ type Leg struct {
 	FlyTo             string `json:"flyTo"`
 	LocalDeparture    string `json:"local_departure"`
 	Airline           string `json:"airline"`
-	FlightNo          uint32 `json:"flight_no"`
+	FlightNo          string `json:"flight_no"`
 	OperatingCarrier  string `json:"operating_carrier"`
 	OperatingFlightNo string `json:"operating_flight_no"`
 	Return            int    `json:"return"`
@@ -57,4 +57,20 @@ type UnsplashResponse struct {
 
 type UnsplashResults struct {
 	Urls map[string]string `json:"urls"`
+}
+
+type TIMrequest struct{}
+
+type TIMflight struct {
+	Origin               string     `json:"origin"`
+	Destination          string     `json:"destination"`
+	OperatingCarrierCode string     `json:"operatingCarrierCode"`
+	FlightNumber         int        `json:"flightNumber"`
+	DepartureDate        DateStruct `json:"departureDate"`
+}
+
+type DateStruct struct {
+	Year  string `json:"year"`
+	Month string `json:"month"`
+	Day   string `json:"day"`
 }
